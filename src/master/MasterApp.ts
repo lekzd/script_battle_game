@@ -1,11 +1,12 @@
 import {WebsocketConnection} from '../common/WebsocketConnection';
-import {setInject} from '../common/InjectDectorator';
+import {Inject, setInject} from '../common/InjectDectorator';
 import {Server} from '../common/Server';
-import 'p2/build/p2';
-import 'pixi.js/dist/pixi';
-import * as Phaser from 'phaser-ce';
+import Phaser from 'phaser';
+import {CharactersList} from "../common/characters/CharactersList";
 
 export class MasterApp {
+
+    @Inject(CharactersList) private charactersList: CharactersList;
 
     constructor() {
         const connection = new WebsocketConnection();
@@ -17,8 +18,9 @@ export class MasterApp {
 
         const config = {
             type: Phaser.AUTO,
-            width: 800,
-            height: 600,
+            width: 400,
+            height: 300,
+            parent: 'display',
             scene: {
                 preload: preload,
                 create: create
@@ -26,15 +28,25 @@ export class MasterApp {
         };
 
         const game = new Phaser.Game(config);
+        const self = this;
 
         function preload () {
             this.load.setBaseURL('http://localhost:8080');
 
-            this.load.image('character_magic', 'img/character_magic.png');
+            self.charactersList.load(this.load);
         }
 
         function create () {
-            this.add.image(400, 300, 'character_magic');
+            self.charactersList.prepareAnimations(this.anims);
+
+            for (let i = 0; i <= 4; i++) {
+                self.charactersList.drawRandomCharacter(this.add, i, true);
+            }
+
+            for (let i = 0; i <= 4; i++) {
+                self.charactersList.drawRandomCharacter(this.add, i, false);
+            }
+
         }
     }
 

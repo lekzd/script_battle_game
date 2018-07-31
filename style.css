@@ -1,0 +1,19 @@
+body {
+  background: #000;
+  margin: 0;
+}
+
+.display,
+.display canvas {
+  width: 800px;
+  height: 600px;
+}
+
+.display {
+  margin: auto;
+  border: 3px solid gold;
+}
+
+.display canvas {
+  image-rendering: pixelated;
+}
