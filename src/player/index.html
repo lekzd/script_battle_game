@@ -7,12 +7,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
-  <title>Battle</title>
-  <link rel="stylesheet" type="text/css" href="/style.css">
+  <title>Player</title>
+  <!--<link rel="stylesheet" type="text/css" href="/style.css">-->
 </head>
 
 <body>
 <div id="display" class="display"></div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        new window.Client();
+    });
+</script>
 
 <% if (isDevServer) { %>
 <script src="/webpack-dev-server.js"></script>
