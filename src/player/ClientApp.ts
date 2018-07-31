@@ -5,6 +5,7 @@ import {Server} from '../common/Server';
 export class ClientApp {
 
     constructor() {
+
         const connection = new WebsocketConnection();
 
         setInject(Server, connection);
