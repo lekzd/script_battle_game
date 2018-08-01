@@ -3,15 +3,26 @@ import {Inject, setInject} from '../common/InjectDectorator';
 import {Server} from '../common/Server';
 import Phaser from 'phaser';
 import {CharactersList} from "../common/characters/CharactersList";
+import {Router} from '../common/router/Router';
+import {WaitingView} from './views/WaitingView';
+import {BattleView} from './views/BattleView';
+import {ResultsView} from './views/ResultsView';
 
 export class MasterApp {
 
+    @Inject(Router) private router: Router;
     @Inject(CharactersList) private charactersList: CharactersList;
 
     constructor() {
         const connection = new WebsocketConnection();
 
         setInject(Server, connection);
+
+        this.router.setConfig({
+            waiting: WaitingView,
+            battle: BattleView,
+            results: ResultsView
+        });
 
         console.log('connection', connection);
         console.log('Phaser', Phaser);

@@ -27,6 +27,7 @@ interface ICharacterConfig extends IAttackConfigs {
     id: string;
     title: string;
     type: CharacterType;
+    speed: number;
 }
 
 function getCoefficents(num: number): IMinMax {
@@ -66,37 +67,43 @@ function getAttackConfigs(mellee: number, shoot: number, magic: number): IAttack
 const MAGIC_GIRL: ICharacterConfig = Object.assign({
     id: 'character_magic',
     title: 'magic girl',
-    type: CharacterType.magic
+    type: CharacterType.magic,
+    speed: 4,
 }, getAttackConfigs(0, 4, 8));
 
 const SKELETON: ICharacterConfig = Object.assign({
     id: 'character_nekr',
     title: 'skeleton',
-    type: CharacterType.shooting
+    type: CharacterType.shooting,
+    speed: 4,
 }, getAttackConfigs(2, 6, 4));
 
 const ORK: ICharacterConfig = Object.assign({
     id: 'character_ork',
     title: 'ork',
-    type: CharacterType.shooting
+    type: CharacterType.shooting,
+    speed: 4,
 }, getAttackConfigs(2, 8, 0));
 
 const PALLADIN: ICharacterConfig = Object.assign({
     id: 'character_palladin',
     title: 'palladin',
-    type: CharacterType.melee
+    type: CharacterType.melee,
+    speed: 4,
 }, getAttackConfigs(6, 6, 0));
 
 const VARVAR: ICharacterConfig = Object.assign({
     id: 'character_varvar',
     title: 'varvar',
-    type: CharacterType.melee
+    type: CharacterType.melee,
+    speed: 4,
 }, getAttackConfigs(6, 2, 4));
 
 const WINTER: ICharacterConfig = Object.assign({
     id: 'character_winter',
     title: 'winter',
-    type: CharacterType.magic
+    type: CharacterType.magic,
+    speed: 4,
 }, getAttackConfigs(2, 4, 6));
 
 export class CharactersList {
