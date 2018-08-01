@@ -23,20 +23,32 @@ export class BattleView extends Phaser.Scene {
     create() {
         this.charactersList.prepareAnimations(this.anims);
 
-        const fieldTexture = this.textures.createCanvas('hexagons', 400, 300);
+        const {width, height} = this.battleFieldDrawer;
+
+        const fieldTexture = this.textures.createCanvas('hexagons', width, height);
 
         this.battleFieldDrawer.draw((fieldTexture as any).context);
 
         (fieldTexture as any).refresh();
 
-        this.add.image(200, 190, 'hexagons');
+        this.add.image(200, 150, 'hexagons');
+
+        const topIndexes = [
+            2, 4, 6, 8
+        ];
 
         for (let i = 0; i <= 4; i++) {
-            this.charactersList.drawRandomCharacter(this.add, i, true);
+            const left = this.battleFieldDrawer.getHexagonLeft(2, topIndexes[i]);
+            const top = this.battleFieldDrawer.getHexagonTop(2, topIndexes[i]);
+
+            this.charactersList.drawRandomCharacter(this.add, left, top, true);
         }
 
         for (let i = 0; i <= 4; i++) {
-            this.charactersList.drawRandomCharacter(this.add, i, false);
+            const left = this.battleFieldDrawer.getHexagonLeft(11, topIndexes[i]);
+            const top = this.battleFieldDrawer.getHexagonTop(11, topIndexes[i]);
+
+            this.charactersList.drawRandomCharacter(this.add, left, top, false);
         }
     }
 }

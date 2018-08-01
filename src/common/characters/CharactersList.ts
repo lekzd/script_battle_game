@@ -131,9 +131,7 @@ export class CharactersList {
         });
     }
 
-    drawRandomCharacter(factory: Phaser.GameObjects.GameObjectFactory, index: number, friend: boolean) {
-        const left = friend ? 100 : 300;
-        const top = (index * 75) - 32;
+    drawRandomCharacter(factory: Phaser.GameObjects.GameObjectFactory, left: number, top: number, friend: boolean) {
         const randomIndex = Math.floor(Math.random() * this.types.length);
         const characterId = this.types[randomIndex].id;
         const characterAnimation = friend ? `${characterId}_slash_right` : `${characterId}_slash_left`;

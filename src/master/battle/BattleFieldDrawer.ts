@@ -1,8 +1,8 @@
 
 const HEXAGON_ANGLE = 0.523598776;
-const FIELD_WIDTH = 15;
-const FIELD_HEIGHT = 11;
-const SIDE_LENGTH = 15;
+const FIELD_WIDTH = 12;
+const FIELD_HEIGHT = 9;
+const SIDE_LENGTH = 17;
 
 const hexHeight = Math.round(Math.sin(HEXAGON_ANGLE) * SIDE_LENGTH);
 const hexRadius = Math.round(Math.cos(HEXAGON_ANGLE) * SIDE_LENGTH);
@@ -10,6 +10,9 @@ const hexRectangleHeight = Math.round(SIDE_LENGTH + (2 * hexHeight));
 const hexRectangleWidth = Math.round(2 * hexRadius);
 
 export class BattleFieldDrawer {
+
+    width = (FIELD_WIDTH * hexRectangleWidth) + hexRectangleWidth / 2;
+    height = (FIELD_HEIGHT * (SIDE_LENGTH + hexHeight)) + (SIDE_LENGTH + hexHeight) / 2;
 
     private hexagonGraphic: HTMLCanvasElement;
 
@@ -78,12 +81,10 @@ export class BattleFieldDrawer {
     }
 
     private prepareBoard(): HTMLCanvasElement {
-        const width = FIELD_WIDTH * SIDE_LENGTH * 2;
-        const height = FIELD_HEIGHT * SIDE_LENGTH * 2;
+        const ctx = this.makeCtx(this.width, this.height);
 
-        const ctx = this.makeCtx(width, height);
         this.forEachBoard((left, top) => {
-            return ctx.drawImage(this.hexagonGraphic, left, top);
+            ctx.drawImage(this.hexagonGraphic, left, top);
         });
 
         return ctx.canvas;
