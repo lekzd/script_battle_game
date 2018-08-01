@@ -29,8 +29,6 @@ export class MasterApp {
 
         const game = new Phaser.Game(config);
 
-        // game.scene.switch(null, 'waiting');
-
     }
 
 }
