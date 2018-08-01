@@ -1,7 +1,8 @@
 import {AbstractView} from './AbstractView';
+import Phaser from 'phaser';
 
 interface IRouterConfig {
-    [name: string]: typeof AbstractView;
+    [name: string]: typeof Phaser.Scene;
 }
 
 export class Router {

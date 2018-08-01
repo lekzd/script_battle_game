@@ -1,15 +1,10 @@
-import {AbstractView} from '../../common/router/AbstractView';
+import Phaser from 'phaser';
 
-export class ResultsView extends AbstractView {
-    start() {
+export class ResultsView extends Phaser.Scene {
 
-    }
-
-    update() {
-
-    }
-
-    end() {
-
+    constructor() {
+        super({
+            key: 'results'
+        });
     }
 }

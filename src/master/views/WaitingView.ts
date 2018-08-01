@@ -1,15 +1,23 @@
-import {AbstractView} from '../../common/router/AbstractView';
+import Phaser from 'phaser';
 
-export class WaitingView extends AbstractView {
-    start() {
+export class WaitingView extends Phaser.Scene {
 
+    constructor() {
+        super({
+            key: 'waiting'
+        });
     }
 
-    update() {
+    create() {
+        this.add.text(200, 150, 'Please wait', {
+            font: '16px Courier',
+            fill: '#00ff00'
+        });
 
-    }
+        this.input.on('pointerdown', () => {
 
-    end() {
+            this.scene.switch('battle');
 
+        });
     }
 }
