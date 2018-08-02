@@ -1,33 +1,20 @@
 import {WebsocketConnection} from '../common/WebsocketConnection';
-import {Inject, setInject} from '../common/InjectDectorator';
-import {Server} from '../common/Server';
-import Phaser from 'phaser';
-import {CharactersList} from "../common/characters/CharactersList";
-import {Router} from '../common/router/Router';
-import {BattleView} from './views/BattleView';
-import {WaitingView} from "./views/WaitingView";
+import {Inject} from '../common/InjectDectorator';
+import {BattleGame, BattleState} from '../common/battle/BattleGame';
 
 export class MasterApp {
 
-    @Inject(Router) private router: Router;
-    @Inject(CharactersList) private charactersList: CharactersList;
+    @Inject(BattleGame) private battleGame: BattleGame;
+    @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
     constructor() {
-        const connection = new WebsocketConnection();
+        console.log('connection', this.connection);
 
-        setInject(Server, connection);
+        this.battleGame.setState(BattleState.battle);
 
-        console.log('connection', connection);
-
-        const config = {
-            type: Phaser.AUTO,
-            width: 400,
-            height: 300,
-            parent: 'display',
-            scene: [WaitingView, BattleView]
-        };
-
-        const game = new Phaser.Game(config);
+        this.connection.onMessage$.subscribe(message => {
+            console.log('connection.onMessage$', message);
+        })
 
     }
 

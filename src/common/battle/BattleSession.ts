@@ -1,5 +1,5 @@
 import {UnitsStack} from './UnitsStack';
-import {Inject} from '../../common/InjectDectorator';
+import {Inject} from '../InjectDectorator';
 
 export enum BattleSide {
     left, right

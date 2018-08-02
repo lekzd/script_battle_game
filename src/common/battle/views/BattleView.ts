@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
-import {Inject} from "../../common/InjectDectorator";
-import {CharactersList} from "../../common/characters/CharactersList";
-import {BattleFieldDrawer} from "../battle/BattleFieldDrawer";
+import {Inject} from "../../InjectDectorator";
+import {CharactersList} from "../../characters/CharactersList";
+import {BattleFieldDrawer} from "../BattleFieldDrawer";
 
 export class BattleView extends Phaser.Scene {
 
@@ -22,14 +22,7 @@ export class BattleView extends Phaser.Scene {
 
     create() {
         this.charactersList.prepareAnimations(this.anims);
-
-        const {width, height} = this.battleFieldDrawer;
-
-        const fieldTexture = this.textures.createCanvas('hexagons', width, height);
-
-        this.battleFieldDrawer.draw((fieldTexture as any).context);
-
-        (fieldTexture as any).refresh();
+        this.generateHexagonsTexture('hexagons');
 
         this.add.image(200, 150, 'hexagons');
 
@@ -50,5 +43,15 @@ export class BattleView extends Phaser.Scene {
 
             this.charactersList.drawRandomCharacter(this.add, left, top, false);
         }
+    }
+
+    private generateHexagonsTexture(name: string) {
+        const {width, height} = this.battleFieldDrawer;
+
+        const fieldTexture = this.textures.createCanvas(name, width, height);
+
+        this.battleFieldDrawer.draw((fieldTexture as any).context);
+
+        (fieldTexture as any).refresh();
     }
 }
