@@ -1,11 +1,13 @@
 import {BattleView} from './views/BattleView';
 import {WaitingView} from './views/WaitingView';
 import Phaser from "phaser";
+import {ConnectionClosedView} from "./views/ConnectionClosedView";
 
 export enum BattleState {
     wait = 'waiting',
     battle = 'battle',
-    results = 'results'
+    results = 'results',
+    connectionClosed = 'connectionClosed'
 }
 
 export class BattleGame {
@@ -19,14 +21,16 @@ export class BattleGame {
             width: 400,
             height: 300,
             parent: 'display',
-            scene: [WaitingView, BattleView]
+            scene: [WaitingView, BattleView, ConnectionClosedView]
         };
 
         this.game = new Phaser.Game(config);
     }
 
     setState(newState: BattleState) {
-        this.game.scene.switch(this.currentState, newState);
+        this.game.scene.switch(BattleState.wait, newState);
+
+        this.currentState = BattleState.wait;
     }
 
     runCode(code: string) {

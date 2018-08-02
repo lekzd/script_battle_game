@@ -7,14 +7,24 @@ export class MasterApp {
     @Inject(BattleGame) private battleGame: BattleGame;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
+    private registered = false;
+
     constructor() {
         console.log('connection', this.connection);
 
-        this.battleGame.setState(BattleState.battle);
+        this.connection.registerAsMaster();
+
+        // this.battleGame.setState(BattleState.wait);
 
         this.connection.onMessage$.subscribe(message => {
-            console.log('connection.onMessage$', message);
-        })
+            if (message.type === 'state') {
+                this.battleGame.setState(message.data);
+            }
+        });
+
+        this.connection.onClose$.subscribe(() => {
+            this.battleGame.setState(BattleState.connectionClosed);
+        });
 
     }
 

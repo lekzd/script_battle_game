@@ -8,18 +8,27 @@ export interface IMessage {
 export class WebsocketConnection {
 
     onMessage$ = new Subject<IMessage>();
+    onClose$ = new Subject<IMessage>();
 
     private connection: WebSocket;
+    private readyPromise: Promise<void>;
 
     constructor() {
         this.connection = new WebSocket('ws://localhost:1337');
 
-        this.connection.onopen = () => {
-            // connection is opened and ready to use
-        };
+        this.readyPromise = new Promise<void>((resolve, reject) => {
+            this.connection.onopen = () => {
+                resolve();
+            };
 
-        this.connection.onerror = (error) => {
-            // an error occurred when sending/receiving data
+            this.connection.onerror = (error) => {
+                reject();
+                this.onClose$.next();
+            };
+        });
+
+        this.connection.onclose = () => {
+            this.onClose$.next();
         };
 
         this.connection.onmessage = (message) => {
@@ -37,6 +46,26 @@ export class WebsocketConnection {
     }
 
     send(message: string) {
-        this.connection.send(message);
+        this.readyPromise.then(() => {
+            this.connection.send(message);
+        });
+    }
+
+    registerAsMaster() {
+        this.send(JSON.stringify({
+            type: 'registerMaster'
+        }));
+    }
+
+    registerAsLeftPlayer() {
+        this.send(JSON.stringify({
+            type: 'registerLeftPlayer'
+        }));
+    }
+
+    registerAsRightPlayer() {
+        this.send(JSON.stringify({
+            type: 'registerRightPlayer'
+        }));
     }
 }
