@@ -12,8 +12,22 @@
 </head>
 
 <body>
-<div id="display" class="display"></div>
-<div id="editor" class="editor"></div>
+<div class="player">
+    <div class="editor">
+        <div id="editor"></div>
+    </div>
+    <div class="rightSide">
+        <input class="tabRadio" type="radio" id="tab1" name="tabs" checked>
+        <label for="tab1" class="tabHead">Настройки</label>
+        <div class="toolbar tabBody">
+          <button id="run">run</button>
+        </div>
+
+        <input class="tabRadio" type="radio" id="tab2" name="tabs">
+        <label for="tab2" class="tabHead">Игра</label>
+        <div id="display" class="playerDisplay tabBody"></div>
+    </div>
+</div>
 
 <script>
     window.addEventListener('DOMContentLoaded', () => {

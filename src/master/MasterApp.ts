@@ -10,8 +10,6 @@ export class MasterApp {
     private registered = false;
 
     constructor() {
-        console.log('connection', this.connection);
-
         this.connection.registerAsMaster();
 
         // this.battleGame.setState(BattleState.wait);

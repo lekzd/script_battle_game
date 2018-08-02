@@ -3,8 +3,22 @@ body {
   margin: 0;
 }
 
+.player {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+.master {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
 .display,
-.display canvas {
+.playerDisplay,
+.display canvas,
+.playerDisplay canvas {
   width: 800px;
   height: 600px;
 }
@@ -14,6 +28,67 @@ body {
   border: 3px solid gold;
 }
 
-.display canvas {
+.playerDisplay {
+  height: 100%;
+}
+
+.editor {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 50%;
+  border: 3px solid green;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.ace_editor {
+  height: 100%;
+}
+
+.rightSide {
+  position: relative;
+  height: 100%;
+  width: 50%;
+  box-sizing: border-box;
+  flex-grow: 1;
+}
+
+.tabRadio {
+  display: none;
+}
+
+.tabHead {
+  display: inline-block;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 20px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.tabBody {
+  position: absolute;
+  left: 0;
+  top: 40px;
+  bottom: 0;
+  right: 0;
+  border: 3px solid grey;
+  box-sizing: border-box;
+}
+
+.tabRadio + .tabHead + .tabBody {
+  display: none;
+}
+
+.tabRadio:checked + .tabHead {
+  background: #333;
+}
+
+.tabRadio:checked + .tabHead + .tabBody {
+  display: block;
+}
+
+canvas {
   image-rendering: pixelated;
 }

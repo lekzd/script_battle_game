@@ -10,14 +10,23 @@ export class ClientApp {
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
     constructor() {
-
-        console.log('connection', this.connection);
+        this.connection.registerAsLeftPlayer();
 
         this.battleGame.setState(BattleState.battle);
 
         this.editorComponent.runCode$.subscribe(code => {
             this.battleGame.runCode(code);
-        })
+        });
+
+        this.connection.onMessage$.subscribe(message => {
+            if (message.type === 'state') {
+                this.battleGame.setState(message.data);
+            }
+        });
+
+        this.connection.onClose$.subscribe(() => {
+            this.battleGame.setState(BattleState.connectionClosed);
+        });
 
     }
 

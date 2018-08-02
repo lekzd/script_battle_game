@@ -35,6 +35,8 @@ export class BattleGame {
 
     runCode(code: string) {
         console.log('runCode', code);
+
+        this.setState(BattleState.battle);
     }
 
 }
