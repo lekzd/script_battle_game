@@ -2,6 +2,8 @@ import {BattleView} from './views/BattleView';
 import {WaitingView} from './views/WaitingView';
 import Phaser from "phaser";
 import {ConnectionClosedView} from "./views/ConnectionClosedView";
+import {CodeSandbox} from '../codeSandbox/CodeSandbox';
+import {Inject} from '../InjectDectorator';
 
 export enum BattleState {
     wait = 'waiting',
@@ -11,6 +13,8 @@ export enum BattleState {
 }
 
 export class BattleGame {
+
+    @Inject(CodeSandbox) private codeSandbox: CodeSandbox;
 
     private game: Phaser.Game;
     private currentState: BattleState.wait;
@@ -36,7 +40,15 @@ export class BattleGame {
     runCode(code: string) {
         console.log('runCode', code);
 
-        this.setState(BattleState.battle);
+        // this.setState(BattleState.battle);
+
+        this.codeSandbox.eval(code)
+            .then(() => {
+                console.log('run success');
+            })
+            .catch((e) => {
+                console.error(e);
+            });
     }
 
 }

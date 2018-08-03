@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WrapperPlugin = require('wrapper-webpack-plugin');
 const isDevServer = process.argv.find(v => v.includes('webpack-dev-server'));
 
 function getHtmlWebpackConfig(directory) {
@@ -23,7 +24,11 @@ module.exports = function(env = {}) {
         },
         plugins: [
             new HtmlWebpackPlugin(getHtmlWebpackConfig('master')),
-            new HtmlWebpackPlugin(getHtmlWebpackConfig('player'))
+            new HtmlWebpackPlugin(getHtmlWebpackConfig('player')),
+            new WrapperPlugin({
+                test: /script\.js$/,
+                header: 'window.$w = function(o, e){with (o) {return eval(e)}};'
+            })
         ],
         resolve: {
             extensions: ['.ts', '.js']
