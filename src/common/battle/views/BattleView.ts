@@ -2,15 +2,26 @@ import Phaser from 'phaser';
 import {Inject} from "../../InjectDectorator";
 import {CharactersList} from "../../characters/CharactersList";
 import {BattleFieldDrawer} from "../BattleFieldDrawer";
+import {BattleFieldModel} from "../BattleFieldModel";
+import {BattleUnit} from "../BattleUnit";
+import {Subject} from "rxjs/internal/Subject";
+import {IAction} from "../../codeSandbox/CodeSandbox";
 
 export class BattleView extends Phaser.Scene {
 
+    runLeftCode$ = new Subject<IAction[]>();
+
     @Inject(CharactersList) private charactersList: CharactersList;
+    @Inject(BattleFieldModel) private battleFieldModel: BattleFieldModel;
     @Inject(BattleFieldDrawer) private battleFieldDrawer: BattleFieldDrawer;
 
     constructor() {
         super({
             key: 'battle'
+        });
+
+        this.runLeftCode$.subscribe(actions => {
+            console.log('runLeftCode$', actions);
         });
     }
 
@@ -31,18 +42,24 @@ export class BattleView extends Phaser.Scene {
         ];
 
         for (let i = 0; i <= 4; i++) {
-            const left = this.battleFieldDrawer.getHexagonLeft(2, topIndexes[i]);
-            const top = this.battleFieldDrawer.getHexagonTop(2, topIndexes[i]);
+            const unit = new BattleUnit();
 
-            this.charactersList.drawRandomCharacter(this.add, left, top, true);
+            this.battleFieldModel.set(2, topIndexes[i], unit);
         }
 
         for (let i = 0; i <= 4; i++) {
-            const left = this.battleFieldDrawer.getHexagonLeft(11, topIndexes[i]);
-            const top = this.battleFieldDrawer.getHexagonTop(11, topIndexes[i]);
+            const unit = new BattleUnit();
 
-            this.charactersList.drawRandomCharacter(this.add, left, top, false);
+            this.battleFieldModel.set(11, topIndexes[i], unit);
         }
+
+        this.battleFieldModel.forEach((unit: BattleUnit, x: number, y: number) => {
+            const left = this.battleFieldDrawer.getHexagonLeft(x, y);
+            const top = this.battleFieldDrawer.getHexagonTop(x, y);
+            const isFriend = x === 2;
+
+            this.charactersList.drawRandomCharacter(this.add, left, top, isFriend);
+        })
     }
 
     private generateHexagonsTexture(name: string) {

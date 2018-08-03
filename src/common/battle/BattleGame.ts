@@ -17,7 +17,7 @@ export class BattleGame {
     @Inject(CodeSandbox) private codeSandbox: CodeSandbox;
 
     private game: Phaser.Game;
-    private currentState: BattleState.wait;
+    private currentState: BattleState;
 
     constructor() {
         const config = {
@@ -34,17 +34,19 @@ export class BattleGame {
     setState(newState: BattleState) {
         this.game.scene.switch(BattleState.wait, newState);
 
-        this.currentState = BattleState.wait;
+        this.currentState = newState;
     }
 
     runCode(code: string) {
         console.log('runCode', code);
 
-        // this.setState(BattleState.battle);
-
         this.codeSandbox.eval(code)
-            .then(() => {
-                console.log('run success');
+            .then((actions) => {
+                this.setState(BattleState.battle);
+
+                const battleView = <BattleView>this.game.scene.getScene(BattleState.battle);
+
+                battleView.runLeftCode$.next(actions);
             })
             .catch((e) => {
                 console.error(e);

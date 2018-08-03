@@ -2,14 +2,25 @@
 import Ace from "ace-builds/src-noconflict/ace";
 import "ace-builds/src-noconflict/mode-javascript"
 import "ace-builds/src-noconflict/theme-monokai"
-import {Subject} from 'rxjs/index';
+import {fromEvent, merge, Observable, Subject} from 'rxjs/index';
+import {filter} from "rxjs/operators";
 
 export class EditorComponent {
 
     runCode$ = new Subject<string>();
 
     private editor: any;
-    private runButton: HTMLButtonElement;
+
+    get runButtonClick$(): Observable<Event> {
+        return fromEvent(document.getElementById('run'), 'click');
+    }
+
+    get ctrlEnter$(): Observable<KeyboardEvent> {
+        return fromEvent<KeyboardEvent>(document, 'keypress')
+            .pipe(
+                filter(event => event.keyCode === 10 && (event.ctrlKey || event.metaKey))
+            );
+    }
 
     constructor() {
         this.editor = Ace.edit('editor', {
@@ -19,11 +30,10 @@ export class EditorComponent {
 
         this.editor.session.setMode('ace/mode/javascript');
 
-        this.runButton = <HTMLButtonElement>document.getElementById('run');
-
-        this.runButton.addEventListener('click', () => {
-            this.runCode$.next(this.editor.getValue());
-        })
+        merge(this.runButtonClick$, this.ctrlEnter$)
+            .subscribe(() => {
+                this.runCode$.next(this.editor.getValue());
+            });
     }
 
 

@@ -1,5 +1,14 @@
 
+export interface IAction {
+    type: string;
+    [key: string]: string;
+}
+
 const MAX_EVAL_TIMEOUT = 1000;
+const BANNED_APIS = [
+    'self', 'state', 'fetch', 'postMessage', 'nativePostMessage', 'addEventListener',
+    'XMLHttpRequest', 'WebSocket', 'Worker', 'Error'
+];
 
 export class CodeSandbox {
 
@@ -9,17 +18,17 @@ export class CodeSandbox {
         this.scope[name] = value;
     }
 
-    eval(code: string): Promise<boolean> {
+    eval(code: string): Promise<IAction[]> {
         const worker = new Worker(this.getJSBlob(code));
 
         let resolved = false;
 
-        return new Promise<boolean>((resolve, reject) => {
+        return new Promise<IAction[]>((resolve, reject) => {
             worker.onmessage = (e) => {
-                console.log("Received: " + e.data);
+                const actions = <IAction[]>JSON.parse(e.data);
 
                 resolved = true;
-                resolve();
+                resolve(actions);
                 worker.terminate();
             };
 
@@ -35,8 +44,6 @@ export class CodeSandbox {
     }
 
     private getWorkerCode(codeToInject: string): string {
-        const postMessageHash = 'a' + Math.random().toString(26).substr(2);
-
         return `
             onmessage = () => {
                 const state = [];
@@ -81,17 +88,19 @@ export class CodeSandbox {
                     return '1';
                 }
                 
-                const ${postMessageHash} = this.postMessage;
+                const nativePostMessage = this.postMessage;
                 
                 Object.keys(this).forEach(key => {
                     delete this[key];
                 });
                 
-                (function(state, fetch, XMLHttpRequest) {
-                    ${codeToInject};
+                (function(${BANNED_APIS.join(',')}) {
+                    try {
+                        ${codeToInject};
+                    } catch (e) {}
                 }).call({hello: 'how are you?'})
             
-                ${postMessageHash}(JSON.stringify(state))
+                nativePostMessage(JSON.stringify(state))
             }`;
     }
 
