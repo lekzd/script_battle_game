@@ -35,8 +35,10 @@ export class CodeSandbox {
     }
 
     private getWorkerCode(codeToInject: string): string {
+        const postMessageHash = 'a' + Math.random().toString(26).substr(2);
+
         return `
-            onmessage = (message) => {
+            onmessage = () => {
                 const state = [];
                 
                 function goTo(x, y) {
@@ -79,11 +81,17 @@ export class CodeSandbox {
                     return '1';
                 }
                 
-                (function() {
+                const ${postMessageHash} = this.postMessage;
+                
+                Object.keys(this).forEach(key => {
+                    delete this[key];
+                });
+                
+                (function(state, fetch, XMLHttpRequest) {
                     ${codeToInject};
-                })()
+                }).call({hello: 'how are you?'})
             
-                postMessage(JSON.stringify(state))
+                ${postMessageHash}(JSON.stringify(state))
             }`;
     }
 
