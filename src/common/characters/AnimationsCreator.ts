@@ -19,6 +19,10 @@ const actions = [
     {
         name: 'shoot',
         frames: 13
+    },
+    {
+        name: 'idle',
+        frames: 1
     }
 ];
 

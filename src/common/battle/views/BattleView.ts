@@ -6,6 +6,7 @@ import {BattleFieldModel} from "../BattleFieldModel";
 import {BattleUnit} from "../BattleUnit";
 import {Subject} from "rxjs/internal/Subject";
 import {IAction} from "../../codeSandbox/CodeSandbox";
+import {BattleSide} from "../BattleSession";
 
 export class BattleView extends Phaser.Scene {
 
@@ -42,24 +43,28 @@ export class BattleView extends Phaser.Scene {
         ];
 
         for (let i = 0; i <= 4; i++) {
-            const unit = new BattleUnit();
+            const x = 2;
+            const y = topIndexes[i];
+            const type = this.charactersList.getRandomType();
+            const side = BattleSide.left;
+            const scene = this;
 
-            this.battleFieldModel.set(2, topIndexes[i], unit);
+            const unit = new BattleUnit({x, y, type, side, scene});
+
+            this.battleFieldModel.set(x, y, unit);
         }
 
         for (let i = 0; i <= 4; i++) {
-            const unit = new BattleUnit();
+            const x = 11;
+            const y = topIndexes[i];
+            const type = this.charactersList.getRandomType();
+            const side = BattleSide.right;
+            const scene = this;
 
-            this.battleFieldModel.set(11, topIndexes[i], unit);
+            const unit = new BattleUnit({x, y, type, side, scene});
+
+            this.battleFieldModel.set(x, y, unit);
         }
-
-        this.battleFieldModel.forEach((unit: BattleUnit, x: number, y: number) => {
-            const left = this.battleFieldDrawer.getHexagonLeft(x, y);
-            const top = this.battleFieldDrawer.getHexagonTop(x, y);
-            const isFriend = x === 2;
-
-            this.charactersList.drawRandomCharacter(this.add, left, top, isFriend);
-        })
     }
 
     private generateHexagonsTexture(name: string) {

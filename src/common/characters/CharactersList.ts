@@ -23,7 +23,7 @@ interface IAttackConfigs {
     magic: IAttackTypeConfig;
 }
 
-interface ICharacterConfig extends IAttackConfigs {
+export interface ICharacterConfig extends IAttackConfigs {
     id: string;
     title: string;
     type: CharacterType;
@@ -131,12 +131,14 @@ export class CharactersList {
         });
     }
 
-    drawRandomCharacter(factory: Phaser.GameObjects.GameObjectFactory, left: number, top: number, friend: boolean) {
-        const randomIndex = Math.floor(Math.random() * this.types.length);
-        const characterId = this.types[randomIndex].id;
-        const characterAnimation = friend ? `${characterId}_slash_right` : `${characterId}_slash_left`;
+    get(typeId: string): ICharacterConfig {
+        return this.types.find(type => type.id === typeId);
+    }
 
-        factory.sprite(left, top, characterId).play(characterAnimation, false, 0);
+    getRandomType(): string {
+        const randomIndex = Math.floor(Math.random() * this.types.length);
+
+        return this.types[randomIndex].id;
     }
 
 }
