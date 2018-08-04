@@ -46,7 +46,7 @@ export class BattleGame {
 
                 const battleView = <BattleView>this.game.scene.getScene(BattleState.battle);
 
-                battleView.runLeftCode$.next(actions);
+                battleView.runCode$.next([actions, []]);
             })
             .catch((e) => {
                 console.error(e);

@@ -6,12 +6,13 @@ import {BattleFieldModel} from "../BattleFieldModel";
 import {BattleUnit} from "../BattleUnit";
 import {Subject} from "rxjs/internal/Subject";
 import {IAction} from "../../codeSandbox/CodeSandbox";
-import {BattleSide} from "../BattleSession";
+import {BattleSession, BattleSide} from "../BattleSession";
 
 export class BattleView extends Phaser.Scene {
 
-    runLeftCode$ = new Subject<IAction[]>();
+    runCode$ = new Subject<[IAction[], IAction[]]>();
 
+    @Inject(BattleSession) private battleSession: BattleSession;
     @Inject(CharactersList) private charactersList: CharactersList;
     @Inject(BattleFieldModel) private battleFieldModel: BattleFieldModel;
     @Inject(BattleFieldDrawer) private battleFieldDrawer: BattleFieldDrawer;
@@ -21,8 +22,8 @@ export class BattleView extends Phaser.Scene {
             key: 'battle'
         });
 
-        this.runLeftCode$.subscribe(actions => {
-            console.log('runLeftCode$', actions);
+        this.runCode$.subscribe(([leftActions, rightActions]) => {
+            this.battleSession.start(this.battleFieldModel.units, leftActions, rightActions);
         });
     }
 

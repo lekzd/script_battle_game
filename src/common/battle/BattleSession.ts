@@ -1,5 +1,7 @@
 import {UnitsStack} from './UnitsStack';
 import {Inject} from '../InjectDectorator';
+import {BattleUnit} from "./BattleUnit";
+import {IAction} from "../codeSandbox/CodeSandbox";
 
 export enum BattleSide {
     left, right
@@ -14,12 +16,10 @@ export class BattleSession {
 
     private turnResolve: Function;
 
-    start() {
+    start(units: BattleUnit[], leftScript: IAction[], rightScript: IAction[]) {
         this.winPromise = new Promise<BattleSide>(resolve => {
             this.winResolve = resolve;
         });
-
-        const units = [];
 
         this.unitsStack.init(units);
 

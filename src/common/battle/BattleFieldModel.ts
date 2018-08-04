@@ -14,6 +14,18 @@ export class BattleFieldModel {
     private grid = new Grid<BattleUnit>(FIELD_WIDTH);
     private graph = new HexagonalGraph(FIELD_WIDTH, FIELD_HEIGHT);
 
+    get units(): BattleUnit[] {
+        const result = [];
+
+        this.grid.forEach(unit => {
+            if (!!unit) {
+                result.push(unit);
+            }
+        });
+
+        return result;
+    }
+
     constructor() {
         this.grid.getRawData().fill(null);
     }

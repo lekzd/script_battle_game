@@ -2,6 +2,7 @@ import {BattleSide} from './BattleSession';
 import {CharactersList, ICharacterConfig} from "../characters/CharactersList";
 import {Inject} from "../InjectDectorator";
 import {BattleFieldDrawer} from "./BattleFieldDrawer";
+import {IAction} from "../codeSandbox/CodeSandbox";
 
 interface IBattleUnitConfig {
     x: number;
@@ -29,6 +30,7 @@ export class BattleUnit {
     private scene: Phaser.Scene;
     private type: string;
     private sprite: Phaser.GameObjects.Sprite;
+    private actions: IAction[] = [];
 
     get renderLeft(): number {
         return this.battleFieldDrawer.getHexagonLeft(this.x, this.y);
@@ -51,6 +53,10 @@ export class BattleUnit {
         this.sprite = this.scene.add.sprite(this.renderLeft, this.renderTop, this.type);
 
         this.setAnimation('idle');
+    }
+
+    setActions(actions: IAction[]) {
+        this.actions = actions.slice(0);
     }
 
     private setAnimation(animationName: IAnimationName) {
