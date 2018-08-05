@@ -68,10 +68,17 @@ export class BattleUnit {
     }
 
     setPosition(x: number, y: number) {
-        this.x += x;
-        this.y += y;
+        this.x = Math.max(0, x + this.x);
+        this.y = Math.max(0, y + this.y);
 
         this.container.setPosition(this.renderLeft, this.renderTop);
+
+        this.setAnimation('walk');
+
+        setTimeout(() => {
+
+            this.setAnimation('idle');
+        }, 200);
     }
 
     private setAnimation(animationName: IAnimationName) {

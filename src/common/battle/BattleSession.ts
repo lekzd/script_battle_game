@@ -60,7 +60,7 @@ export class BattleSession {
             }
 
             this.turnResolve();
-        }, 1000);
+        }, 300);
     }
 
     private isLeftSideWins(): boolean {

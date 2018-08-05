@@ -49,7 +49,7 @@ export class BattleView extends Phaser.Scene {
         ];
 
         const ids = [
-            'CHROME', 'FIREFOX', 'IE', 'SAFARI'
+            'A', 'B', 'C', 'D'
         ];
 
         for (let i = 0; i <= 4; i++) {
