@@ -11,7 +11,7 @@ interface IAttackTypeConfig {
     defence: IMinMax;
 }
 
-enum CharacterType {
+export enum CharacterType {
     shooting,
     magic,
     melee

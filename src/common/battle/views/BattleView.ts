@@ -5,26 +5,31 @@ import {BattleFieldDrawer} from "../BattleFieldDrawer";
 import {BattleFieldModel} from "../BattleFieldModel";
 import {BattleUnit} from "../BattleUnit";
 import {Subject} from "rxjs/internal/Subject";
-import {IAction} from "../../codeSandbox/CodeSandbox";
+import {CodeSandbox} from "../../codeSandbox/CodeSandbox";
 import {BattleSession, BattleSide} from "../BattleSession";
+import {combineLatest} from "rxjs/internal/observable/combineLatest";
 
 export class BattleView extends Phaser.Scene {
 
-    runCode$ = new Subject<[IAction[], IAction[]]>();
+    runCode$ = new Subject<[string, string]>();
 
+    @Inject(CodeSandbox) private codeSandbox: CodeSandbox;
     @Inject(BattleSession) private battleSession: BattleSession;
     @Inject(CharactersList) private charactersList: CharactersList;
     @Inject(BattleFieldModel) private battleFieldModel: BattleFieldModel;
     @Inject(BattleFieldDrawer) private battleFieldDrawer: BattleFieldDrawer;
+
+    private create$ = new Subject();
 
     constructor() {
         super({
             key: 'battle'
         });
 
-        this.runCode$.subscribe(([leftActions, rightActions]) => {
-            this.battleSession.start(this.battleFieldModel.units, leftActions, rightActions);
-        });
+        combineLatest(this.runCode$, this.create$.asObservable())
+            .subscribe(([[leftCode, rightCode]]) => {
+                this.runCode(leftCode, rightCode);
+            });
     }
 
     preload () {
@@ -66,6 +71,8 @@ export class BattleView extends Phaser.Scene {
 
             this.battleFieldModel.set(x, y, unit);
         }
+
+        this.create$.next();
     }
 
     private generateHexagonsTexture(name: string) {
@@ -76,5 +83,27 @@ export class BattleView extends Phaser.Scene {
         this.battleFieldDrawer.draw((fieldTexture as any).context);
 
         (fieldTexture as any).refresh();
+    }
+
+    private runCode(leftCode: string, rightCode: string) {
+        const {units} = this.battleFieldModel;
+
+        const promises = units
+            .map(unit => {
+                const evalPromise = unit.side === BattleSide.left
+                    ? this.codeSandbox.eval(leftCode, unit)
+                    : this.codeSandbox.eval(rightCode, unit);
+
+                evalPromise.then((actions) => {
+                    unit.setActions(actions);
+                });
+
+                return evalPromise;
+            });
+
+        Promise.all(promises)
+            .then(() => {
+                this.battleSession.start(units);
+            })
     }
 }

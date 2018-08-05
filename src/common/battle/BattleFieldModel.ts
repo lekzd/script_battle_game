@@ -3,6 +3,7 @@ import {BattleUnit} from "./BattleUnit";
 import {Inject} from "../InjectDectorator";
 import {BattleFieldDrawer} from "./BattleFieldDrawer";
 import {HexagonalGraph} from "../helpers/HexagonalGraph";
+import {IAction} from "../codeSandbox/CodeSandbox";
 
 const FIELD_WIDTH = 12;
 const FIELD_HEIGHT = 9;
@@ -41,6 +42,10 @@ export class BattleFieldModel {
 
     forEach(callback: (unit: BattleUnit, x: number, y: number) => void) {
         this.grid.forEach(callback);
+    }
+
+    doAction(unit: BattleUnit, action: IAction) {
+        console.log('doAction', action);
     }
 
 }

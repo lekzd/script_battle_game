@@ -1,7 +1,11 @@
+import {BattleUnit} from "../battle/BattleUnit";
 
 export interface IAction {
-    type: string;
-    [key: string]: string;
+    action: string;
+    id?: string;
+    x?: number;
+    y?: number;
+    text?: string;
 }
 
 const MAX_EVAL_TIMEOUT = 1000;
@@ -18,17 +22,15 @@ export class CodeSandbox {
         this.scope[name] = value;
     }
 
-    eval(code: string): Promise<IAction[]> {
+    eval(code: string, unit: BattleUnit): Promise<IAction[]> {
         const worker = new Worker(this.getJSBlob(code));
 
         let resolved = false;
 
         return new Promise<IAction[]>((resolve, reject) => {
             worker.onmessage = (e) => {
-                const actions = <IAction[]>JSON.parse(e.data);
-
                 resolved = true;
-                resolve(actions);
+                resolve(JSON.parse(e.data));
                 worker.terminate();
             };
 
@@ -39,68 +41,72 @@ export class CodeSandbox {
                 }
             }, MAX_EVAL_TIMEOUT);
 
-            worker.postMessage("hello"); // Start the worker.
+            worker.postMessage(unit.api); // Start the worker.
         });
     }
 
     private getWorkerCode(codeToInject: string): string {
         return `
-            onmessage = () => {
-                const state = [];
+            onmessage = (message) => {
                 
-                function goTo(x, y) {
-                    state.push({action: 'goTo', x: x, y: y});
-                }
+                const actions = [];
+                const unit = message.data;
                 
-                function goToEnemyAndHit() {
-                    state.push({action: 'goToEnemyAndHit'});
-                }
-                
-                function shoot(id) {
-                    state.push({action: 'shoot', id: id});
-                }
-                
-                function spell(id) {
-                    state.push({action: 'spell', id: id});
-                }
-                
-                function say(text) {
-                    state.push({action: 'say', text: text});
-                }
-                
-                function isShooter() {
-                    return true;
-                }
-                
-                function isMagician() {
-                    return true;
-                }
-                
-                function isAlive() {
-                    return true;
-                }
-                
-                function getHealth() {
-                    return 100;
-                }
-                
-                function getID() {
-                    return '1';
-                }
-                
-                const nativePostMessage = this.postMessage;
-                
-                Object.keys(this).forEach(key => {
-                    delete this[key];
-                });
-                
-                (function(${BANNED_APIS.join(',')}) {
-                    try {
-                        ${codeToInject};
-                    } catch (e) {}
-                }).call({hello: 'how are you?'})
+                class UnitApi {
+                    goTo(x, y) {
+                        actions.push({action: 'goTo', x: x, y: y});
+                    }
             
-                nativePostMessage(JSON.stringify(state))
+                    goToEnemyAndHit() {
+                        actions.push({action: 'goToEnemyAndHit'});
+                    }
+            
+                    shoot(id) {
+                        actions.push({action: 'shoot', id: id});
+                    }
+            
+                    spell(id) {
+                        actions.push({action: 'spell', id: id});
+                    }
+            
+                    say(text) {
+                        actions.push({action: 'say', text: text});
+                    }
+            
+                    isShooter() {
+                        return unit.character.type === CharacterType.shooting;
+                    }
+            
+                    isMagician() {
+                        return unit.character.type === CharacterType.magic;
+                    }
+            
+                    isAlive() {
+                        return unit.health > 0;
+                    }
+            
+                    getHealth() {
+                        return unit.health;
+                    }
+            
+                    getID() {
+                        return '1';
+                    }
+                }
+                
+                const unitApi = new UnitApi();
+                
+                with (unitApi) {
+                    (function(${BANNED_APIS.join(',')}) {
+                        try {
+                            ${codeToInject};
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    }).call({hello: 'how are you?'})
+                }
+            
+                postMessage(JSON.stringify(actions));
             }`;
     }
 

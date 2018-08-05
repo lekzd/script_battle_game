@@ -27,7 +27,9 @@ export class UnitsStack {
 
         this.all.forEach(unit => {
             unit.hasTurn = true;
-        })
+        });
+
+        this.next();
     }
 
     private isRoundEnd(): boolean {

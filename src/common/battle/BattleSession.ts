@@ -1,7 +1,7 @@
 import {UnitsStack} from './UnitsStack';
 import {Inject} from '../InjectDectorator';
 import {BattleUnit} from "./BattleUnit";
-import {IAction} from "../codeSandbox/CodeSandbox";
+import {BattleFieldModel} from "./BattleFieldModel";
 
 export enum BattleSide {
     left, right
@@ -10,13 +10,14 @@ export enum BattleSide {
 export class BattleSession {
 
     @Inject(UnitsStack) private unitsStack: UnitsStack;
+    @Inject(BattleFieldModel) private battleFieldModel: BattleFieldModel;
 
     private winPromise: Promise<BattleSide>;
     private winResolve: Function;
 
     private turnResolve: Function;
 
-    start(units: BattleUnit[], leftScript: IAction[], rightScript: IAction[]) {
+    start(units: BattleUnit[]) {
         this.winPromise = new Promise<BattleSide>(resolve => {
             this.winResolve = resolve;
         });
@@ -29,10 +30,10 @@ export class BattleSession {
     private newTurn() {
         new Promise<void>(resolve => {
             this.turnResolve = resolve;
+            this.runActiveUnitTasks();
         }).then(() => {
             this.unitsStack.next();
             this.newTurn();
-            this.runActiveUnitTasks();
         });
     }
 
@@ -49,6 +50,13 @@ export class BattleSession {
                 this.winResolve(BattleSide.right);
 
                 return;
+            }
+
+            const {activeUnit} = this.unitsStack;
+            const action = activeUnit.actions.shift();
+
+            if (action) {
+                this.battleFieldModel.doAction(activeUnit, action);
             }
 
             this.turnResolve();
