@@ -30,9 +30,9 @@ export class BattleSession {
     private newTurn() {
         new Promise<void>(resolve => {
             this.turnResolve = resolve;
+            this.unitsStack.next();
             this.runActiveUnitTasks();
         }).then(() => {
-            this.unitsStack.next();
             this.newTurn();
         });
     }

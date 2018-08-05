@@ -7,15 +7,14 @@ export class UnitsStack {
 
     init(units: BattleUnit[]) {
         this.all = units.slice(0);
-        this.newRound();
     }
 
     next() {
-        this.activeUnit = this.all.pop();
+        this.activeUnit = this.all.shift();
 
         this.activeUnit.hasTurn = false;
 
-        this.all.unshift(this.activeUnit);
+        this.all.push(this.activeUnit);
 
         if (this.isRoundEnd()) {
             this.newRound();

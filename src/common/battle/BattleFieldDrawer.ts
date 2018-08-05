@@ -2,7 +2,7 @@
 const HEXAGON_ANGLE = 0.523598776;
 const FIELD_WIDTH = 12;
 const FIELD_HEIGHT = 9;
-const SIDE_LENGTH = 17;
+const SIDE_LENGTH = 18;
 
 const hexHeight = Math.round(Math.sin(HEXAGON_ANGLE) * SIDE_LENGTH);
 const hexRadius = Math.round(Math.cos(HEXAGON_ANGLE) * SIDE_LENGTH);

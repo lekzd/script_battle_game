@@ -46,6 +46,10 @@ export class BattleFieldModel {
 
     doAction(unit: BattleUnit, action: IAction) {
         console.log('doAction', action);
+
+        if (action.action === 'goTo') {
+            unit.setPosition(action.x, action.y);
+        }
     }
 
 }

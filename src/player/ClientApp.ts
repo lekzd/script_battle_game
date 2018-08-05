@@ -6,13 +6,16 @@ import {EditorComponent} from '../common/editor/EditorComponent';
 export class ClientApp {
 
     @Inject(BattleGame) private battleGame: BattleGame;
-    @Inject(EditorComponent) private editorComponent: EditorComponent;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
+
+    private editorComponent: EditorComponent;
 
     constructor() {
         this.connection.registerAsLeftPlayer();
 
         this.battleGame.setState(BattleState.battle);
+
+        this.editorComponent = new EditorComponent();
 
         this.editorComponent.runCode$.subscribe(code => {
             this.battleGame.runCode(code);
