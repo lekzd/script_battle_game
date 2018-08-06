@@ -36,6 +36,7 @@ export class BattleUnit {
     private scene: Phaser.Scene;
     private type: string;
     private sprite: Phaser.GameObjects.Sprite;
+    private sayText: Phaser.GameObjects.Text;
     private container: any;
 
     get renderLeft(): number {
@@ -67,7 +68,7 @@ export class BattleUnit {
         this.actions = actions.slice(0);
     }
 
-    setPosition(x: number, y: number) {
+    setPositionAction(x: number, y: number): Promise<void> {
         this.x = Math.max(0, x + this.x);
         this.y = Math.max(0, y + this.y);
 
@@ -75,10 +76,28 @@ export class BattleUnit {
 
         this.setAnimation('walk');
 
-        setTimeout(() => {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                this.setAnimation('idle');
+                resolve();
+            }, 300);
+        });
+    }
 
-            this.setAnimation('idle');
-        }, 200);
+    sayAction(text: string): Promise<void> {
+        return new Promise(resolve => {
+            this.sayText.setText(text);
+            this.sayText.setVisible(true);
+
+            setTimeout(() => {
+
+                resolve();
+            }, 300);
+
+            setTimeout(() => {
+                this.sayText.setVisible(false);
+            }, 2000);
+        });
     }
 
     private setAnimation(animationName: IAnimationName) {
@@ -92,9 +111,11 @@ export class BattleUnit {
         this.container = (this.scene.add as any).container(this.renderLeft, this.renderTop);
         this.sprite = this.generateSprite();
         const idText = this.generateIdText();
+        this.sayText = this.generateSayText();
         const healthBar = this.generateHealthBar();
 
         this.container.add(this.sprite);
+        this.container.add(this.sayText);
         this.container.add(idText);
         this.container.add(healthBar);
 
@@ -124,6 +145,28 @@ export class BattleUnit {
         idText.setPadding(2, 1, 2, 0);
 
         return idText;
+    }
+
+    private generateSayText(): Phaser.GameObjects.Text {
+        const isLeft = this.side === BattleSide.left;
+        const left = isLeft ? 10 : -10;
+
+        const textElement = this.scene.add.text(left, -32, '', {
+            font: '9px monospace',
+            color: '#111111',
+            backgroundColor: '#faffac'
+        });
+
+        if (isLeft) {
+            textElement.setOrigin(0, 1);
+        } else {
+            textElement.setOrigin(1, 1);
+        }
+
+        textElement.setPadding(2, 1, 2, 0);
+        textElement.setVisible(false);
+
+        return textElement;
     }
 
     private generateHealthBar(): Phaser.GameObjects.Graphics {

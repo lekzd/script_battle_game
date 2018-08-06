@@ -18,7 +18,7 @@ export class EditorComponent {
     get ctrlEnter$(): Observable<KeyboardEvent> {
         return fromEvent<KeyboardEvent>(document, 'keypress')
             .pipe(
-                filter(event => event.keyCode === 10 && (event.ctrlKey || event.metaKey))
+                filter(event => this.isWindowsCtrlEnter(event) || this.isUnixCtrlEnter(event))
             );
     }
 
@@ -36,5 +36,11 @@ export class EditorComponent {
             });
     }
 
+    private isWindowsCtrlEnter(event: KeyboardEvent): boolean {
+        return event.keyCode === 10 && event.ctrlKey;
+    }
 
+    private isUnixCtrlEnter(event: KeyboardEvent): boolean {
+        return event.keyCode === 13 && (event.ctrlKey || event.metaKey);
+    }
 }

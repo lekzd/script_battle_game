@@ -32,6 +32,14 @@ export class BattleFieldModel {
     }
 
     set(x: number, y: number, unit: BattleUnit) {
+        const oldX = unit.x;
+        const oldY = unit.y;
+
+        if (oldX !== unit.x || oldY !== unit.y) {
+            this.grid.set(oldX, oldY, null);
+            this.graph.setWeight(oldX, oldY, 0);
+        }
+
         this.grid.set(x, y, unit);
         this.graph.setWeight(x, y, 1);
     }
@@ -44,11 +52,16 @@ export class BattleFieldModel {
         this.grid.forEach(callback);
     }
 
-    doAction(unit: BattleUnit, action: IAction) {
+    doAction(unit: BattleUnit, action: IAction): Promise<void> {
         console.log('doAction', action);
 
         if (action.action === 'goTo') {
-            unit.setPosition(action.x, action.y);
+            this.set(action.x, action.y, unit);
+            return unit.setPositionAction(action.x, action.y);
+        }
+
+        if (action.action === 'say') {
+            return unit.sayAction(action.text);
         }
     }
 
