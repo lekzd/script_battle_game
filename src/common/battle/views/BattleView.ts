@@ -48,19 +48,14 @@ export class BattleView extends Phaser.Scene {
             2, 4, 6, 8
         ];
 
-        const ids = [
-            'A', 'B', 'C', 'D'
-        ];
-
         for (let i = 0; i <= 4; i++) {
             const x = 2;
             const y = topIndexes[i];
             const type = this.charactersList.getRandomType();
             const side = BattleSide.left;
             const scene = this;
-            const id = ids[i];
 
-            const unit = new BattleUnit({x, y, type, side, scene, id});
+            const unit = new BattleUnit({x, y, type, side, scene});
 
             this.battleFieldModel.set(x, y, unit);
         }
@@ -71,9 +66,8 @@ export class BattleView extends Phaser.Scene {
             const type = this.charactersList.getRandomType();
             const side = BattleSide.right;
             const scene = this;
-            const id = ids[i];
 
-            const unit = new BattleUnit({x, y, type, side, scene, id});
+            const unit = new BattleUnit({x, y, type, side, scene});
 
             this.battleFieldModel.set(x, y, unit);
         }

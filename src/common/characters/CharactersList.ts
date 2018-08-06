@@ -24,6 +24,7 @@ interface IAttackConfigs {
 }
 
 export interface ICharacterConfig extends IAttackConfigs {
+    id: string;
     key: string;
     title: string;
     type: CharacterType;

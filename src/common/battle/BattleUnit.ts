@@ -8,9 +8,8 @@ import {getBattleApi} from "./BattleUnitBattleApi";
 interface IBattleUnitConfig {
     x: number;
     y: number;
-    id: string,
-    type: string,
-    side: BattleSide,
+    type: string;
+    side: BattleSide;
     scene: Phaser.Scene;
 }
 
@@ -51,12 +50,13 @@ export class BattleUnit {
         this.x = config.x;
         this.y = config.y;
 
-        this.id = config.id;
         this.side = config.side;
         this.scene = config.scene;
         this.type = config.type;
 
         this.character = this.charactersList.get(config.type);
+
+        this.id = this.character.id;
 
         this.initGraphics();
 
