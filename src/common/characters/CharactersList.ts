@@ -24,7 +24,7 @@ interface IAttackConfigs {
 }
 
 export interface ICharacterConfig extends IAttackConfigs {
-    id: string;
+    key: string;
     title: string;
     type: CharacterType;
     speed: number;
@@ -65,42 +65,48 @@ function getAttackConfigs(mellee: number, shoot: number, magic: number): IAttack
 }
 
 const MAGIC_GIRL: ICharacterConfig = Object.assign({
-    id: 'character_magic',
+    id: 'EVAL',
+    key: 'character_magic',
     title: 'magic girl',
     type: CharacterType.magic,
     speed: 4,
 }, getAttackConfigs(0, 4, 8));
 
 const SKELETON: ICharacterConfig = Object.assign({
-    id: 'character_nekr',
+    id: 'PWA',
+    key: 'character_nekr',
     title: 'skeleton',
     type: CharacterType.shooting,
     speed: 4,
 }, getAttackConfigs(2, 6, 4));
 
 const ORK: ICharacterConfig = Object.assign({
-    id: 'character_ork',
+    id: '$',
+    key: 'character_ork',
     title: 'ork',
     type: CharacterType.shooting,
     speed: 4,
 }, getAttackConfigs(2, 8, 0));
 
 const PALLADIN: ICharacterConfig = Object.assign({
-    id: 'character_palladin',
+    id: 'DART',
+    key: 'character_palladin',
     title: 'palladin',
     type: CharacterType.melee,
     speed: 4,
 }, getAttackConfigs(6, 6, 0));
 
 const VARVAR: ICharacterConfig = Object.assign({
-    id: 'character_varvar',
+    id: 'CSS',
+    key: 'character_varvar',
     title: 'varvar',
     type: CharacterType.melee,
     speed: 4,
 }, getAttackConfigs(6, 2, 4));
 
 const WINTER: ICharacterConfig = Object.assign({
-    id: 'character_winter',
+    id: 'IE',
+    key: 'character_winter',
     title: 'winter',
     type: CharacterType.magic,
     speed: 4,
@@ -121,24 +127,24 @@ export class CharactersList {
 
     load(loader: Phaser.Loader.LoaderPlugin) {
         this.types.forEach(type => {
-            loader.atlas(type.id, `img/${type.id}.png`, 'img/sprites.json');
+            loader.atlas(type.key, `img/${type.key}.png`, 'img/sprites.json');
         });
     }
 
     prepareAnimations(phaserAnims: any) {
         this.types.forEach(type => {
-            this.animationsCreator.create(phaserAnims, type.id);
+            this.animationsCreator.create(phaserAnims, type.key);
         });
     }
 
     get(typeId: string): ICharacterConfig {
-        return this.types.find(type => type.id === typeId);
+        return this.types.find(type => type.key === typeId);
     }
 
     getRandomType(): string {
         const randomIndex = Math.floor(Math.random() * this.types.length);
 
-        return this.types[randomIndex].id;
+        return this.types[randomIndex].key;
     }
 
 }
