@@ -1,4 +1,5 @@
 import {BattleUnit} from "../battle/BattleUnit";
+import {getUnitApi} from './getUnitApi';
 
 export interface IAction {
     action: string;
@@ -52,49 +53,7 @@ export class CodeSandbox {
                 const actions = [];
                 const unit = message.data;
                 
-                class UnitApi {
-                    goTo(x, y) {
-                        actions.push({action: 'goTo', x: x, y: y});
-                    }
-            
-                    goToEnemyAndHit() {
-                        actions.push({action: 'goToEnemyAndHit'});
-                    }
-            
-                    shoot(id) {
-                        actions.push({action: 'shoot', id: id});
-                    }
-            
-                    spell(id) {
-                        actions.push({action: 'spell', id: id});
-                    }
-            
-                    say(text) {
-                        actions.push({action: 'say', text: text});
-                    }
-            
-                    isShooter() {
-                        return unit.character.type === CharacterType.shooting;
-                    }
-            
-                    isMagician() {
-                        return unit.character.type === CharacterType.magic;
-                    }
-            
-                    isAlive() {
-                        return unit.health > 0;
-                    }
-            
-                    getHealth() {
-                        return unit.health;
-                    }
-            
-                    getID() {
-                        return unit.id;
-                    }
-                }
-                
-                const unitApi = new UnitApi();
+                const unitApi = (${getUnitApi.toString()})(unit, actions);
                 
                 with (unitApi) {
                     (function(${BANNED_APIS.join(',')}) {

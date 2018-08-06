@@ -12,9 +12,9 @@ interface IAttackTypeConfig {
 }
 
 export enum CharacterType {
-    shooting,
-    magic,
-    melee
+    shooting = 'shooting',
+    magic = 'magic',
+    melee = 'melee'
 }
 
 interface IAttackConfigs {

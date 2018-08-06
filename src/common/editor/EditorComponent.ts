@@ -1,9 +1,13 @@
 // https://github.com/ajaxorg/ace-builds/issues/129
-import Ace from "ace-builds/src-noconflict/ace";
-import "ace-builds/src-noconflict/mode-javascript"
-import "ace-builds/src-noconflict/theme-monokai"
+import * as ace from "brace";
+
+import "brace/mode/javascript";
+import "brace/theme/monokai"
+import "brace/ext/language_tools"
+
 import {fromEvent, merge, Observable, Subject} from 'rxjs/index';
 import {filter} from "rxjs/operators";
+import {SandboxAutocomplete} from './SandboxAutocomplete';
 
 export class EditorComponent {
 
@@ -23,12 +27,7 @@ export class EditorComponent {
     }
 
     constructor() {
-        this.editor = Ace.edit('editor', {
-            fontSize: 18,
-            theme: 'ace/theme/monokai'
-        });
-
-        this.editor.session.setMode('ace/mode/javascript');
+        this.initEditor();
 
         merge(this.runButtonClick$, this.ctrlEnter$)
             .subscribe(() => {
@@ -42,5 +41,21 @@ export class EditorComponent {
 
     private isUnixCtrlEnter(event: KeyboardEvent): boolean {
         return event.keyCode === 13 && (event.ctrlKey || event.metaKey);
+    }
+
+    private initEditor() {
+        const langTools = ace.acequire("ace/ext/language_tools");
+        this.editor = ace.edit('editor');
+
+        this.editor.session.setMode('ace/mode/javascript');
+        this.editor.setTheme('ace/theme/monokai');
+
+        this.editor.setOptions({
+            fontSize: 18,
+            enableBasicAutocompletion: true,
+            enableLiveAutocompletion: true
+        });
+
+        langTools.addCompleter(new SandboxAutocomplete());
     }
 }
