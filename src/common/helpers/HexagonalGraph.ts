@@ -1,4 +1,3 @@
-
 import {Graph} from "./Graph";
 import {GraphNode} from "./GraphNode";
 

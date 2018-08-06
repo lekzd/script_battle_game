@@ -49,6 +49,11 @@ export class Graph {
         node.weight = weight;
     }
 
+    getWeight(x: number, y: number): number {
+        const node = this.grid.get(x, y);
+
+        return node.weight;
+    }
 
     protected getWest(x: number, y: number): GraphNode {
         return this.grid.get(x - 1, y);

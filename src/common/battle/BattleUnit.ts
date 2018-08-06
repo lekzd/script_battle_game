@@ -1,9 +1,10 @@
-import {BattleSide} from './BattleSession';
 import {CharactersList, ICharacterConfig} from "../characters/CharactersList";
 import {Inject} from "../InjectDectorator";
 import {BattleFieldDrawer} from "./BattleFieldDrawer";
 import {IAction} from "../codeSandbox/CodeSandbox";
 import {getBattleApi} from "./BattleUnitBattleApi";
+import {BattleSide} from "./BattleSide";
+import {color} from "../helpers/color";
 
 interface IBattleUnitConfig {
     x: number;
@@ -13,7 +14,7 @@ interface IBattleUnitConfig {
     scene: Phaser.Scene;
 }
 
-type IAnimationName = 'idle' | 'slash' | 'shoot' | 'walk' | 'thrust' | 'spellcast';
+export type IAnimationName = 'idle' | 'slash' | 'shoot' | 'walk' | 'thrust' | 'spellcast';
 
 export class BattleUnit {
     x: number;
@@ -69,8 +70,8 @@ export class BattleUnit {
     }
 
     setPositionAction(x: number, y: number): Promise<void> {
-        this.x = Math.max(0, x + this.x);
-        this.y = Math.max(0, y + this.y);
+        this.x = x;
+        this.y = y;
 
         this.container.setPosition(this.renderLeft, this.renderTop);
 
@@ -100,7 +101,7 @@ export class BattleUnit {
         });
     }
 
-    private setAnimation(animationName: IAnimationName) {
+    setAnimation(animationName: IAnimationName) {
         const turnKey = this.side === BattleSide.right ? 'left' : 'right';
         const phaserAnimationName = `${this.type}_${animationName}_${turnKey}`;
 
@@ -173,9 +174,9 @@ export class BattleUnit {
         const width = 40;
         const graphics = this.scene.add.graphics();
 
-        graphics.fillStyle(0x00ff00, 1);
+        graphics.fillStyle(color('#00FF00'), 1);
         graphics.fillRect(-(width / 2), 12, width, 2);
-        graphics.lineStyle(1, 0x11cc14, 1);
+        graphics.lineStyle(1, color('#11cc14'), 1);
         graphics.strokeRect(-(width / 2), 12, width, 2);
 
         return graphics;

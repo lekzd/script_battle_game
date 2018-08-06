@@ -2,10 +2,7 @@ import {UnitsStack} from './UnitsStack';
 import {Inject} from '../InjectDectorator';
 import {BattleUnit} from "./BattleUnit";
 import {BattleFieldModel} from "./BattleFieldModel";
-
-export enum BattleSide {
-    left, right
-}
+import {BattleSide} from "./BattleSide";
 
 export class BattleSession {
 

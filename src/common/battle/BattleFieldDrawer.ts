@@ -89,5 +89,4 @@ export class BattleFieldDrawer {
 
         return ctx.canvas;
     }
-
 }

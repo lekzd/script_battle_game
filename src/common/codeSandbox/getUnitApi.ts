@@ -6,8 +6,8 @@ export function getUnitApi(unit: any, actions: IAction[]) {
             actions.push({action: 'goTo', x: x, y: y});
         }
 
-        goToEnemyAndHit() {
-            actions.push({action: 'goToEnemyAndHit'});
+        goToEnemyAndHit(id) {
+            actions.push({action: 'goToEnemyAndHit', id: id});
         }
 
         shoot(id) {
@@ -16,6 +16,10 @@ export function getUnitApi(unit: any, actions: IAction[]) {
 
         spell(id) {
             actions.push({action: 'spell', id: id});
+        }
+
+        heal(id) {
+            actions.push({action: 'heal', id: id});
         }
 
         say(text) {
@@ -30,6 +34,10 @@ export function getUnitApi(unit: any, actions: IAction[]) {
             return unit.character.type === 'magic';
         }
 
+        isInfantry() {
+            return unit.character.type === 'melee';
+        }
+
         isAlive() {
             return unit.health > 0;
         }
@@ -40,6 +48,10 @@ export function getUnitApi(unit: any, actions: IAction[]) {
 
         getID() {
             return unit.id;
+        }
+
+        is(id) {
+            return unit.id === id;
         }
     }
 

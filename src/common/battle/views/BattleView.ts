@@ -6,8 +6,10 @@ import {BattleFieldModel} from "../BattleFieldModel";
 import {BattleUnit} from "../BattleUnit";
 import {Subject} from "rxjs/internal/Subject";
 import {CodeSandbox} from "../../codeSandbox/CodeSandbox";
-import {BattleSession, BattleSide} from "../BattleSession";
+import {BattleSession} from "../BattleSession";
 import {combineLatest} from "rxjs/internal/observable/combineLatest";
+import {BattleSide} from "../BattleSide";
+import {color} from "../../helpers/color";
 
 export class BattleView extends Phaser.Scene {
 
@@ -29,6 +31,11 @@ export class BattleView extends Phaser.Scene {
         combineLatest(this.runCode$, this.create$.asObservable())
             .subscribe(([[leftCode, rightCode]]) => {
                 this.runCode(leftCode, rightCode);
+            });
+
+        this.battleFieldModel.bullet$
+            .subscribe(([x, y, x2, y2]) => {
+                this.createBullet(x, y, x2, y2);
             });
     }
 
@@ -105,5 +112,29 @@ export class BattleView extends Phaser.Scene {
             .then(() => {
                 this.battleSession.start(units);
             })
+    }
+
+    private createBullet(x: number, y: number, x2: number, y2: number) {
+        const left = this.battleFieldDrawer.getHexagonLeft(x, y);
+        const top = this.battleFieldDrawer.getHexagonTop(x, y);
+
+        const left2 = this.battleFieldDrawer.getHexagonLeft(x2, y2);
+        const top2 = this.battleFieldDrawer.getHexagonTop(x2, y2);
+
+        const graphics = this.add.graphics();
+
+        graphics.fillStyle(color('#fcff93'), 1);
+        graphics.fillCircle(left, top, 4);
+
+        this.tweens.add({
+            targets: graphics,
+            x: left2 - left,
+            y: top2 - top,
+            duration: 300,
+            repeat: 0,
+            onComplete: () => {
+                graphics.destroy();
+            }
+        });
     }
 }
