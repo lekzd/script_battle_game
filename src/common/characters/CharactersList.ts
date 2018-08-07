@@ -6,7 +6,7 @@ interface IMinMax {
     max: number;
 }
 
-interface IAttackTypeConfig {
+export interface IAttackTypeConfig {
     attack: IMinMax;
     defence: IMinMax;
 }

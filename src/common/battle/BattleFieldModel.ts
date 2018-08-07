@@ -65,14 +65,24 @@ export class BattleFieldModel {
         if (action.action === 'goTo') {
             const path = this.getPath(unit.x, unit.y, action.x + unit.x, action.y + unit.y);
 
+            path.length = Math.min(path.length, unit.character.speed);
+
             return this.animateUnitByPath(unit, path);
         }
 
         if (action.action === 'goToEnemyAndHit') {
             const enemy = this.getEnemy(action.id);
             const path = this.getPath(unit.x, unit.y, enemy.x, enemy.y).slice(0, -1);
+            const canHitEnemy = path.length <= unit.character.speed;
 
-            return this.animateUnitByPath(unit, path);
+            path.length = Math.min(path.length, unit.character.speed);
+
+            return this.animateUnitByPath(unit, path)
+                .then(() => {
+                    if (canHitEnemy) {
+                        enemy.hitHealth(10, unit);
+                    }
+                })
         }
 
         if (action.action === 'say') {
@@ -89,6 +99,8 @@ export class BattleFieldModel {
             return new Promise(resolve => {
                 setTimeout(() => {
                     unit.setAnimation('idle');
+
+                    enemy.hitHealth(10, unit);
                     resolve();
                 }, 500);
             })
@@ -104,6 +116,8 @@ export class BattleFieldModel {
             return new Promise(resolve => {
                 setTimeout(() => {
                     unit.setAnimation('idle');
+
+                    enemy.hitHealth(10, unit);
                     resolve();
                 }, 500);
             })

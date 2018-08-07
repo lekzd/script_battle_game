@@ -1,4 +1,4 @@
-import {CharactersList, ICharacterConfig} from "../characters/CharactersList";
+import {CharactersList, CharacterType, IAttackTypeConfig, ICharacterConfig} from "../characters/CharactersList";
 import {Inject} from "../InjectDectorator";
 import {BattleFieldDrawer} from "./BattleFieldDrawer";
 import {IAction} from "../codeSandbox/CodeSandbox";
@@ -16,13 +16,15 @@ interface IBattleUnitConfig {
 
 export type IAnimationName = 'idle' | 'slash' | 'shoot' | 'walk' | 'thrust' | 'spellcast';
 
+const MAX_HEALTH = 100;
+
 export class BattleUnit {
     x: number;
     y: number;
     id: string;
 
     hasTurn = true;
-    health = 100;
+    health = MAX_HEALTH;
     side: BattleSide;
 
     character: ICharacterConfig;
@@ -33,11 +35,13 @@ export class BattleUnit {
     @Inject(CharactersList) private charactersList: CharactersList;
     @Inject(BattleFieldDrawer) private battleFieldDrawer: BattleFieldDrawer;
 
+    private rotation: BattleSide;
     private scene: Phaser.Scene;
     private type: string;
     private sprite: Phaser.GameObjects.Sprite;
     private sayText: Phaser.GameObjects.Text;
     private container: any;
+    private healthBar: Phaser.GameObjects.Graphics;
 
     get renderLeft(): number {
         return this.battleFieldDrawer.getHexagonLeft(this.x, this.y) - 32;
@@ -52,6 +56,7 @@ export class BattleUnit {
         this.y = config.y;
 
         this.side = config.side;
+        this.rotation = config.side;
         this.scene = config.scene;
         this.type = config.type;
 
@@ -102,10 +107,38 @@ export class BattleUnit {
     }
 
     setAnimation(animationName: IAnimationName) {
-        const turnKey = this.side === BattleSide.right ? 'left' : 'right';
+        const turnKey = this.rotation === BattleSide.right ? 'left' : 'right';
         const phaserAnimationName = `${this.type}_${animationName}_${turnKey}`;
 
         this.sprite.play(phaserAnimationName, false, 0);
+    }
+
+    hitHealth(absoluteHitValue: number, fromUnit: BattleUnit) {
+        let enemyValues: IAttackTypeConfig = null;
+        let myValues: IAttackTypeConfig = null;
+
+        if (fromUnit.character.type === CharacterType.magic) {
+            enemyValues = fromUnit.character.magic;
+            myValues = this.character.magic;
+        }
+        if (fromUnit.character.type === CharacterType.shooting) {
+            enemyValues = fromUnit.character.shoot;
+            myValues = this.character.shoot;
+        }
+        if (fromUnit.character.type === CharacterType.melee) {
+            enemyValues = fromUnit.character.mellee;
+            myValues = this.character.mellee;
+        }
+
+        let hitValue = enemyValues.attack > myValues.defence
+            ? enemyValues.attack.max * absoluteHitValue
+            : Math.max(enemyValues.attack.max - myValues.defence.max, 1) * absoluteHitValue;
+
+        const newValue = this.health - hitValue;
+
+        this.health = Math.max(Math.min(MAX_HEALTH, newValue), 0);
+
+        this.updateHealthBar();
     }
 
     private initGraphics() {
@@ -113,12 +146,14 @@ export class BattleUnit {
         this.sprite = this.generateSprite();
         const idText = this.generateIdText();
         this.sayText = this.generateSayText();
-        const healthBar = this.generateHealthBar();
+        this.healthBar = this.generateHealthBar();
+
+        this.updateHealthBar();
 
         this.container.add(this.sprite);
         this.container.add(this.sayText);
         this.container.add(idText);
-        this.container.add(healthBar);
+        this.container.add(this.healthBar);
 
         this.setAnimation('idle');
     }
@@ -128,7 +163,7 @@ export class BattleUnit {
     }
 
     private generateIdText(): Phaser.GameObjects.Text {
-        const isLeft = this.side === BattleSide.left;
+        const isLeft = this.rotation === BattleSide.left;
         const left = isLeft ? 10 : -10;
 
         const idText = this.scene.add.text(left, 4, this.id, {
@@ -149,7 +184,7 @@ export class BattleUnit {
     }
 
     private generateSayText(): Phaser.GameObjects.Text {
-        const isLeft = this.side === BattleSide.left;
+        const isLeft = this.rotation === BattleSide.left;
         const left = isLeft ? 10 : -10;
 
         const textElement = this.scene.add.text(left, -32, '', {
@@ -171,14 +206,37 @@ export class BattleUnit {
     }
 
     private generateHealthBar(): Phaser.GameObjects.Graphics {
-        const width = 40;
         const graphics = this.scene.add.graphics();
 
-        graphics.fillStyle(color('#00FF00'), 1);
-        graphics.fillRect(-(width / 2), 12, width, 2);
-        graphics.lineStyle(1, color('#11cc14'), 1);
-        graphics.strokeRect(-(width / 2), 12, width, 2);
-
         return graphics;
+    }
+
+    private updateHealthBar() {
+        const width = 40;
+        const healthWith = Math.round(width * (this.health / MAX_HEALTH));
+
+        this.healthBar.clear();
+
+        this.healthBar.fillStyle(this.getHeathColor(this.health), 1);
+        this.healthBar.fillRect(-(width / 2), 12, healthWith, 2);
+
+        this.healthBar.lineStyle(1, color('#11cc14'), 1);
+        this.healthBar.strokeRect(-(width / 2), 12, width, 2);
+    }
+
+    private getHeathColor(health: number): number {
+        if (health > 75) {
+            return color('#00FF00');
+        }
+
+        if (health > 50) {
+            return color('#e9ff23');
+        }
+
+        if (health > 25) {
+            return color('#ffa133');
+        }
+
+        return color('#ff3131');
     }
 }
