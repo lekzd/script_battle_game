@@ -13,9 +13,6 @@
 
 <body>
 <div class="player">
-    <div class="editor">
-        <div id="editor"></div>
-    </div>
     <div class="rightSide">
         <input class="tabRadio" type="radio" id="tab1" name="tabs" checked>
         <label for="tab1" class="tabHead">Настройки</label>
@@ -27,11 +24,14 @@
         <label for="tab2" class="tabHead">Игра</label>
         <div id="display" class="playerDisplay tabBody"></div>
     </div>
+    <div class="editor">
+        <div id="editor"></div>
+    </div>
 </div>
 
 <script>
     window.addEventListener('DOMContentLoaded', () => {
-        new window.Client();
+        new window.Client('right');
     });
 </script>
 

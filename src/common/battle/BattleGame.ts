@@ -37,14 +37,41 @@ export class BattleGame {
         this.currentState = newState;
     }
 
-    runCode(code: string) {
-        console.log('runCode', code);
+    runCode(leftCode: string, rightCode: string) {
+        console.log('runCode', leftCode);
 
         this.setState(BattleState.battle);
 
         const battleView = <BattleView>this.game.scene.getScene(BattleState.battle);
 
-        battleView.runCode$.next([code, '']);
+        battleView.runCode$.next([leftCode, rightCode]);
     }
 
+    updateLeftCode(code: string) {
+        const container = document.querySelector('.leftCode');
+        const preLength = container.querySelectorAll('pre').length;
+
+        if (preLength > 1) {
+            container.removeChild(container.querySelector('pre'));
+            container.querySelector('pre').classList.remove('fade-in');
+        }
+
+        container.innerHTML += `
+            <pre class="fade-in">${code}</pre>
+        `;
+    }
+
+    updateRightCode(code: string) {
+        const container = document.querySelector('.rightCode');
+        const preLength = container.querySelectorAll('pre').length;
+
+        if (preLength > 1) {
+            container.removeChild(container.querySelector('pre'));
+            container.querySelector('pre').classList.remove('fade-in');
+        }
+
+        container.innerHTML += `
+            <pre class="fade-in">${code}</pre>
+        `;
+    }
 }

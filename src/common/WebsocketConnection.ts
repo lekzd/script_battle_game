@@ -68,4 +68,18 @@ export class WebsocketConnection {
             type: 'registerRightPlayer'
         }));
     }
+
+    sendLeftCode(code: string) {
+        this.send(JSON.stringify({
+            type: 'leftCode',
+            code
+        }));
+    }
+
+    sendRightCode(code: string) {
+        this.send(JSON.stringify({
+            type: 'rightCode',
+            code
+        }));
+    }
 }

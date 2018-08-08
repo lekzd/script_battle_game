@@ -6,7 +6,21 @@ export class Master {
 
         this.connection.send(JSON.stringify({
             type: 'state',
-            data: 'battle'
+            data: 'wait'
+        }))
+    }
+
+    dispatchLeftCode(code) {
+        this.connection.send(JSON.stringify({
+            type: 'leftCode',
+            data: {code}
+        }))
+    }
+
+    dispatchRightCode(code) {
+        this.connection.send(JSON.stringify({
+            type: 'rightCode',
+            data: {code}
         }))
     }
 }

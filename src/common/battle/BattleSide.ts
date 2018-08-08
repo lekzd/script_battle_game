@@ -1,4 +1,5 @@
 
 export enum BattleSide {
-    left, right
+    left = 'left',
+    right = 'right'
 }

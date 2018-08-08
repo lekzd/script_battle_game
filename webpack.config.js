@@ -23,7 +23,8 @@ module.exports = function(env = {}) {
         },
         plugins: [
             new HtmlWebpackPlugin(getHtmlWebpackConfig('master')),
-            new HtmlWebpackPlugin(getHtmlWebpackConfig('player'))
+            new HtmlWebpackPlugin(getHtmlWebpackConfig('left')),
+            new HtmlWebpackPlugin(getHtmlWebpackConfig('right'))
         ],
         resolve: {
             extensions: ['.ts', '.js']

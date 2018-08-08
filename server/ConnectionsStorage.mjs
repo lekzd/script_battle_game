@@ -66,4 +66,14 @@ export class ConnectionsStorage {
         }
     }
 
+    setLeftCode(code) {
+        this.leftPlayer.setCode(code);
+        this.master.dispatchLeftCode(code);
+    }
+
+    setRightCode(code) {
+        this.rightPlayer.setCode(code);
+        this.master.dispatchRightCode(code);
+    }
+
 }

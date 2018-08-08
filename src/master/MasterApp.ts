@@ -18,6 +18,18 @@ export class MasterApp {
             if (message.type === 'state') {
                 this.battleGame.setState(message.data);
             }
+
+            if (message.type === 'leftCode') {
+                this.battleGame.updateLeftCode(message.data.code);
+            }
+
+            if (message.type === 'rightCode') {
+                this.battleGame.updateRightCode(message.data.code);
+            }
+
+            if (message.type === 'runCode') {
+                this.battleGame.runCode(message.data.leftCode, message.data.rightCode);
+            }
         });
 
         this.connection.onClose$.subscribe(() => {

@@ -8,19 +8,22 @@ import "brace/ext/language_tools"
 import {fromEvent, merge, Observable, Subject} from 'rxjs/index';
 import {filter} from "rxjs/operators";
 import {SandboxAutocomplete} from './SandboxAutocomplete';
+import {Editor} from 'brace';
+import {debounceTime, map} from 'rxjs/internal/operators';
 
 export class EditorComponent {
 
     runCode$ = new Subject<string>();
+    change$: Observable<string>;
 
-    private editor: any;
+    private editor: Editor;
 
     get runButtonClick$(): Observable<Event> {
         return fromEvent(document.getElementById('run'), 'click');
     }
 
     get ctrlEnter$(): Observable<KeyboardEvent> {
-        return fromEvent<KeyboardEvent>(document, 'keypress')
+        return fromEvent<KeyboardEvent>(document, 'keydown')
             .pipe(
                 filter(event => this.isWindowsCtrlEnter(event) || this.isUnixCtrlEnter(event))
             );
@@ -55,6 +58,10 @@ export class EditorComponent {
             enableBasicAutocompletion: true,
             enableLiveAutocompletion: true
         });
+
+        this.change$ = fromEvent(this.editor, 'change')
+            .pipe(map(() => this.editor.getValue()))
+            .pipe(debounceTime(1000));
 
         langTools.addCompleter(new SandboxAutocomplete());
     }
