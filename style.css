@@ -117,15 +117,6 @@ canvas {
   height: 100%;
   overflow: hidden;
   padding: 20px;
-  transition: opacity 10s linear, transform 10s linear;
-  opacity: 0;
-  transform: scale(10);
-}
-
-.leftCode pre.fade-in,
-.rightCode pre.fade-in {
-  opacity: 1;
-  transform: scale(1);
 }
 
 .leftCode {

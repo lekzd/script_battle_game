@@ -6,10 +6,10 @@ import "brace/theme/monokai"
 import "brace/ext/language_tools"
 
 import {fromEvent, merge, Observable, Subject} from 'rxjs/index';
-import {filter} from "rxjs/operators";
+import {auditTime, filter} from "rxjs/operators";
 import {SandboxAutocomplete} from './SandboxAutocomplete';
 import {Editor} from 'brace';
-import {debounceTime, map} from 'rxjs/internal/operators';
+import {map} from 'rxjs/internal/operators';
 
 export class EditorComponent {
 
@@ -61,7 +61,7 @@ export class EditorComponent {
 
         this.change$ = fromEvent(this.editor, 'change')
             .pipe(map(() => this.editor.getValue()))
-            .pipe(debounceTime(1000));
+            .pipe(auditTime(300));
 
         langTools.addCompleter(new SandboxAutocomplete());
     }

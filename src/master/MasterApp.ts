@@ -12,6 +12,8 @@ export class MasterApp {
     constructor() {
         this.connection.registerAsMaster();
 
+        this.battleGame.initCodeDisplay();
+
         // this.battleGame.setState(BattleState.wait);
 
         this.connection.onMessage$.subscribe(message => {
