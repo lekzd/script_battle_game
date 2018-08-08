@@ -55,14 +55,25 @@ export class CodeSandbox {
                 
                 const unitApi = (${getUnitApi.toString()})(unit, actions);
                 
-                with (unitApi) {
-                    (function(${BANNED_APIS.join(',')}) {
+                const sandboxProxy = new Proxy(Object.assign(unitApi, {console}), {has, get});
+                
+                with (sandboxProxy) {
+                    (function() {
                         try {
                             ${codeToInject};
                         } catch (e) {
                             console.error(e);
                         }
                     }).call({hello: 'how are you?'})
+                }
+                
+                function has (target, key) {
+                    return true;
+                }
+                
+                function get (target, key) {
+                    if (key === Symbol.unscopables) return undefined;
+                    return target[key];
                 }
             
                 postMessage(JSON.stringify(actions));
