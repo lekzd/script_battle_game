@@ -8,6 +8,7 @@ import {Astar, IPathItem} from "../helpers/Astar";
 import {AsyncSequence} from "../helpers/AsyncSequence";
 import {BattleSide} from "./BattleSide";
 import {Subject} from "rxjs/internal/Subject";
+import {ClientState} from "../client/ClientState";
 
 const FIELD_WIDTH = 12;
 const FIELD_HEIGHT = 9;
@@ -17,6 +18,7 @@ export class BattleFieldModel {
     bullet$ = new Subject<[number, number, number, number]>();
 
     @Inject(Astar) private astar: Astar;
+    @Inject(ClientState) private clientState: ClientState;
     @Inject(BattleFieldDrawer) private battleFieldDrawer: BattleFieldDrawer;
 
     private grid = new Grid<BattleUnit>(FIELD_WIDTH);
@@ -155,13 +157,13 @@ export class BattleFieldModel {
 
     private getEnemy(id: string): BattleUnit {
         return this.units.find(unit => {
-           return unit.side == BattleSide.right && unit.id === id;
+           return unit.side !== this.clientState.side && unit.id === id;
         });
     }
 
     private getFriend(id: string): BattleUnit {
         return this.units.find(unit => {
-           return unit.side == BattleSide.left && unit.id === id;
+           return unit.side === this.clientState.side && unit.id === id;
         });
     }
 

@@ -37,10 +37,35 @@ body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  width: 50%;
-  border: 3px solid green;
+  border: 2px solid #007b9c;
   height: 100%;
   box-sizing: border-box;
+}
+
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  background: #1b1e27;
+}
+
+.toolbar-button {
+  width: 90px;
+  height: 90px;
+  margin: 5px;
+  box-sizing: border-box;
+  background: #1b1e27;
+  color: green;
+  cursor: pointer;
+  border: none;
+}
+
+.toolbar-button:hover {
+  background: #111;
+}
+
+.runButton {
+  height: 40px;
 }
 
 .ace_editor {
@@ -50,7 +75,8 @@ body {
 .rightSide {
   position: relative;
   height: 100%;
-  width: 50%;
+  width: 800px;
+  max-width: 800px;
   box-sizing: border-box;
   flex-grow: 1;
 }
@@ -125,4 +151,73 @@ canvas {
 
 .rightCode {
   right: 0;
+}
+
+.select-window {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+}
+
+.select-window.opened {
+  width: 600px;
+  border: 1px solid #007b9c;
+}
+
+.select-view {
+  display: none;
+  background: #000;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 100px;
+  right: 0;
+  overflow: auto;
+}
+
+.select-button {
+  display: block;
+}
+
+.select-window.opened .select-view {
+  display: block;
+}
+
+.unit {
+  color: #fff;
+}
+
+.unit-img {
+  width: 64px;
+  height: 64px;
+}
+
+.character_magic {
+  background: url('/img/character_magic.png');
+  background-position: 0 -128px;
+}
+
+.character_nekr {
+  background: url('/img/character_nekr.png');
+  background-position: 0 -128px;
+}
+
+.character_ork {
+  background: url('/img/character_ork.png');
+  background-position: 0 -128px;
+}
+
+.character_palladin {
+  background: url('/img/character_palladin.png');
+  background-position: 0 -128px;
+}
+
+.character_varvar {
+  background: url('/img/character_varvar.png');
+  background-position: 0 -128px;
+}
+
+.character_winter {
+  background: url('/img/character_winter.png');
+  background-position: 0 -128px;
 }

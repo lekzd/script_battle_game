@@ -3,16 +3,19 @@ import {Inject} from '../InjectDectorator';
 import {BattleGame, BattleState} from '../battle/BattleGame';
 import {EditorComponent} from '../editor/EditorComponent';
 import {BattleSide} from '../battle/BattleSide';
-import {emptyScheduled} from 'rxjs/internal/observable/empty';
+import {ClientState} from "./ClientState";
 
 export class ClientApp {
 
     @Inject(BattleGame) private battleGame: BattleGame;
+    @Inject(ClientState) private clientState: ClientState;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
     private editorComponent: EditorComponent;
 
     constructor(private side: BattleSide) {
+
+        this.clientState.side = side;
 
         if (side === BattleSide.left) {
             this.connection.registerAsLeftPlayer();

@@ -10,17 +10,16 @@ import {auditTime, filter} from "rxjs/operators";
 import {SandboxAutocomplete} from './SandboxAutocomplete';
 import {Editor} from 'brace';
 import {map} from 'rxjs/internal/operators';
+import {Toolbar} from "./Toolbar";
 
 export class EditorComponent {
 
     runCode$ = new Subject<string>();
     change$: Observable<string>;
 
-    private editor: Editor;
+    toolbar: Toolbar;
 
-    get runButtonClick$(): Observable<Event> {
-        return fromEvent(document.getElementById('run'), 'click');
-    }
+    private editor: Editor;
 
     get ctrlEnter$(): Observable<KeyboardEvent> {
         return fromEvent<KeyboardEvent>(document, 'keydown')
@@ -32,10 +31,13 @@ export class EditorComponent {
     constructor() {
         this.initEditor();
 
-        merge(this.runButtonClick$, this.ctrlEnter$)
+        this.toolbar = new Toolbar(document.querySelector('.toolbar'));
+
+        merge(this.toolbar.runButtonClick$, this.ctrlEnter$)
             .subscribe(() => {
                 this.runCode$.next(this.editor.getValue());
             });
+
     }
 
     private isWindowsCtrlEnter(event: KeyboardEvent): boolean {
