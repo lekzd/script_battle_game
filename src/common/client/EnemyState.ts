@@ -3,7 +3,7 @@ import {Subject} from 'rxjs/index';
 import {Inject} from '../InjectDectorator';
 import {WebsocketConnection} from '../WebsocketConnection';
 
-export class ClientState {
+export class EnemyState {
 
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
@@ -19,17 +19,14 @@ export class ClientState {
 
     change$ = new Subject<any>();
 
-    set(newState: any) {
-        Object.assign(this, {}, newState);
+    constructor() {
+        this.connection.onMessage$.subscribe(message => {
+            if (message.type === 'enemyState') {
+                Object.assign(this, {}, message.data.state);
 
-        this.change$.next(newState);
+                this.change$.next(message.data.state);
+            }
+        });
 
-        if (this.side === BattleSide.left) {
-            this.connection.sendLeftState(newState);
-        }
-
-        if (this.side === BattleSide.right) {
-            this.connection.sendRightState(newState);
-        }
     }
 }

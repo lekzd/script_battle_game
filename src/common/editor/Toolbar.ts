@@ -1,6 +1,8 @@
 import {fromEvent, merge, Observable} from "rxjs/index";
-import {CharactersList} from "../characters/CharactersList";
+import {CharactersList, ICharacterConfig} from "../characters/CharactersList";
 import {Inject} from "../InjectDectorator";
+import {filter, map} from 'rxjs/internal/operators';
+import {ClientState} from '../client/ClientState';
 
 export class Toolbar {
 
@@ -19,10 +21,40 @@ export class Toolbar {
         );
     }
 
+    get unitButtons(): HTMLElement[] {
+        return Array.from(document.querySelectorAll('.select-view'));
+    }
+
+    get chooseUnitClick$(): Observable<ICharacterConfig> {
+        return merge(
+            ...this.unitButtons
+                .map(element => fromEvent<MouseEvent>(element, 'click'))
+        )
+            .pipe(filter(() => this.isSelectorOpen))
+            .pipe(map((event: MouseEvent) => {
+                const index = this.unitButtons.indexOf(<HTMLElement>event.target);
+
+                return this.charactersList.types[index];
+            }))
+    }
+
     get selectWindow(): HTMLElement {
         return document.querySelector('.select-window');
     }
 
+    get isSelectorOpen(): boolean {
+        return this.selectWindow.classList.contains('opened');
+    }
+
+    set isSelectorOpen(value: boolean) {
+        if (value) {
+            this.selectWindow.classList.add('opened');
+        } else {
+            this.selectWindow.classList.remove('opened');
+        }
+    }
+
+    @Inject(ClientState) private clientState: ClientState;
     @Inject(CharactersList) private charactersList: CharactersList;
 
     private selectedItem: number;
@@ -54,15 +86,24 @@ export class Toolbar {
             const itemIndex = this.buttons.indexOf(<HTMLButtonElement>event.target);
 
             if (itemIndex === this.selectedItem) {
-                this.selectWindow.classList.remove('opened');
+                this.isSelectorOpen = false;
 
                 this.selectedItem = null;
             } else {
-                this.selectWindow.classList.add('opened');
+                this.isSelectorOpen = true;
             }
 
             this.selectedItem = itemIndex;
-        })
+        });
+
+        this.chooseUnitClick$
+            .subscribe((characterConfig) => {
+                const {army} = this.clientState;
+
+                army[this.selectedItem] = characterConfig.key;
+
+                this.clientState.set({army: army});
+            });
 
     }
 }

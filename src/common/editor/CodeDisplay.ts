@@ -22,18 +22,18 @@ export class CodeDisplay {
         let span = null;
         let color = '';
 
-        diff.forEach(function(part){
-            // green for additions, red for deletions
-            // grey for common parts
+        diff.forEach((part) => {
             if (part.removed) {
                 return;
             }
 
-            color = part.added ? 'green' : 'grey';
+            const colorGrey = '#cccccc';
+            const colorGreen = '#00cc00';
+
+            color = part.added ? colorGreen : colorGrey;
             span = document.createElement('span');
             span.style.color = color;
-            span.appendChild(document
-                .createTextNode(part.value));
+            span.appendChild(document.createTextNode(part.value));
             fragment.appendChild(span);
         });
 

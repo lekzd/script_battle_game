@@ -82,4 +82,18 @@ export class WebsocketConnection {
             code
         }));
     }
+
+    sendLeftState(state: any) {
+        this.send(JSON.stringify({
+            type: 'leftState',
+            state
+        }));
+    }
+
+    sendRightState(state: any) {
+        this.send(JSON.stringify({
+            type: 'rightState',
+            state
+        }));
+    }
 }

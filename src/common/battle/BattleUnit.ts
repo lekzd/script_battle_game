@@ -75,11 +75,7 @@ export class BattleUnit {
     }
 
     setPositionAction(x: number, y: number): Promise<void> {
-        this.x = x;
-        this.y = y;
-
-        this.container.setPosition(this.renderLeft, this.renderTop);
-
+        this.setPosition(x, y);
         this.setAnimation('walk');
 
         return new Promise(resolve => {
@@ -88,6 +84,13 @@ export class BattleUnit {
                 resolve();
             }, 300);
         });
+    }
+
+    setPosition(x: number, y: number) {
+        this.x = x;
+        this.y = y;
+
+        this.container.setPosition(this.renderLeft, this.renderTop);
     }
 
     sayAction(text: string): Promise<void> {
@@ -138,6 +141,18 @@ export class BattleUnit {
 
         this.health = Math.max(Math.min(MAX_HEALTH, newValue), 0);
 
+        this.updateHealthBar();
+    }
+
+    setType(type: CharacterType) {
+        this.type = type;
+        this.character = this.charactersList.get(type);
+
+        this.sprite.setTexture(type);
+    }
+
+    clear() {
+        this.health = MAX_HEALTH;
         this.updateHealthBar();
     }
 
