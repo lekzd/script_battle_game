@@ -9,4 +9,11 @@ export class Player {
     setCode(code) {
         this.code = code;
     }
+
+    setEnemyState(state) {
+        this.connection.send(JSON.stringify({
+            type: 'enemyState',
+            data: {state}
+        }))
+    }
 }

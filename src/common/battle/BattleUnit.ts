@@ -42,6 +42,7 @@ export class BattleUnit {
     private sayText: Phaser.GameObjects.Text;
     private container: any;
     private healthBar: Phaser.GameObjects.Graphics;
+    private idText: Phaser.GameObjects.Text;
 
     get renderLeft(): number {
         return this.battleFieldDrawer.getHexagonLeft(this.x, this.y) - 32;
@@ -148,7 +149,9 @@ export class BattleUnit {
         this.type = type;
         this.character = this.charactersList.get(type);
 
+        this.idText.setText(this.character.id);
         this.sprite.setTexture(type);
+        this.setAnimation('idle');
     }
 
     clear() {
@@ -159,7 +162,7 @@ export class BattleUnit {
     private initGraphics() {
         this.container = (this.scene.add as any).container(this.renderLeft, this.renderTop);
         this.sprite = this.generateSprite();
-        const idText = this.generateIdText();
+        this.idText = this.generateIdText();
         this.sayText = this.generateSayText();
         this.healthBar = this.generateHealthBar();
 
@@ -167,7 +170,7 @@ export class BattleUnit {
 
         this.container.add(this.sprite);
         this.container.add(this.sayText);
-        this.container.add(idText);
+        this.container.add(this.idText);
         this.container.add(this.healthBar);
 
         this.setAnimation('idle');

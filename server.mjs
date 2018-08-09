@@ -42,6 +42,14 @@ wsServer.on('request', (request) => {
             connectionsStorage.setRightCode(data.code);
         }
 
+        if (data.type === 'leftState') {
+            connectionsStorage.setLeftState(data.state);
+        }
+
+        if (data.type === 'rightState') {
+            connectionsStorage.setRightState(data.state);
+        }
+
         console.log('message', data);
     }
 

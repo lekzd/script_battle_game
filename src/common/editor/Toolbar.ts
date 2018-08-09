@@ -22,7 +22,7 @@ export class Toolbar {
     }
 
     get unitButtons(): HTMLElement[] {
-        return Array.from(document.querySelectorAll('.select-view'));
+        return Array.from(document.querySelectorAll('.select-view > .unit'));
     }
 
     get chooseUnitClick$(): Observable<ICharacterConfig> {
@@ -32,7 +32,7 @@ export class Toolbar {
         )
             .pipe(filter(() => this.isSelectorOpen))
             .pipe(map((event: MouseEvent) => {
-                const index = this.unitButtons.indexOf(<HTMLElement>event.target);
+                const index = this.unitButtons.indexOf(<HTMLElement>event.toElement);
 
                 return this.charactersList.types[index];
             }))

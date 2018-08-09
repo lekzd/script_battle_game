@@ -197,8 +197,10 @@ export class BattleView extends Phaser.Scene {
         }
 
         units.forEach((unit, index) => {
-            if (unit.character.type !== state.army[index]) {
-                unit.setType(state.army[index]);
+            const type = state.army[index];
+
+            if (type && unit.character.type !== type) {
+                unit.setType(type);
             }
         })
     }

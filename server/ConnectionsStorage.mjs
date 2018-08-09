@@ -76,4 +76,14 @@ export class ConnectionsStorage {
         this.master.dispatchRightCode(code);
     }
 
+    setLeftState(state) {
+        this.rightPlayer.setEnemyState(state);
+        this.master.dispatchLeftState(state);
+    }
+
+    setRightState(state) {
+        this.leftPlayer.setEnemyState(state);
+        this.master.dispatchRightState(state);
+    }
+
 }

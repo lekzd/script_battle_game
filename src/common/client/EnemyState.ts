@@ -10,7 +10,7 @@ export class EnemyState {
     name = '';
     side: BattleSide;
 
-    army: {
+    army = {
         0: '',
         1: '',
         2: '',

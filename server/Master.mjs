@@ -23,4 +23,18 @@ export class Master {
             data: {code}
         }))
     }
+
+    dispatchLeftState(state) {
+        this.connection.send(JSON.stringify({
+            type: 'leftState',
+            data: {state}
+        }))
+    }
+
+    dispatchRightState(state) {
+        this.connection.send(JSON.stringify({
+            type: 'rightState',
+            data: {state}
+        }))
+    }
 }
