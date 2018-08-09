@@ -74,7 +74,9 @@ export class Toolbar {
                         return `
                             <section class="unit">
                                 <div class="unit-img ${characterConfig.key}"></div>
-                                <div class="unit-name">${characterConfig.id}</div>
+                                <div class="unit-description">
+                                    <div class="unit-id">${characterConfig.id}</div>
+                                </div>
                             </section>
                         `;
                     }).join('')}
@@ -91,9 +93,9 @@ export class Toolbar {
                 this.selectedItem = null;
             } else {
                 this.isSelectorOpen = true;
-            }
 
-            this.selectedItem = itemIndex;
+                this.selectedItem = itemIndex;
+            }
         });
 
         this.chooseUnitClick$
@@ -103,6 +105,8 @@ export class Toolbar {
                 army[this.selectedItem] = characterConfig.key;
 
                 this.clientState.set({army: army});
+
+                this.isSelectorOpen = false;
             });
 
     }
