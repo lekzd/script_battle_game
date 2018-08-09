@@ -65,6 +65,14 @@ function getAttackConfigs(mellee: number, shoot: number, magic: number): IAttack
     }
 }
 
+const NULL_CHARACTER: ICharacterConfig = Object.assign({
+    id: 'NULL',
+    key: 'character_null',
+    title: 'magic girl',
+    type: CharacterType.magic,
+    speed: 0,
+}, getAttackConfigs(0, 0, 0));
+
 const MAGIC_GIRL: ICharacterConfig = Object.assign({
     id: 'EVAL',
     key: 'character_magic',
@@ -116,6 +124,7 @@ const WINTER: ICharacterConfig = Object.assign({
 export class CharactersList {
 
     types: ICharacterConfig[] = [
+        NULL_CHARACTER,
         MAGIC_GIRL,
         SKELETON,
         ORK,

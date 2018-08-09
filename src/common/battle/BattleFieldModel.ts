@@ -6,7 +6,6 @@ import {HexagonalGraph} from "../helpers/HexagonalGraph";
 import {IAction} from "../codeSandbox/CodeSandbox";
 import {Astar, IPathItem} from "../helpers/Astar";
 import {AsyncSequence} from "../helpers/AsyncSequence";
-import {BattleSide} from "./BattleSide";
 import {Subject} from "rxjs/internal/Subject";
 import {ClientState} from "../client/ClientState";
 

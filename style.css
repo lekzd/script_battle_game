@@ -155,7 +155,7 @@ canvas {
 
 .select-window {
   position: relative;
-  z-index: 1;
+  z-index: 10;
   box-sizing: border-box;
 }
 
@@ -233,32 +233,37 @@ canvas {
     flex-grow: 1;
 }
 
+.character_null {
+  background: url('/img/character_null.png');
+  background-position: 0 -135px;
+}
+
 .character_magic {
   background: url('/img/character_magic.png');
-  background-position: 0 -128px;
+  background-position: 0 -135px;
 }
 
 .character_nekr {
   background: url('/img/character_nekr.png');
-  background-position: 0 -128px;
+  background-position: 0 -135px;
 }
 
 .character_ork {
   background: url('/img/character_ork.png');
-  background-position: 0 -128px;
+  background-position: 0 -135px;
 }
 
 .character_palladin {
   background: url('/img/character_palladin.png');
-  background-position: 0 -128px;
+  background-position: 0 -135px;
 }
 
 .character_varvar {
   background: url('/img/character_varvar.png');
-  background-position: 0 -128px;
+  background-position: 0 -135px;
 }
 
 .character_winter {
   background: url('/img/character_winter.png');
-  background-position: 0 -128px;
+  background-position: 0 -135px;
 }

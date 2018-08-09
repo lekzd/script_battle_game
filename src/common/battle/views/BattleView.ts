@@ -12,6 +12,7 @@ import {BattleSide} from "../BattleSide";
 import {color} from "../../helpers/color";
 import {ClientState} from '../../client/ClientState';
 import {EnemyState} from '../../client/EnemyState';
+import {WebsocketConnection} from "../../WebsocketConnection";
 
 export class BattleView extends Phaser.Scene {
 
@@ -22,6 +23,7 @@ export class BattleView extends Phaser.Scene {
     @Inject(CodeSandbox) private codeSandbox: CodeSandbox;
     @Inject(BattleSession) private battleSession: BattleSession;
     @Inject(CharactersList) private charactersList: CharactersList;
+    @Inject(WebsocketConnection) private connection: WebsocketConnection;
     @Inject(BattleFieldModel) private battleFieldModel: BattleFieldModel;
     @Inject(BattleFieldDrawer) private battleFieldDrawer: BattleFieldDrawer;
 
@@ -62,6 +64,16 @@ export class BattleView extends Phaser.Scene {
                     this.updateUnitsFromState(this.leftUnits, state);
                 }
             });
+
+        this.connection.onMessage$.subscribe(message => {
+            if (message.type === 'leftState') {
+                this.updateUnitsFromState(this.leftUnits, message.data.state);
+            }
+
+            if (message.type === 'rightState') {
+                this.updateUnitsFromState(this.rightUnits, message.data.state);
+            }
+        });
     }
 
     preload () {
@@ -76,9 +88,12 @@ export class BattleView extends Phaser.Scene {
 
         this.add.image(200, 150, 'hexagons');
 
-        for (let i = 0; i <= 4; i++) {
+        for (let i = 0; i < 4; i++) {
             const {x, y} = this.getUnitStartPosition(BattleSide.left, i);
-            const type = this.charactersList.getRandomType();
+            const army = this.clientState.side === BattleSide.left
+                ? this.clientState.army
+                : this.enemyState.army;
+            const type = army[i];
             const side = BattleSide.left;
             const scene = this;
 
@@ -88,9 +103,12 @@ export class BattleView extends Phaser.Scene {
             this.battleFieldModel.set(x, y, unit);
         }
 
-        for (let i = 0; i <= 4; i++) {
+        for (let i = 0; i < 4; i++) {
             const {x, y} = this.getUnitStartPosition(BattleSide.right, i);
-            const type = this.charactersList.getRandomType();
+            const army = this.clientState.side === BattleSide.right
+                ? this.clientState.army
+                : this.enemyState.army;
+            const type = army[i];
             const side = BattleSide.right;
             const scene = this;
 

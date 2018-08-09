@@ -3,6 +3,7 @@ import {CharactersList, ICharacterConfig} from "../characters/CharactersList";
 import {Inject} from "../InjectDectorator";
 import {filter, map} from 'rxjs/internal/operators';
 import {ClientState} from '../client/ClientState';
+import {BattleSide} from "../battle/BattleSide";
 
 export class Toolbar {
 
@@ -34,7 +35,7 @@ export class Toolbar {
             .pipe(map((event: MouseEvent) => {
                 const index = this.unitButtons.indexOf(<HTMLElement>event.currentTarget);
 
-                return this.charactersList.types[index];
+                return this.charactersList.types[index + 1];
             }))
     }
 
@@ -64,13 +65,21 @@ export class Toolbar {
         this.container.innerHTML = `
             <button id="run" class="runButton toolbar-button" type="button">Run</button>
             <div class="select-window">
-                <button id="select-1" class="toolbar-button select-button" type="button"></button>
-                <button id="select-2" class="toolbar-button select-button" type="button"></button>
-                <button id="select-3" class="toolbar-button select-button" type="button"></button>
-                <button id="select-4" class="toolbar-button select-button" type="button"></button>
+                <button id="select-1" class="toolbar-button select-button" type="button">
+                    <div class="unit-img character_null"></div>
+                </button>
+                <button id="select-2" class="toolbar-button select-button" type="button">
+                    <div class="unit-img character_null"></div>
+                </button>
+                <button id="select-3" class="toolbar-button select-button" type="button">
+                    <div class="unit-img character_null"></div>
+                </button>
+                <button id="select-4" class="toolbar-button select-button" type="button">
+                    <div class="unit-img character_null"></div>
+                </button>
                 
                 <div class="select-view">
-                    ${this.charactersList.types.map(characterConfig => {
+                    ${this.charactersList.types.slice(1).map(characterConfig => {
                         return `
                             <section class="unit">
                                 <div class="unit-img ${characterConfig.key}"></div>
@@ -107,6 +116,16 @@ export class Toolbar {
                 this.clientState.set({army: army});
 
                 this.isSelectorOpen = false;
+            });
+
+        this.clientState.change$
+            .subscribe(state => {
+                this.buttons.forEach((button, index) => {
+                    const type = state.army[index];
+                    const icon = button.querySelector('.unit-img');
+
+                    icon.className = `unit-img ${type}`;
+                })
             });
 
     }

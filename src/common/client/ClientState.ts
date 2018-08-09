@@ -11,10 +11,10 @@ export class ClientState {
     side: BattleSide;
 
     army = {
-        0: '',
-        1: '',
-        2: '',
-        3: ''
+        0: 'character_null',
+        1: 'character_null',
+        2: 'character_null',
+        3: 'character_null'
     };
 
     change$ = new Subject<any>();
