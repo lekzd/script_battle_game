@@ -148,6 +148,7 @@ export class BattleUnit {
     setType(type: CharacterType) {
         this.type = type;
         this.character = this.charactersList.get(type);
+        this.id = this.character.id;
         this.api = getBattleApi(this);
 
         this.idText.setText(this.character.id);

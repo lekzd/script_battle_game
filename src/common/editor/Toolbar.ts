@@ -32,7 +32,7 @@ export class Toolbar {
         )
             .pipe(filter(() => this.isSelectorOpen))
             .pipe(map((event: MouseEvent) => {
-                const index = this.unitButtons.indexOf(<HTMLElement>event.toElement);
+                const index = this.unitButtons.indexOf(<HTMLElement>event.currentTarget);
 
                 return this.charactersList.types[index];
             }))
@@ -83,7 +83,7 @@ export class Toolbar {
         `;
 
         this.selectClick$.subscribe(event => {
-            const itemIndex = this.buttons.indexOf(<HTMLButtonElement>event.target);
+            const itemIndex = this.buttons.indexOf(<HTMLButtonElement>event.currentTarget);
 
             if (itemIndex === this.selectedItem) {
                 this.isSelectorOpen = false;
