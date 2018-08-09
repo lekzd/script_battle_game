@@ -35,6 +35,14 @@ export class ClientApp {
             }
         });
 
+        this.editorComponent.pushCode$.subscribe(code => {
+            if (side === BattleSide.left) {
+                this.connection.pushLeftCode(code);
+            } else {
+                this.connection.pushRightCode(code);
+            }
+        });
+
         this.editorComponent.change$.subscribe(code => {
             if (side === BattleSide.left) {
                 this.connection.sendLeftCode(code);

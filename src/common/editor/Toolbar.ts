@@ -15,6 +15,10 @@ export class Toolbar {
         return fromEvent(document.getElementById('run'), 'click');
     }
 
+    get pushButtonClick$(): Observable<Event> {
+        return fromEvent(document.getElementById('push'), 'click');
+    }
+
     get selectClick$(): Observable<MouseEvent> {
         return merge(
             ...this.buttons
@@ -91,6 +95,7 @@ export class Toolbar {
                     }).join('')}
                 </div>
             </div>
+            <button id="push" class="runButton toolbar-button" type="button">git push</button>
         `;
 
         this.selectClick$.subscribe(event => {

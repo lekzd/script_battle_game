@@ -157,6 +157,7 @@ canvas {
   position: relative;
   z-index: 10;
   box-sizing: border-box;
+  border: 1px solid transparent;
 }
 
 .select-window.opened {
@@ -177,6 +178,12 @@ canvas {
 
 .select-button {
   display: block;
+}
+
+.select-button .unit-img {
+  margin: auto;
+  transform: scale(1.5);
+  image-rendering: pixelated;
 }
 
 .select-window.opened .select-view {

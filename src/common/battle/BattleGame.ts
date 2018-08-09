@@ -3,6 +3,7 @@ import {WaitingView} from './views/WaitingView';
 import Phaser from "phaser";
 import {ConnectionClosedView} from "./views/ConnectionClosedView";
 import {CodeDisplay} from "../editor/CodeDisplay";
+import {Subject} from "rxjs/internal/Subject";
 
 export enum BattleState {
     wait = 'waiting',

@@ -86,4 +86,12 @@ export class ConnectionsStorage {
         this.master.dispatchRightState(state);
     }
 
+    pushLeftCode(code) {
+        this.master.pushLeftCode(code);
+    }
+
+    pushRightCode(code) {
+        this.master.pushRightCode(code);
+    }
+
 }

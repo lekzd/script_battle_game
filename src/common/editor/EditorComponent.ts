@@ -15,6 +15,7 @@ import {Toolbar} from "./Toolbar";
 export class EditorComponent {
 
     runCode$ = new Subject<string>();
+    pushCode$ = new Subject<string>();
     change$: Observable<string>;
 
     toolbar: Toolbar;
@@ -36,6 +37,11 @@ export class EditorComponent {
         merge(this.toolbar.runButtonClick$, this.ctrlEnter$)
             .subscribe(() => {
                 this.runCode$.next(this.editor.getValue());
+            });
+
+        this.toolbar.pushButtonClick$
+            .subscribe(() => {
+                this.pushCode$.next(this.editor.getValue());
             });
 
     }

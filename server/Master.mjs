@@ -37,4 +37,18 @@ export class Master {
             data: {state}
         }))
     }
+
+    pushLeftCode(code) {
+        this.connection.send(JSON.stringify({
+            type: 'pushLeftCode',
+            data: {code}
+        }))
+    }
+
+    pushRightCode(code) {
+        this.connection.send(JSON.stringify({
+            type: 'pushRightCode',
+            data: {code}
+        }))
+    }
 }

@@ -50,6 +50,14 @@ wsServer.on('request', (request) => {
             connectionsStorage.setRightState(data.state);
         }
 
+        if (data.type === 'pushLeftCode') {
+            connectionsStorage.pushLeftCode(data.code);
+        }
+
+        if (data.type === 'pushRightCode') {
+            connectionsStorage.pushRightCode(data.code);
+        }
+
         console.log('message', data);
     }
 

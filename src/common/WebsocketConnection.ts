@@ -96,4 +96,18 @@ export class WebsocketConnection {
             state
         }));
     }
+
+    pushLeftCode(code: any) {
+        this.send(JSON.stringify({
+            type: 'pushLeftCode',
+            code
+        }));
+    }
+
+    pushRightCode(code: any) {
+        this.send(JSON.stringify({
+            type: 'pushRightCode',
+            code
+        }));
+    }
 }
