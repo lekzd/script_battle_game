@@ -123,8 +123,6 @@ canvas {
 .codeDisplay {
   position: absolute;
   top: 0;
-  background: #000000;
-  border: 3px solid green;
   box-sizing: border-box;
   color: #79dc24;
   height: 100%;
@@ -135,12 +133,15 @@ canvas {
 }
 
 .codeDisplay pre {
+  margin: 0;
   flex-grow: 1;
   box-sizing: border-box;
   width: 100%;
   height: 100%;
   overflow: hidden;
   padding: 20px;
+  background: #272822;
+  border: 2px solid #007b9c;
 }
 
 .leftCode {
@@ -276,4 +277,9 @@ canvas {
 .character_winter {
   background: url('/img/character_winter.png');
   background-position: 0 -135px;
+}
+
+.army-display {
+  background: #1b1e27;
+  width: 100px;
 }

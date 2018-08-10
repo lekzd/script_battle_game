@@ -165,19 +165,27 @@ export class BattleView extends Phaser.Scene {
 
     private runCode(leftCode: string, rightCode: string) {
         const {units} = this.battleFieldModel;
+        const promises = [];
 
-        const promises = units
-            .map(unit => {
-                const evalPromise = unit.side === BattleSide.left
-                    ? this.codeSandbox.eval(leftCode, unit)
-                    : this.codeSandbox.eval(rightCode, unit);
+        this.leftUnits.forEach(unit => {
+            const evalPromise = this.codeSandbox.eval(leftCode, unit);
 
-                evalPromise.then((actions) => {
-                    unit.setActions(actions);
-                });
-
-                return evalPromise;
+            evalPromise.then((actions) => {
+                unit.setActions(actions);
             });
+
+            promises.push(evalPromise);
+        });
+
+        this.rightUnits.forEach(unit => {
+            const evalPromise = this.codeSandbox.eval(rightCode, unit);
+
+            evalPromise.then((actions) => {
+                unit.setActions(actions);
+            });
+
+            promises.push(evalPromise);
+        });
 
         Promise.all(promises)
             .then(() => {
