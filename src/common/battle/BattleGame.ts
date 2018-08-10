@@ -2,8 +2,6 @@ import {BattleView} from './views/BattleView';
 import {WaitingView} from './views/WaitingView';
 import Phaser from "phaser";
 import {ConnectionClosedView} from "./views/ConnectionClosedView";
-import {CodeDisplay} from "../editor/CodeDisplay";
-import {Subject} from "rxjs/internal/Subject";
 
 export enum BattleState {
     wait = 'waiting',
@@ -16,9 +14,6 @@ export class BattleGame {
 
     private game: Phaser.Game;
     private currentState: BattleState;
-
-    private leftCode: CodeDisplay;
-    private rightCode: CodeDisplay;
 
     constructor() {
         const config = {
@@ -50,18 +45,5 @@ export class BattleGame {
         const battleView = <BattleView>this.game.scene.getScene(BattleState.battle);
 
         battleView.runCode$.next([leftCode, rightCode]);
-    }
-
-    updateLeftCode(code: string) {
-        this.leftCode.setCode(code);
-    }
-
-    updateRightCode(code: string) {
-        this.rightCode.setCode(code);
-    }
-
-    initCodeDisplay() {
-        this.leftCode = new CodeDisplay(document.querySelector('.leftCode'));
-        this.rightCode = new CodeDisplay(document.querySelector('.rightCode'));
     }
 }
