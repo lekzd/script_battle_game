@@ -72,6 +72,10 @@ export class MasterApp {
                 this.rightCode.setState(state);
                 setInject(RightArmy, state.army);
             }
+
+            if (message.type === 'endSession') {
+                this.battleGame.showResults(message.data.sessionResult);
+            }
         });
 
         this.connection.onClose$.subscribe(() => {

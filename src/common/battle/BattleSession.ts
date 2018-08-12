@@ -38,6 +38,12 @@ export class BattleSession {
         return this.winPromise;
     }
 
+    getSideDamage(side: BattleSide): number {
+        return this.unitsStack.all.reduce((summ, unit) => {
+            return summ + (unit.side === side ? unit.gotDamage : 0);
+        }, 0);
+    }
+
     private newTurn() {
         this.unitsStack.next();
         this.runActiveUnitTasks()
@@ -77,14 +83,6 @@ export class BattleSession {
 
     private noActionsLeft(): boolean {
         return !this.unitsStack.all.some(unit => unit.actions.length > 0)
-    }
-
-    private getSideDamage(side: BattleSide): number {
-        return this.unitsStack.all.reduce((summ, unit) => {
-            return summ + unit.side === side
-                ? unit.gotDamage
-                : 0;
-        }, 0);
     }
 
     private getWinnerSide(): WinnerSide {

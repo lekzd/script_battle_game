@@ -1,5 +1,5 @@
 import {Subject} from 'rxjs/index';
-import {ISessionResult, WinnerSide} from "./battle/BattleSession";
+import {ISessionResult} from "./battle/BattleSession";
 
 export interface IMessage {
     type: string;
@@ -10,6 +10,7 @@ export class WebsocketConnection {
 
     onMessage$ = new Subject<IMessage>();
     onClose$ = new Subject<IMessage>();
+    isMaster = false;
 
     private connection: WebSocket;
     private readyPromise: Promise<void>;
@@ -56,6 +57,8 @@ export class WebsocketConnection {
         this.send(JSON.stringify({
             type: 'registerMaster'
         }));
+
+        this.isMaster = true;
     }
 
     registerAsLeftPlayer() {

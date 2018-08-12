@@ -6,7 +6,7 @@ import {BattleFieldModel} from "../BattleFieldModel";
 import {BattleUnit} from "../BattleUnit";
 import {Subject} from "rxjs/internal/Subject";
 import {CodeSandbox} from "../../codeSandbox/CodeSandbox";
-import {BattleSession, ISessionResult, WinnerSide} from "../BattleSession";
+import {BattleSession, ISessionResult} from "../BattleSession";
 import {combineLatest} from "rxjs/internal/observable/combineLatest";
 import {BattleSide} from "../BattleSide";
 import {color} from "../../helpers/color";
@@ -15,6 +15,8 @@ import {EnemyState} from '../../client/EnemyState';
 import {WebsocketConnection} from "../../WebsocketConnection";
 import {LeftArmy} from "../../../left/LeftArmy";
 import {RightArmy} from "../../../right/RightArmy";
+import {timer} from "rxjs/internal/observable/timer";
+import {BattleStatistics} from "../BattleStatistics";
 
 export class BattleView extends Phaser.Scene {
 
@@ -34,6 +36,10 @@ export class BattleView extends Phaser.Scene {
     private create$ = new Subject();
     private leftUnits: BattleUnit[] = [];
     private rightUnits: BattleUnit[] = [];
+    private updateTimer$ = new Subject();
+
+    private leftStatistics: BattleStatistics;
+    private rightStatistics: BattleStatistics;
 
     constructor() {
         super({
@@ -78,6 +84,11 @@ export class BattleView extends Phaser.Scene {
                 this.updateUnitsFromState(this.rightUnits, message.data.state);
             }
         });
+
+        this.updateTimer$.subscribe(() => {
+            this.leftStatistics.setDamage(this.battleSession.getSideDamage(BattleSide.right));
+            this.rightStatistics.setDamage(this.battleSession.getSideDamage(BattleSide.left));
+        });
     }
 
     preload () {
@@ -91,6 +102,13 @@ export class BattleView extends Phaser.Scene {
         this.generateHexagonsTexture('hexagons');
 
         this.add.image(200, 150, 'hexagons');
+
+        this.leftStatistics = new BattleStatistics(this, BattleSide.left);
+        this.rightStatistics = new BattleStatistics(this, BattleSide.right);
+
+        timer(500, 500).subscribe(() => {
+            this.updateTimer$.next();
+        });
 
         for (let i = 0; i < 4; i++) {
             const {x, y} = this.getUnitStartPosition(BattleSide.left, i);
@@ -191,7 +209,9 @@ export class BattleView extends Phaser.Scene {
                 return this.battleSession.start([...this.leftUnits, ...this.rightUnits]);
             })
             .then((sessionResult: ISessionResult) => {
-                this.dispatchWinner(sessionResult);
+                if (this.connection.isMaster) {
+                    this.dispatchWinner(sessionResult);
+                }
             });
     }
 

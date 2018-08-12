@@ -51,4 +51,11 @@ export class Master {
             data: {code}
         }))
     }
+
+    dispatchSessionResult(sessionResult) {
+        this.connection.send(JSON.stringify({
+            type: 'endSession',
+            data: {sessionResult}
+        }))
+    }
 }

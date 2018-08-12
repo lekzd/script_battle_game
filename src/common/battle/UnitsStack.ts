@@ -3,22 +3,24 @@ import {BattleUnit} from './BattleUnit';
 export class UnitsStack {
 
     all: BattleUnit[] = [];
+    alive: BattleUnit[] = [];
     activeUnit: BattleUnit;
 
     init(units: BattleUnit[]) {
         this.all = units.slice(0);
+        this.alive = units.slice(0);
 
-        this.all.forEach(unit => {
+        this.alive.forEach(unit => {
             unit.hasTurn = true;
         });
     }
 
     next() {
-        this.activeUnit = this.all.shift();
+        this.activeUnit = this.alive.shift();
 
         this.activeUnit.hasTurn = false;
 
-        this.all.push(this.activeUnit);
+        this.alive.push(this.activeUnit);
 
         if (this.isRoundEnd()) {
             this.newRound();
@@ -28,7 +30,7 @@ export class UnitsStack {
     newRound() {
         this.clearDiedUnits();
 
-        this.all.forEach(unit => {
+        this.alive.forEach(unit => {
             unit.hasTurn = true;
         });
 
@@ -36,11 +38,11 @@ export class UnitsStack {
     }
 
     private isRoundEnd(): boolean {
-        return !this.all.some(unit => unit.hasTurn);
+        return !this.alive.some(unit => unit.hasTurn);
     }
 
     private clearDiedUnits() {
-        this.all = this.all.filter(unit => unit.health > 0)
+        this.alive = this.alive.filter(unit => unit.health > 0)
     }
 
 }

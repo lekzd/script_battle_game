@@ -21,4 +21,11 @@ export class Player {
             data: {state}
         }))
     }
+
+    dispatchSessionResult(sessionResult) {
+        this.connection.send(JSON.stringify({
+            type: 'endSession',
+            data: {sessionResult}
+        }))
+    }
 }

@@ -58,6 +58,14 @@ wsServer.on('request', (request) => {
             connectionsStorage.pushRightCode(data.code);
         }
 
+        if (data.type === 'pushRightCode') {
+            connectionsStorage.pushRightCode(data.code);
+        }
+
+        if (data.type === 'sendWinner') {
+            connectionsStorage.endSession(data.sessionResult);
+        }
+
         console.log('message', data);
     }
 

@@ -184,6 +184,9 @@ export class BattleUnit {
         this.updateHealthBar();
 
         this.sprite.setAlpha(1);
+        this.sprite.setAngle(0);
+        this.sprite.setPosition(0, -20);
+
         this.healthBar.setVisible(true);
         this.idText.setVisible(true);
     }

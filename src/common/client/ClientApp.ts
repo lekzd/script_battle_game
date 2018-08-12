@@ -7,6 +7,7 @@ import {ClientState} from "./ClientState";
 import {LeftArmy} from "../../left/LeftArmy";
 import {EnemyState} from "./EnemyState";
 import {RightArmy} from "../../right/RightArmy";
+import {ISessionResult} from "../battle/BattleSession";
 
 export class ClientApp {
 
@@ -64,6 +65,16 @@ export class ClientApp {
         this.connection.onMessage$.subscribe(message => {
             if (message.type === 'state') {
                 this.battleGame.setState(message.data);
+            }
+
+            if (message.type === 'endSession') {
+                const sessionResult = <ISessionResult>message.data.sessionResult;
+
+                if (sessionResult.winner.toString() === this.clientState.side) {
+                    this.battleGame.showWinnerScreen(message.data.sessionResult);
+                } else {
+                    this.battleGame.showLoseScreen(message.data.sessionResult);
+                }
             }
         });
 

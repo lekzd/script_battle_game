@@ -94,4 +94,10 @@ export class ConnectionsStorage {
         this.master.pushRightCode(code);
     }
 
+    endSession(sessionResult) {
+        this.master.dispatchSessionResult(sessionResult);
+        this.leftPlayer.dispatchSessionResult(sessionResult);
+        this.rightPlayer.dispatchSessionResult(sessionResult);
+    }
+
 }
