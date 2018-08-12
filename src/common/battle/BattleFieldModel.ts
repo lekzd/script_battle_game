@@ -186,6 +186,10 @@ export class BattleFieldModel {
     }
 
     private animateUnitByPath(unit: BattleUnit, path: IPathItem[]): Promise<void> {
+        if (path.length === 0) {
+            return Promise.resolve();
+        }
+
         const lastItem = path[path.length - 1];
 
         return AsyncSequence.from(path.map(({x, y}) =>

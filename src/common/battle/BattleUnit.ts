@@ -5,6 +5,7 @@ import {IAction} from "../codeSandbox/CodeSandbox";
 import {getBattleApi} from "./BattleUnitBattleApi";
 import {BattleSide} from "./BattleSide";
 import {color} from "../helpers/color";
+import {Subject} from "rxjs/internal/Subject";
 
 interface IBattleUnitConfig {
     x: number;
@@ -29,6 +30,7 @@ export class BattleUnit {
 
     character: ICharacterConfig;
     actions: IAction[] = [];
+    gotDamage = 0;
 
     api: any;
 
@@ -43,6 +45,7 @@ export class BattleUnit {
     private container: any;
     private healthBar: Phaser.GameObjects.Graphics;
     private idText: Phaser.GameObjects.Text;
+    private spriteZ: number;
 
     get renderLeft(): number {
         return this.battleFieldDrawer.getHexagonLeft(this.x, this.y) - 32;
@@ -76,12 +79,17 @@ export class BattleUnit {
     }
 
     setPositionAction(x: number, y: number): Promise<void> {
+        this.rotation = this.x < x
+            ? BattleSide.left
+            : BattleSide.right;
+
         this.setPosition(x, y);
         this.setAnimation('walk');
 
         return new Promise(resolve => {
             setTimeout(() => {
                 this.setAnimation('idle');
+                this.rotation = this.side;
                 resolve();
             }, 300);
         });
@@ -114,6 +122,12 @@ export class BattleUnit {
         const turnKey = this.rotation === BattleSide.right ? 'left' : 'right';
         const phaserAnimationName = `${this.type}_${animationName}_${turnKey}`;
 
+        if (animationName === 'idle') {
+            this.container.setZ(this.spriteZ);
+        } else {
+            this.container.setZ(0);
+        }
+
         this.sprite.play(phaserAnimationName, false, 0);
     }
 
@@ -140,7 +154,15 @@ export class BattleUnit {
 
         const newValue = this.health - hitValue;
 
+        this.gotDamage += hitValue;
+
         this.health = Math.max(Math.min(MAX_HEALTH, newValue), 0);
+
+        if (this.health <= 0) {
+            this.makeDeadAnimation();
+        } else {
+            this.makeHitAnimation(fromUnit);
+        }
 
         this.updateHealthBar();
     }
@@ -158,7 +180,12 @@ export class BattleUnit {
 
     clear() {
         this.health = MAX_HEALTH;
+        this.gotDamage = 0;
         this.updateHealthBar();
+
+        this.sprite.setAlpha(1);
+        this.healthBar.setVisible(true);
+        this.idText.setVisible(true);
     }
 
     private initGraphics() {
@@ -174,6 +201,8 @@ export class BattleUnit {
         this.container.add(this.sayText);
         this.container.add(this.idText);
         this.container.add(this.healthBar);
+
+        this.spriteZ = this.sprite.z;
 
         this.setAnimation('idle');
     }
@@ -258,5 +287,55 @@ export class BattleUnit {
         }
 
         return color('#ff3131');
+    }
+
+    private makeHitAnimation(fromUnit: BattleUnit) {
+        const offset = this.renderLeft < fromUnit.renderLeft
+            ? '-=5'
+            : '+=5';
+
+        this.setAnimation('spellcast');
+
+        setTimeout(() => {
+            this.setAnimation('idle');
+        }, 500);
+
+        this.scene.tweens.add({
+            targets: this.sprite,
+            x: offset,
+            duration: 100,
+            repeat: 0,
+            yoyo: true
+        });
+    }
+
+    private makeDeadAnimation() {
+        const angle = this.side === BattleSide.right
+            ? 90
+            : -90;
+
+        const offset = this.side === BattleSide.right
+            ? '+=30'
+            : '-=30';
+
+        this.scene.tweens.add({
+            targets: this.sprite,
+            y: '+=26',
+            x: offset,
+            duration: 100,
+            repeat: 0
+        });
+
+        this.scene.tweens.add({
+            targets: this.sprite,
+            angle,
+            duration: 100,
+            repeat: 0,
+            onComplete: () => {
+                this.sprite.setAlpha(0.2);
+                this.healthBar.setVisible(false);
+                this.idText.setVisible(false);
+            }
+        });
     }
 }

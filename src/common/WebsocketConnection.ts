@@ -1,4 +1,5 @@
 import {Subject} from 'rxjs/index';
+import {ISessionResult, WinnerSide} from "./battle/BattleSession";
 
 export interface IMessage {
     type: string;
@@ -108,6 +109,13 @@ export class WebsocketConnection {
         this.send(JSON.stringify({
             type: 'pushRightCode',
             code
+        }));
+    }
+
+    sendWinner(sessionResult: ISessionResult) {
+        this.send(JSON.stringify({
+            type: 'sendWinner',
+            sessionResult
         }));
     }
 }

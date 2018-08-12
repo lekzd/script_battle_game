@@ -4,22 +4,38 @@ import {BattleUnit} from "./BattleUnit";
 import {BattleFieldModel} from "./BattleFieldModel";
 import {BattleSide} from "./BattleSide";
 
+export enum WinnerSide {
+    left = 'left',
+    right = 'right',
+    nobody = 'nobody'
+}
+
+export interface ISessionResult {
+    winner: WinnerSide;
+    damage: {
+        left: number;
+        right: number;
+    }
+}
+
 export class BattleSession {
 
     @Inject(UnitsStack) private unitsStack: UnitsStack;
     @Inject(BattleFieldModel) private battleFieldModel: BattleFieldModel;
 
-    private winPromise: Promise<BattleSide>;
-    private winResolve: Function;
+    private winPromise: Promise<ISessionResult>;
+    private winResolve: (state: ISessionResult) => any;
 
-    start(units: BattleUnit[]) {
-        this.winPromise = new Promise<BattleSide>(resolve => {
+    start(units: BattleUnit[]): Promise<ISessionResult> {
+        this.winPromise = new Promise<ISessionResult>(resolve => {
             this.winResolve = resolve;
         });
 
         this.unitsStack.init(units);
 
         this.newTurn();
+
+        return this.winPromise;
     }
 
     private newTurn() {
@@ -29,7 +45,13 @@ export class BattleSession {
                 const winnerSide = this.getWinnerSide();
 
                 if (winnerSide) {
-                    this.winResolve(winnerSide);
+                    this.winResolve({
+                        winner: winnerSide,
+                        damage: {
+                            left: this.getSideDamage(BattleSide.left),
+                            right: this.getSideDamage(BattleSide.right)
+                        }
+                    });
 
                     return;
                 }
@@ -49,21 +71,44 @@ export class BattleSession {
         return Promise.resolve();
     }
 
-    private isLeftSideWins(): boolean {
-        return !this.unitsStack.all.some(unit => unit.side === BattleSide.right && unit.health > 0)
+    private hasAbsoluteWin(side: BattleSide): boolean {
+        return !this.unitsStack.all.some(unit => unit.side === side && unit.health > 0)
     }
 
-    private isRightSideWins(): boolean {
-        return !this.unitsStack.all.some(unit => unit.side === BattleSide.left && unit.health > 0)
+    private noActionsLeft(): boolean {
+        return !this.unitsStack.all.some(unit => unit.actions.length > 0)
     }
 
-    private getWinnerSide(): BattleSide {
-        if (this.isLeftSideWins()) {
-            return BattleSide.left;
+    private getSideDamage(side: BattleSide): number {
+        return this.unitsStack.all.reduce((summ, unit) => {
+            return summ + unit.side === side
+                ? unit.gotDamage
+                : 0;
+        }, 0);
+    }
+
+    private getWinnerSide(): WinnerSide {
+        if (this.hasAbsoluteWin(BattleSide.left)) {
+            return WinnerSide.left;
         }
 
-        if (this.isRightSideWins()) {
-            return BattleSide.right;
+        if (this.hasAbsoluteWin(BattleSide.right)) {
+            return WinnerSide.right;
+        }
+
+        if (this.noActionsLeft()) {
+            const leftDamage = this.getSideDamage(BattleSide.left);
+            const rightDamage = this.getSideDamage(BattleSide.left);
+
+            if (leftDamage > rightDamage) {
+                return WinnerSide.left;
+            }
+
+            if (leftDamage < rightDamage) {
+                return WinnerSide.right;
+            }
+
+            return WinnerSide.nobody;
         }
 
         return null;

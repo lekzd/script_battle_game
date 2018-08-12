@@ -6,7 +6,7 @@ import {BattleFieldModel} from "../BattleFieldModel";
 import {BattleUnit} from "../BattleUnit";
 import {Subject} from "rxjs/internal/Subject";
 import {CodeSandbox} from "../../codeSandbox/CodeSandbox";
-import {BattleSession} from "../BattleSession";
+import {BattleSession, ISessionResult, WinnerSide} from "../BattleSession";
 import {combineLatest} from "rxjs/internal/observable/combineLatest";
 import {BattleSide} from "../BattleSide";
 import {color} from "../../helpers/color";
@@ -164,7 +164,6 @@ export class BattleView extends Phaser.Scene {
     }
 
     private runCode(leftCode: string, rightCode: string) {
-        const {units} = this.battleFieldModel;
         const promises = [];
 
         this.leftUnits.forEach(unit => {
@@ -189,8 +188,11 @@ export class BattleView extends Phaser.Scene {
 
         Promise.all(promises)
             .then(() => {
-                this.battleSession.start(units);
+                return this.battleSession.start([...this.leftUnits, ...this.rightUnits]);
             })
+            .then((sessionResult: ISessionResult) => {
+                this.dispatchWinner(sessionResult);
+            });
     }
 
     private createBullet(x: number, y: number, x2: number, y2: number) {
@@ -229,5 +231,9 @@ export class BattleView extends Phaser.Scene {
                 unit.setType(type);
             }
         })
+    }
+
+    private dispatchWinner(sessionResult: ISessionResult) {
+        this.connection.sendWinner(sessionResult);
     }
 }
