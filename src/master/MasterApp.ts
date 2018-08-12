@@ -1,19 +1,20 @@
 import {WebsocketConnection} from '../common/WebsocketConnection';
-import {Inject} from '../common/InjectDectorator';
+import {Inject, setInject} from '../common/InjectDectorator';
 import {BattleGame, BattleState} from '../common/battle/BattleGame';
 import {Subject} from "rxjs/internal/Subject";
 import {combineLatest} from "rxjs/internal/observable/combineLatest";
 import {CodeDisplay} from './CodeDisplay';
+import {LeftArmy} from "../left/LeftArmy";
+import {EMPTY_ARMY} from "../common/client/EMPTY_ARMY";
+import {RightArmy} from "../right/RightArmy";
 
 export class MasterApp {
 
     @Inject(BattleGame) private battleGame: BattleGame;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
-    private leftIsReady = new Subject();
-    private finalLeftCode = '';
-    private rightIsReady = new Subject();
-    private finalRightCode = '';
+    private leftIsReady$ = new Subject();
+    private rightIsReady$ = new Subject();
 
     private leftCode: CodeDisplay;
     private rightCode: CodeDisplay;
@@ -24,6 +25,9 @@ export class MasterApp {
 
     constructor() {
         this.connection.registerAsMaster();
+
+        setInject(LeftArmy, Object.assign({}, EMPTY_ARMY));
+        setInject(RightArmy, Object.assign({}, EMPTY_ARMY));
 
         this.leftCode = new CodeDisplay(document.querySelector('.leftCode'));
         this.rightCode = new CodeDisplay(document.querySelector('.rightCode'));
@@ -46,25 +50,27 @@ export class MasterApp {
             }
 
             if (message.type === 'pushLeftCode') {
-                this.finalLeftCode = message.data.code;
-
                 this.leftCode.setCode(message.data.code);
-                this.leftIsReady.next();
+                this.leftIsReady$.next();
             }
 
             if (message.type === 'pushRightCode') {
-                this.finalRightCode = message.data.code;
-
                 this.rightCode.setCode(message.data.code);
-                this.rightIsReady.next();
+                this.rightIsReady$.next();
             }
 
             if (message.type === 'leftState') {
-                this.leftCode.setState(message.data.state);
+                const {state} = message.data;
+
+                this.leftCode.setState(state);
+                setInject(LeftArmy, state.army);
             }
 
             if (message.type === 'rightState') {
-                this.rightCode.setState(message.data.state);
+                const {state} = message.data;
+
+                this.rightCode.setState(state);
+                setInject(RightArmy, state.army);
             }
         });
 
@@ -72,7 +78,7 @@ export class MasterApp {
             this.battleGame.setState(BattleState.connectionClosed);
         });
 
-        combineLatest(this.leftIsReady.asObservable(), this.rightIsReady.asObservable())
+        combineLatest(this.leftIsReady$.asObservable(), this.rightIsReady$.asObservable())
             .subscribe(() => {
                 this.setState(BattleState.battle);
                 this.battleGame.runCode(this.leftCode.value, this.rightCode.value);

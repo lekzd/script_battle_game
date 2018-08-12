@@ -8,6 +8,7 @@ import {Astar, IPathItem} from "../helpers/Astar";
 import {AsyncSequence} from "../helpers/AsyncSequence";
 import {Subject} from "rxjs/internal/Subject";
 import {ClientState} from "../client/ClientState";
+import {CharacterType} from "../characters/CharactersList";
 
 const FIELD_WIDTH = 12;
 const FIELD_HEIGHT = 9;
@@ -72,7 +73,7 @@ export class BattleFieldModel {
         }
 
         if (action.action === 'goToEnemyAndHit') {
-            const enemy = this.getEnemy(action.id);
+            const enemy = this.getEnemy(action.id, unit);
             const path = this.getPath(unit.x, unit.y, enemy.x, enemy.y).slice(0, -1);
             const canHitEnemy = path.length <= unit.character.speed;
 
@@ -91,53 +92,63 @@ export class BattleFieldModel {
         }
 
         if (action.action === 'shoot') {
-            const enemy = this.getEnemy(action.id);
+            const enemy = this.getEnemy(action.id, unit);
 
-            this.bullet$.next([unit.x, unit.y, enemy.x, enemy.y]);
-
-            unit.setAnimation('shoot');
-
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    unit.setAnimation('idle');
-
+            return this.makeBulletAction(unit, enemy, 'shoot')
+                .then(() => {
                     enemy.hitHealth(10, unit);
-                    resolve();
-                }, 500);
-            })
+                });
         }
 
         if (action.action === 'spell') {
-            const enemy = this.getEnemy(action.id);
+            const enemy = this.getEnemy(action.id, unit);
 
-            this.bullet$.next([unit.x, unit.y, enemy.x, enemy.y]);
-
-            unit.setAnimation('spellcast');
-
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    unit.setAnimation('idle');
-
+            return this.makeBulletAction(unit, enemy, 'spellcast')
+                .then(() => {
                     enemy.hitHealth(10, unit);
-                    resolve();
-                }, 500);
-            })
+                });
         }
 
         if (action.action === 'heal') {
-            const enemy = this.getFriend(action.id);
+            const enemy = this.getFriend(action.id, unit);
 
-            this.bullet$.next([unit.x, unit.y, enemy.x, enemy.y]);
-
-            unit.setAnimation('spellcast');
-
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    unit.setAnimation('idle');
-                    resolve();
-                }, 500);
-            })
+            return this.makeBulletAction(unit, enemy, 'spellcast');
         }
+
+
+        if (action.action === 'attackRandom') {
+            const enemy = this.getRandomEnemy(unit);
+
+            if (unit.character.type === CharacterType.magic) {
+                return this.makeBulletAction(unit, enemy, 'spellcast')
+                    .then(() => {
+                        enemy.hitHealth(10, unit);
+                    });
+            }
+
+            if (unit.character.type === CharacterType.shooting) {
+                return this.makeBulletAction(unit, enemy, 'shoot')
+                    .then(() => {
+                        enemy.hitHealth(10, unit);
+                    });
+            }
+
+            const path = this.getPath(unit.x, unit.y, enemy.x, enemy.y).slice(0, -1);
+            const canHitEnemy = path.length <= unit.character.speed;
+
+            path.length = Math.min(path.length, unit.character.speed);
+
+            return this.animateUnitByPath(unit, path)
+                .then(() => {
+                    if (canHitEnemy) {
+                        return this.makeHitAction(unit, enemy, 'slash');
+                    }
+
+                    return;
+                })
+        }
+
+        console.log(`unhandled action: ${action.action}`);
     }
 
     private getPath(x1: number, y1: number, x2: number, y2: number): IPathItem[] {
@@ -154,15 +165,23 @@ export class BattleFieldModel {
         return path;
     }
 
-    private getEnemy(id: string): BattleUnit {
+    private getEnemy(id: string, toUnit: BattleUnit): BattleUnit {
         return this.units.find(unit => {
-           return unit.side !== this.clientState.side && unit.id === id;
+           return unit.side !== toUnit.side && unit.id === id;
         });
     }
 
-    private getFriend(id: string): BattleUnit {
+    private getRandomEnemy(toUnit: BattleUnit): BattleUnit {
+        const enemies = this.units.filter(unit => {
+           return unit.side !== toUnit.side && unit.health > 0;
+        });
+
+        return enemies[Math.floor(Math.random() * enemies.length)];
+    }
+
+    private getFriend(id: string, toUnit: BattleUnit): BattleUnit {
         return this.units.find(unit => {
-           return unit.side === this.clientState.side && unit.id === id;
+           return unit.side === toUnit.side && unit.id === id;
         });
     }
 
@@ -174,5 +193,30 @@ export class BattleFieldModel {
         )).then(() => {
             this.set(lastItem.x, lastItem.y, unit);
         });
+    }
+
+    private makeBulletAction(fromUnit: BattleUnit, toUnit: BattleUnit, animation: IAnimationName): Promise<void> {
+        this.bullet$.next([fromUnit.x, fromUnit.y, toUnit.x, toUnit.y]);
+
+        fromUnit.setAnimation(animation);
+
+        return new Promise(resolve => {
+            setTimeout(() => {
+                fromUnit.setAnimation('idle');
+                resolve();
+            }, 500);
+        })
+    }
+
+    private makeHitAction(fromUnit: BattleUnit, toUnit: BattleUnit, animation: IAnimationName): Promise<void> {
+        fromUnit.setAnimation(animation);
+
+        return new Promise(resolve => {
+            setTimeout(() => {
+                toUnit.hitHealth(10, fromUnit);
+                fromUnit.setAnimation('idle');
+                resolve();
+            }, 500);
+        })
     }
 }

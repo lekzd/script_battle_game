@@ -2,6 +2,7 @@ import {BattleSide} from "../battle/BattleSide";
 import {Subject} from 'rxjs/index';
 import {Inject} from '../InjectDectorator';
 import {WebsocketConnection} from '../WebsocketConnection';
+import {EMPTY_ARMY} from "./EMPTY_ARMY";
 
 export class EnemyState {
 
@@ -10,12 +11,7 @@ export class EnemyState {
     name = '';
     side: BattleSide;
 
-    army = {
-        0: 'character_null',
-        1: 'character_null',
-        2: 'character_null',
-        3: 'character_null'
-    };
+    army = Object.assign({}, EMPTY_ARMY);
 
     change$ = new Subject<any>();
 

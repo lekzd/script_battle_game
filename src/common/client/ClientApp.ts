@@ -1,13 +1,17 @@
 import {WebsocketConnection} from '../WebsocketConnection';
-import {Inject} from '../InjectDectorator';
+import {Inject, setInject} from '../InjectDectorator';
 import {BattleGame, BattleState} from '../battle/BattleGame';
 import {EditorComponent} from '../editor/EditorComponent';
 import {BattleSide} from '../battle/BattleSide';
 import {ClientState} from "./ClientState";
+import {LeftArmy} from "../../left/LeftArmy";
+import {EnemyState} from "./EnemyState";
+import {RightArmy} from "../../right/RightArmy";
 
 export class ClientApp {
 
     @Inject(BattleGame) private battleGame: BattleGame;
+    @Inject(EnemyState) private enemyState: EnemyState;
     @Inject(ClientState) private clientState: ClientState;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
@@ -19,8 +23,14 @@ export class ClientApp {
 
         if (side === BattleSide.left) {
             this.connection.registerAsLeftPlayer();
+
+            setInject(LeftArmy, this.clientState.army);
+            setInject(RightArmy, this.enemyState.army);
         } else {
             this.connection.registerAsRightPlayer();
+
+            setInject(LeftArmy, this.enemyState.army);
+            setInject(RightArmy, this.clientState.army);
         }
 
         this.battleGame.setState(BattleState.battle);

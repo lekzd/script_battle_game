@@ -13,11 +13,15 @@ import {color} from "../../helpers/color";
 import {ClientState} from '../../client/ClientState';
 import {EnemyState} from '../../client/EnemyState';
 import {WebsocketConnection} from "../../WebsocketConnection";
+import {LeftArmy} from "../../../left/LeftArmy";
+import {RightArmy} from "../../../right/RightArmy";
 
 export class BattleView extends Phaser.Scene {
 
     runCode$ = new Subject<[string, string]>();
 
+    @Inject(LeftArmy) private leftArmy: LeftArmy;
+    @Inject(RightArmy) private rightArmy: RightArmy;
     @Inject(EnemyState) private enemyState: EnemyState;
     @Inject(ClientState) private clientState: ClientState;
     @Inject(CodeSandbox) private codeSandbox: CodeSandbox;
@@ -90,9 +94,7 @@ export class BattleView extends Phaser.Scene {
 
         for (let i = 0; i < 4; i++) {
             const {x, y} = this.getUnitStartPosition(BattleSide.left, i);
-            const army = this.clientState.side === BattleSide.left
-                ? this.clientState.army
-                : this.enemyState.army;
+            const army = this.leftArmy;
             const type = army[i];
             const side = BattleSide.left;
             const scene = this;
@@ -105,9 +107,7 @@ export class BattleView extends Phaser.Scene {
 
         for (let i = 0; i < 4; i++) {
             const {x, y} = this.getUnitStartPosition(BattleSide.right, i);
-            const army = this.clientState.side === BattleSide.right
-                ? this.clientState.army
-                : this.enemyState.army;
+            const army = this.rightArmy;
             const type = army[i];
             const side = BattleSide.right;
             const scene = this;

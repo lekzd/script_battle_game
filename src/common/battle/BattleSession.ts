@@ -12,8 +12,6 @@ export class BattleSession {
     private winPromise: Promise<BattleSide>;
     private winResolve: Function;
 
-    private turnResolve: Function;
-
     start(units: BattleUnit[]) {
         this.winPromise = new Promise<BattleSide>(resolve => {
             this.winResolve = resolve;
@@ -25,46 +23,49 @@ export class BattleSession {
     }
 
     private newTurn() {
-        new Promise<void>(resolve => {
-            this.turnResolve = resolve;
-            this.unitsStack.next();
-            this.runActiveUnitTasks();
-        }).then(() => {
-            this.newTurn();
-        });
+        this.unitsStack.next();
+        this.runActiveUnitTasks()
+            .then(() => {
+                const winnerSide = this.getWinnerSide();
+
+                if (winnerSide) {
+                    this.winResolve(winnerSide);
+
+                    return;
+                }
+
+                this.newTurn();
+            });
     }
 
-    private runActiveUnitTasks() {
-        setTimeout(() => {
+    private runActiveUnitTasks(): Promise<void> {
+        const {activeUnit} = this.unitsStack;
+        const action = activeUnit.actions.shift();
 
-            if (this.isLeftSideWins()) {
-                this.winResolve(BattleSide.left);
+        if (action) {
+            return this.battleFieldModel.doAction(activeUnit, action);
+        }
 
-                return;
-            }
-
-            if (this.isRightSideWins()) {
-                this.winResolve(BattleSide.right);
-
-                return;
-            }
-
-            const {activeUnit} = this.unitsStack;
-            const action = activeUnit.actions.shift();
-
-            if (action) {
-                this.battleFieldModel.doAction(activeUnit, action);
-            }
-
-            this.turnResolve();
-        }, 300);
+        return Promise.resolve();
     }
 
     private isLeftSideWins(): boolean {
-        return this.unitsStack.all.some(unit => unit.side === BattleSide.right && unit.health === 0)
+        return !this.unitsStack.all.some(unit => unit.side === BattleSide.right && unit.health > 0)
     }
 
     private isRightSideWins(): boolean {
-        return this.unitsStack.all.some(unit => unit.side === BattleSide.left && unit.health === 0)
+        return !this.unitsStack.all.some(unit => unit.side === BattleSide.left && unit.health > 0)
+    }
+
+    private getWinnerSide(): BattleSide {
+        if (this.isLeftSideWins()) {
+            return BattleSide.left;
+        }
+
+        if (this.isRightSideWins()) {
+            return BattleSide.right;
+        }
+
+        return null;
     }
 }

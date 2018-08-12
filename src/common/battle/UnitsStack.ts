@@ -7,6 +7,10 @@ export class UnitsStack {
 
     init(units: BattleUnit[]) {
         this.all = units.slice(0);
+
+        this.all.forEach(unit => {
+            unit.hasTurn = true;
+        });
     }
 
     next() {

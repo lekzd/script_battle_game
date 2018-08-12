@@ -26,6 +26,10 @@ export function getUnitApi(unit: any, actions: IAction[]) {
             actions.push({action: 'say', text: text});
         }
 
+        attackRandom() {
+            actions.push({action: 'attackRandom'});
+        }
+
         isShooter() {
             return unit.character.type === 'shooting';
         }

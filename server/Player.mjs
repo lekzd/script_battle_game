@@ -4,6 +4,11 @@ export class Player {
         this.connection = connection;
         this.side = side;
         this.code = '';
+
+        this.connection.send(JSON.stringify({
+            type: 'state',
+            data: 'battle'
+        }))
     }
 
     setCode(code) {

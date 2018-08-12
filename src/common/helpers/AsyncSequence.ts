@@ -18,10 +18,11 @@ export class AsyncSequence {
     private onPromise(promise: Promise<any>, callback: Function): Promise<any> {
         promise = callback();
 
+        this.counter--;
+
         if (this.counter === 0) {
             this.globalResolve(true);
         }
-        this.counter--;
 
         return promise;
     }
