@@ -99,11 +99,11 @@ export class BattleSession {
             const rightDamage = this.getSideDamage(BattleSide.left);
 
             if (leftDamage > rightDamage) {
-                return WinnerSide.left;
+                return WinnerSide.right;
             }
 
             if (leftDamage < rightDamage) {
-                return WinnerSide.right;
+                return WinnerSide.left;
             }
 
             return WinnerSide.nobody;

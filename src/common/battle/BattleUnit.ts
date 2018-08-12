@@ -335,7 +335,7 @@ export class BattleUnit {
             duration: 100,
             repeat: 0,
             onComplete: () => {
-                this.sprite.setAlpha(0.2);
+                this.sprite.setAlpha(0.5);
                 this.healthBar.setVisible(false);
                 this.idText.setVisible(false);
             }

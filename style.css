@@ -58,6 +58,7 @@ body {
   color: green;
   cursor: pointer;
   border: none;
+  padding: 1px 6px;
 }
 
 .toolbar-button:hover {
@@ -181,7 +182,11 @@ canvas {
 }
 
 .select-button {
-  display: block;
+  display: flex;
+}
+
+.select-button + .select-button {
+  margin-top: 18px;
 }
 
 .select-button .unit-img {
