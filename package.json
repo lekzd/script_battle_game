@@ -6,6 +6,8 @@
   "scripts": {
     "build": "webpack",
     "start": "webpack-dev-server",
+    "release": "zip -r archive.zip . -x *.git* *.map *.idea* src/**\\* node_modules/**\\*",
+    "deploy": "scp archive.zip root@142.93.129.144:game/archive.zip",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

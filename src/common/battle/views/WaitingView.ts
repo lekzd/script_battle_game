@@ -2,9 +2,11 @@ import Phaser from 'phaser';
 import {Inject} from "../../InjectDectorator";
 import {CharactersList} from "../../characters/CharactersList";
 import {WebsocketConnection} from "../../WebsocketConnection";
+import {Environment} from '../../Environment';
 
 export class WaitingView extends Phaser.Scene {
 
+    @Inject(Environment) private environment: Environment;
     @Inject(CharactersList) private charactersList: CharactersList;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
@@ -15,7 +17,7 @@ export class WaitingView extends Phaser.Scene {
     }
 
     preload () {
-        this.load.setBaseURL('http://localhost:8080');
+        this.load.setBaseURL(this.environment.config.staticHost);
 
         this.load.image('arrow', '/img/arrow.png');
         this.load.image('snow', '/img/snow.png');

@@ -1,5 +1,7 @@
 import {Subject} from 'rxjs/index';
 import {ISessionResult} from "./battle/BattleSession";
+import {Inject} from './InjectDectorator';
+import {Environment} from './Environment';
 
 export interface IMessage {
     type: string;
@@ -7,6 +9,8 @@ export interface IMessage {
 }
 
 export class WebsocketConnection {
+
+    @Inject(Environment) private environment: Environment;
 
     onMessage$ = new Subject<IMessage>();
     onClose$ = new Subject<IMessage>();
@@ -16,7 +20,7 @@ export class WebsocketConnection {
     private readyPromise: Promise<void>;
 
     constructor() {
-        this.connection = new WebSocket('ws://localhost:1337');
+        this.connection = new WebSocket(this.environment.config.websocket);
 
         this.readyPromise = new Promise<void>((resolve, reject) => {
             this.connection.onopen = () => {
