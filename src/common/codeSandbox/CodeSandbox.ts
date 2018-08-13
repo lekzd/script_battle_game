@@ -10,18 +10,8 @@ export interface IAction {
 }
 
 const MAX_EVAL_TIMEOUT = 1000;
-const BANNED_APIS = [
-    'self', 'state', 'fetch', 'postMessage', 'nativePostMessage', 'addEventListener',
-    'XMLHttpRequest', 'WebSocket', 'Worker', 'Error'
-];
 
 export class CodeSandbox {
-
-    private scope: any = {};
-
-    setGlobal(name: string, value: any) {
-        this.scope[name] = value;
-    }
 
     eval(code: string, unit: BattleUnit): Promise<IAction[]> {
         const worker = new Worker(this.getJSBlob(code));

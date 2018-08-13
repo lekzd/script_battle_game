@@ -33,8 +33,6 @@ export class UnitsStack {
         this.alive.forEach(unit => {
             unit.hasTurn = true;
         });
-
-        this.next();
     }
 
     private isRoundEnd(): boolean {

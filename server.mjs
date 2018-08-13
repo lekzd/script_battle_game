@@ -5,6 +5,8 @@ import {ConnectionsStorage} from "./server/ConnectionsStorage";
 const server = http.createServer((request, response) => {
     // process HTTP request. Since we're writing just WebSockets
     // server we don't have to implement anything.
+
+    response.end('OK');
 });
 server.listen(1337, () => {});
 
