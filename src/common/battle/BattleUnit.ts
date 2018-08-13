@@ -47,11 +47,11 @@ export class BattleUnit {
     private spriteZ: number;
 
     get renderLeft(): number {
-        return this.battleFieldDrawer.getHexagonLeft(this.x, this.y) - 32;
+        return this.battleFieldDrawer.getHexagonLeft(this.x, this.y) + 16;
     }
 
     get renderTop(): number {
-        return this.battleFieldDrawer.getHexagonTop(this.x, this.y) + 8;
+        return this.battleFieldDrawer.getHexagonTop(this.x, this.y) + 36;
     }
 
     constructor(config: IBattleUnitConfig) {
@@ -82,9 +82,9 @@ export class BattleUnit {
             return Promise.resolve();
         }
 
-        this.rotation = this.x < x
-            ? BattleSide.left
-            : BattleSide.right;
+        this.rotation = this.x > x
+            ? BattleSide.right
+            : BattleSide.left;
 
         this.setPosition(x, y);
         this.setAnimation('walk');
@@ -341,12 +341,12 @@ export class BattleUnit {
             : -90;
 
         const offset = this.side === BattleSide.right
-            ? '+=30'
-            : '-=30';
+            ? '+=22'
+            : '-=22';
 
         this.scene.tweens.add({
             targets: this.sprite,
-            y: '+=26',
+            y: '+=24',
             x: offset,
             duration: 100,
             repeat: 0

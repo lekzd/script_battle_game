@@ -3,10 +3,10 @@ import {getUnitApi} from './getUnitApi';
 
 export interface IAction {
     action: string;
-    id?: string;
-    x?: number;
-    y?: number;
-    text?: string;
+    id?: any;
+    x?: any;
+    y?: any;
+    text?: any;
 }
 
 const MAX_EVAL_TIMEOUT = 1000;

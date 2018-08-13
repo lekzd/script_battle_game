@@ -80,7 +80,10 @@ export class Toolbar {
     constructor(private container: HTMLElement) {
 
         this.container.innerHTML = `
-            <button id="run" class="runButton toolbar-button" type="button">Run</button>
+            <button id="run" class="runButton toolbar-button" type="button">
+              <div>Run</div>
+              (Ctrl + Enter)
+            </button>
             <div class="select-window">
                 <button id="select-1" class="toolbar-button select-button" type="button">
                     <div class="unit-img character_null"></div>

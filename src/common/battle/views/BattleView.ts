@@ -159,11 +159,11 @@ export class BattleView extends Phaser.Scene {
 
     private getUnitStartPosition(side: BattleSide, index: number): {x: number, y: number} {
         const topIndexes = [
-            2, 4, 6, 8
+            1, 3, 5, 7
         ];
 
         return {
-            x: side === BattleSide.left ? 2 : 11,
+            x: side === BattleSide.left ? 1 : 10,
             y: topIndexes[index]
         }
     }

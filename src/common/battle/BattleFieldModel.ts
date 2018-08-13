@@ -66,7 +66,18 @@ export class BattleFieldModel {
         console.log('doAction', action);
 
         if (action.action === 'goTo') {
-            const path = this.getPath(unit.x, unit.y, action.x + unit.x, action.y + unit.y);
+            const toX = parseInt(action.x, 10);
+            const toY = parseInt(action.y, 10);
+
+            if (isNaN(toX)) {
+                this.dispatchError('x не может быть приведен к числу');
+            }
+
+            if (isNaN(toY)) {
+                this.dispatchError('y не может быть приведен к числу');
+            }
+
+            const path = this.getPath(unit.x, unit.y, toX + unit.x, toY + unit.y);
 
             path.length = Math.min(path.length, unit.character.speed);
 
@@ -89,6 +100,10 @@ export class BattleFieldModel {
         }
 
         if (action.action === 'say') {
+            if (!action.text) {
+                this.dispatchError(`Не задан обязательный параметр text`);
+            }
+
             return unit.sayAction(action.text);
         }
 
@@ -153,23 +168,29 @@ export class BattleFieldModel {
     }
 
     private getPath(x1: number, y1: number, x2: number, y2: number): IPathItem[] {
+        x2 = Math.min(Math.max(x2, 0), FIELD_WIDTH - 1);
+        y2 = Math.min(Math.max(y2, 0), FIELD_HEIGHT - 1);
+
         const fromNode = this.graph.grid.get(x1, y1);
         const toNode = this.graph.grid.get(x2, y2);
-        const pointWeight = this.graph.getWeight(x1, y1);
 
-        this.graph.setWeight(x1, y1, 0);
-
-        const path = this.astar.search(this.graph, fromNode, toNode);
-
-        this.graph.setWeight(x1, y1, pointWeight);
-
-        return path;
+        return this.astar.search(this.graph, fromNode, toNode);
     }
 
     private getEnemy(id: string, toUnit: BattleUnit): BattleUnit {
-        return this.units.find(unit => {
-           return unit.side !== toUnit.side && unit.id === id;
+        if (!id) {
+            this.dispatchError(`Не задан обязательный параметр id`);
+        }
+
+        const unit = this.units.find(unit => {
+            return unit.side !== toUnit.side && unit.id.toLowerCase() === id.toString().toLowerCase();
         });
+
+        if (!unit) {
+            this.dispatchError(`Противник с ID "${id}" не найден`);
+        }
+
+        return unit;
     }
 
     private getRandomEnemy(toUnit: BattleUnit): BattleUnit {
@@ -181,9 +202,19 @@ export class BattleFieldModel {
     }
 
     private getFriend(id: string, toUnit: BattleUnit): BattleUnit {
-        return this.units.find(unit => {
+        if (!id) {
+            this.dispatchError(`Не задан обязательный параметр id`);
+        }
+
+        const unit = this.units.find(unit => {
            return unit.side === toUnit.side && unit.id === id;
         });
+
+        if (!unit) {
+            this.dispatchError(`Союзник с ID "${id}" не найден`);
+        }
+
+        return unit;
     }
 
     private animateUnitByPath(unit: BattleUnit, path: IPathItem[]): Promise<void> {
@@ -228,5 +259,9 @@ export class BattleFieldModel {
                 resolve();
             }, 500);
         })
+    }
+
+    private dispatchError(errorText: string) {
+        throw new Error(errorText);
     }
 }
