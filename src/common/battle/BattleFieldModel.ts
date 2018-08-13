@@ -9,13 +9,14 @@ import {AsyncSequence} from "../helpers/AsyncSequence";
 import {Subject} from "rxjs/internal/Subject";
 import {ClientState} from "../client/ClientState";
 import {CharacterType} from "../characters/CharactersList";
+import {BulletType} from "./BulletDrawer";
 
 const FIELD_WIDTH = 12;
 const FIELD_HEIGHT = 9;
 
 export class BattleFieldModel {
 
-    bullet$ = new Subject<[number, number, number, number]>();
+    bullet$ = new Subject<[BattleUnit, BattleUnit, BulletType]>();
 
     @Inject(Astar) private astar: Astar;
     @Inject(ClientState) private clientState: ClientState;
@@ -200,15 +201,20 @@ export class BattleFieldModel {
     }
 
     private makeBulletAction(fromUnit: BattleUnit, toUnit: BattleUnit, animation: IAnimationName): Promise<void> {
-        this.bullet$.next([fromUnit.x, fromUnit.y, toUnit.x, toUnit.y]);
+        const type = fromUnit.character.bulletType;
 
         fromUnit.setAnimation(animation);
 
         return new Promise(resolve => {
             setTimeout(() => {
                 fromUnit.setAnimation('idle');
-                resolve();
-            }, 500);
+                this.bullet$.next([fromUnit, toUnit, type]);
+
+                setTimeout(() => {
+                    resolve();
+                }, 300);
+
+            }, 700);
         })
     }
 

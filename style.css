@@ -1,6 +1,7 @@
 body {
   background: #000;
   margin: 0;
+  font-family: Courier, sans-serif;
 }
 
 .player {
@@ -183,6 +184,11 @@ canvas {
 
 .select-button {
   display: flex;
+  outline: none;
+}
+
+.select-button.selected {
+  background: #2b2f3e;
 }
 
 .select-button + .select-button {

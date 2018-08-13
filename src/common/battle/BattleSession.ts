@@ -54,8 +54,8 @@ export class BattleSession {
                     this.winResolve({
                         winner: winnerSide,
                         damage: {
-                            left: this.getSideDamage(BattleSide.left),
-                            right: this.getSideDamage(BattleSide.right)
+                            left: this.getSideDamage(BattleSide.right),
+                            right: this.getSideDamage(BattleSide.left)
                         }
                     });
 
@@ -78,7 +78,7 @@ export class BattleSession {
     }
 
     private hasAbsoluteWin(side: BattleSide): boolean {
-        return !this.unitsStack.all.some(unit => unit.side === side && unit.health > 0)
+        return !this.unitsStack.all.some(unit => unit.side !== side && unit.health > 0)
     }
 
     private noActionsLeft(): boolean {
@@ -95,15 +95,15 @@ export class BattleSession {
         }
 
         if (this.noActionsLeft()) {
-            const leftDamage = this.getSideDamage(BattleSide.left);
+            const leftDamage = this.getSideDamage(BattleSide.right);
             const rightDamage = this.getSideDamage(BattleSide.left);
 
             if (leftDamage > rightDamage) {
-                return WinnerSide.right;
+                return WinnerSide.left;
             }
 
             if (leftDamage < rightDamage) {
-                return WinnerSide.left;
+                return WinnerSide.right;
             }
 
             return WinnerSide.nobody;

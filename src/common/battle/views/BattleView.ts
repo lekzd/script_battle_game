@@ -9,7 +9,6 @@ import {CodeSandbox} from "../../codeSandbox/CodeSandbox";
 import {BattleSession, ISessionResult} from "../BattleSession";
 import {combineLatest} from "rxjs/internal/observable/combineLatest";
 import {BattleSide} from "../BattleSide";
-import {color} from "../../helpers/color";
 import {ClientState} from '../../client/ClientState';
 import {EnemyState} from '../../client/EnemyState';
 import {WebsocketConnection} from "../../WebsocketConnection";
@@ -17,6 +16,7 @@ import {LeftArmy} from "../../../left/LeftArmy";
 import {RightArmy} from "../../../right/RightArmy";
 import {timer} from "rxjs/internal/observable/timer";
 import {BattleStatistics} from "../BattleStatistics";
+import {BulletDrawer, BulletType} from "../BulletDrawer";
 
 export class BattleView extends Phaser.Scene {
 
@@ -32,6 +32,8 @@ export class BattleView extends Phaser.Scene {
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
     @Inject(BattleFieldModel) private battleFieldModel: BattleFieldModel;
     @Inject(BattleFieldDrawer) private battleFieldDrawer: BattleFieldDrawer;
+
+    private bulletDrawer: BulletDrawer;
 
     private create$ = new Subject();
     private leftUnits: BattleUnit[] = [];
@@ -53,8 +55,8 @@ export class BattleView extends Phaser.Scene {
             });
 
         this.battleFieldModel.bullet$
-            .subscribe(([x, y, x2, y2]) => {
-                this.createBullet(x, y, x2, y2);
+            .subscribe(([fromUnit, toUnit, type]) => {
+                this.createBullet(fromUnit, toUnit, type);
             });
 
         this.enemyState.change$
@@ -94,6 +96,11 @@ export class BattleView extends Phaser.Scene {
     preload () {
         this.load.setBaseURL('http://localhost:8080');
 
+        this.load.image('arrow', '/img/arrow.png');
+        this.load.image('snow', '/img/snow.png');
+        this.load.image('fire', '/img/fire.png');
+        this.load.image('stone', '/img/stone.png');
+
         this.charactersList.load(this.load);
     }
 
@@ -103,6 +110,7 @@ export class BattleView extends Phaser.Scene {
 
         this.add.image(200, 150, 'hexagons');
 
+        this.bulletDrawer = new BulletDrawer(this);
         this.leftStatistics = new BattleStatistics(this, BattleSide.left);
         this.rightStatistics = new BattleStatistics(this, BattleSide.right);
 
@@ -215,22 +223,25 @@ export class BattleView extends Phaser.Scene {
             });
     }
 
-    private createBullet(x: number, y: number, x2: number, y2: number) {
-        const left = this.battleFieldDrawer.getHexagonLeft(x, y);
-        const top = this.battleFieldDrawer.getHexagonTop(x, y);
+    private createBullet(fromUnit: BattleUnit, toUnit: BattleUnit, type: BulletType) {
+        const left = fromUnit.renderLeft;
+        const top = fromUnit.renderTop - 20;
 
-        const left2 = this.battleFieldDrawer.getHexagonLeft(x2, y2);
-        const top2 = this.battleFieldDrawer.getHexagonTop(x2, y2);
+        const left2 = toUnit.renderLeft;
+        const top2 = toUnit.renderTop - 20;
 
-        const graphics = this.add.graphics();
+        const graphics = this.bulletDrawer.get(type);
 
-        graphics.fillStyle(color('#fcff93'), 1);
-        graphics.fillCircle(left, top, 4);
+        graphics.setPosition(left, top);
+
+        if (left > left2) {
+            graphics.flipX = true;
+        }
 
         this.tweens.add({
             targets: graphics,
-            x: left2 - left,
-            y: top2 - top,
+            x: left2,
+            y: top2,
             duration: 300,
             repeat: 0,
             onComplete: () => {

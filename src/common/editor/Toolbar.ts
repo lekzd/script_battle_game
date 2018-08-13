@@ -56,13 +56,26 @@ export class Toolbar {
             this.selectWindow.classList.add('opened');
         } else {
             this.selectWindow.classList.remove('opened');
+            this.selectedItem = null;
         }
+    }
+
+    get selectedItem(): number {
+        return this._selectedItem;
+    }
+
+    set selectedItem(value: number) {
+        this.buttons.forEach((button, index) => {
+            button.classList.toggle('selected', index === value);
+        });
+
+        this._selectedItem = value;
     }
 
     @Inject(ClientState) private clientState: ClientState;
     @Inject(CharactersList) private charactersList: CharactersList;
 
-    private selectedItem: number;
+    private _selectedItem: number;
 
     constructor(private container: HTMLElement) {
 
@@ -103,8 +116,6 @@ export class Toolbar {
 
             if (itemIndex === this.selectedItem) {
                 this.isSelectorOpen = false;
-
-                this.selectedItem = null;
             } else {
                 this.isSelectorOpen = true;
 

@@ -39,7 +39,7 @@ export class AnimationsCreator {
                         prefix: `${name}_${turn}_`,
                         end: frames - 1
                     }),
-                    frameRate: 10,
+                    frameRate: 15,
                     repeat: -1
                 });
             })

@@ -79,6 +79,10 @@ export class BattleUnit {
     }
 
     setPositionAction(x: number, y: number): Promise<void> {
+        if (this.health <= 0) {
+            return Promise.resolve();
+        }
+
         this.rotation = this.x < x
             ? BattleSide.left
             : BattleSide.right;
@@ -125,7 +129,7 @@ export class BattleUnit {
         if (animationName === 'idle') {
             this.container.setZ(this.spriteZ);
         } else {
-            this.container.setZ(0);
+            this.container.setZ(10);
         }
 
         this.sprite.play(phaserAnimationName, false, 0);
@@ -193,6 +197,7 @@ export class BattleUnit {
 
     private initGraphics() {
         this.container = (this.scene.add as any).container(this.renderLeft, this.renderTop);
+        const shadow = this.generateShadow();
         this.sprite = this.generateSprite();
         this.idText = this.generateIdText();
         this.sayText = this.generateSayText();
@@ -200,6 +205,7 @@ export class BattleUnit {
 
         this.updateHealthBar();
 
+        this.container.add(shadow);
         this.container.add(this.sprite);
         this.container.add(this.sayText);
         this.container.add(this.idText);
@@ -208,6 +214,24 @@ export class BattleUnit {
         this.spriteZ = this.sprite.z;
 
         this.setAnimation('idle');
+    }
+
+    private generateShadow() {
+        const graphics = this.scene.add.graphics();
+
+        graphics.fillStyle(0x000000);
+
+        graphics.setAlpha(0.3);
+
+        graphics.beginPath();
+        graphics.lineStyle(40, 0xff00ff);
+        graphics.arc(0, 4, 16, Phaser.Math.DegToRad(0), Phaser.Math.DegToRad(360), false);
+        graphics.fillPath();
+        graphics.closePath();
+
+        graphics.setZ(-1);
+
+        return graphics;
     }
 
     private generateSprite(): Phaser.GameObjects.Sprite {

@@ -1,5 +1,6 @@
 import {Inject} from "../InjectDectorator";
 import {AnimationsCreator} from "./AnimationsCreator";
+import {BulletType} from "../battle/BulletDrawer";
 
 interface IMinMax {
     min: number;
@@ -28,6 +29,7 @@ export interface ICharacterConfig extends IAttackConfigs {
     key: string;
     title: string;
     type: CharacterType;
+    bulletType: BulletType;
     speed: number;
 }
 
@@ -44,7 +46,7 @@ function getAttackConfigs(mellee: number, shoot: number, magic: number): IAttack
 
     const melleeConfig = {
         attack: getCoefficents(mellee),
-        defence: getCoefficents(mellee)
+        defence: getCoefficents(mellee >> 1)
     };
 
     const shootConfig = {
@@ -70,6 +72,7 @@ const NULL_CHARACTER: ICharacterConfig = Object.assign({
     key: 'character_null',
     title: 'magic girl',
     type: CharacterType.magic,
+    bulletType: BulletType.snow,
     speed: 0,
 }, getAttackConfigs(0, 0, 0));
 
@@ -78,6 +81,7 @@ const MAGIC_GIRL: ICharacterConfig = Object.assign({
     key: 'character_magic',
     title: 'magic girl',
     type: CharacterType.magic,
+    bulletType: BulletType.fire,
     speed: 4,
 }, getAttackConfigs(0, 4, 8));
 
@@ -86,6 +90,7 @@ const SKELETON: ICharacterConfig = Object.assign({
     key: 'character_nekr',
     title: 'skeleton',
     type: CharacterType.shooting,
+    bulletType: BulletType.arrow,
     speed: 4,
 }, getAttackConfigs(2, 6, 4));
 
@@ -94,6 +99,7 @@ const ORK: ICharacterConfig = Object.assign({
     key: 'character_ork',
     title: 'ork',
     type: CharacterType.shooting,
+    bulletType: BulletType.stone,
     speed: 4,
 }, getAttackConfigs(2, 8, 0));
 
@@ -102,6 +108,7 @@ const PALLADIN: ICharacterConfig = Object.assign({
     key: 'character_palladin',
     title: 'palladin',
     type: CharacterType.melee,
+    bulletType: BulletType.snow,
     speed: 4,
 }, getAttackConfigs(6, 6, 0));
 
@@ -110,6 +117,7 @@ const VARVAR: ICharacterConfig = Object.assign({
     key: 'character_varvar',
     title: 'varvar',
     type: CharacterType.melee,
+    bulletType: BulletType.snow,
     speed: 4,
 }, getAttackConfigs(6, 2, 4));
 
@@ -118,6 +126,7 @@ const WINTER: ICharacterConfig = Object.assign({
     key: 'character_winter',
     title: 'winter',
     type: CharacterType.magic,
+    bulletType: BulletType.snow,
     speed: 4,
 }, getAttackConfigs(2, 4, 6));
 
