@@ -101,7 +101,14 @@ export class Toolbar {
                             <section class="unit">
                                 <div class="unit-img ${characterConfig.key}"></div>
                                 <div class="unit-description">
-                                    <div class="unit-id">${characterConfig.id}</div>
+                                    <div class="unit-id">${characterConfig.id}
+                                        <span class="unit-grey">${characterConfig.title}</span>
+                                    </div>
+                                    <div class="unit-grey">Атака / защита</div>
+                                    <div class="unit-mellee"><span class="unit-grey">ближний</span> ${characterConfig.mellee.attack.max} / ${characterConfig.mellee.defence.max}</div>
+                                    <div class="unit-shooting"><span class="unit-grey">стрельба</span> ${characterConfig.shoot.attack.max} / ${characterConfig.shoot.defence.max}</div>
+                                    <div class="unit-magic"><span class="unit-grey">магия</span> ${characterConfig.magic.attack.max} / ${characterConfig.magic.defence.max}</div>
+                                    <div class="unit-magic"><span class="unit-grey">скорость</span> ${characterConfig.speed}</div>
                                 </div>
                             </section>
                         `;

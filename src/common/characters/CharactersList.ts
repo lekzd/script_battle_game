@@ -70,8 +70,8 @@ function getAttackConfigs(mellee: number, shoot: number, magic: number): IAttack
 const NULL_CHARACTER: ICharacterConfig = Object.assign({
     id: 'NULL',
     key: 'character_null',
-    title: 'magic girl',
-    type: CharacterType.magic,
+    title: 'Null, просто Null',
+    type: CharacterType.melee,
     bulletType: BulletType.snow,
     speed: 0,
 }, getAttackConfigs(0, 0, 0));
@@ -79,7 +79,7 @@ const NULL_CHARACTER: ICharacterConfig = Object.assign({
 const MAGIC_GIRL: ICharacterConfig = Object.assign({
     id: 'EVAL',
     key: 'character_magic',
-    title: 'magic girl',
+    title: 'Маг Eval, обладает самой сильной магией',
     type: CharacterType.magic,
     bulletType: BulletType.fire,
     speed: 4,
@@ -88,16 +88,16 @@ const MAGIC_GIRL: ICharacterConfig = Object.assign({
 const SKELETON: ICharacterConfig = Object.assign({
     id: 'PWA',
     key: 'character_nekr',
-    title: 'skeleton',
+    title: 'Стреляет из лука, почти невосприимчив к магии',
     type: CharacterType.shooting,
     bulletType: BulletType.arrow,
     speed: 4,
-}, getAttackConfigs(2, 6, 4));
+}, getAttackConfigs(2, 6, 8));
 
 const ORK: ICharacterConfig = Object.assign({
     id: '$',
     key: 'character_ork',
-    title: 'ork',
+    title: 'Стрелок. Старый добрый jQuery, кидает кирпичи',
     type: CharacterType.shooting,
     bulletType: BulletType.stone,
     speed: 4,
@@ -106,29 +106,29 @@ const ORK: ICharacterConfig = Object.assign({
 const PALLADIN: ICharacterConfig = Object.assign({
     id: 'DART',
     key: 'character_palladin',
-    title: 'palladin',
+    title: 'Палладин. Лучший в своем роде, но очень медлительный',
     type: CharacterType.melee,
     bulletType: BulletType.snow,
-    speed: 4,
-}, getAttackConfigs(6, 6, 0));
+    speed: 2,
+}, getAttackConfigs(8, 6, 0));
 
 const VARVAR: ICharacterConfig = Object.assign({
     id: 'CSS',
     key: 'character_varvar',
-    title: 'varvar',
+    title: 'Простой, но очень быстрый воин с длинным копьем',
     type: CharacterType.melee,
     bulletType: BulletType.snow,
-    speed: 4,
+    speed: 5,
 }, getAttackConfigs(6, 2, 4));
 
 const WINTER: ICharacterConfig = Object.assign({
     id: 'IE',
     key: 'character_winter',
-    title: 'winter',
+    title: 'Маг. Замораживает всех в округе, но погибает от точных выстрелов',
     type: CharacterType.magic,
     bulletType: BulletType.snow,
     speed: 4,
-}, getAttackConfigs(2, 4, 6));
+}, getAttackConfigs(6, 0, 6));
 
 export class CharactersList {
 

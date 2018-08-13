@@ -93,17 +93,6 @@ export class BattleView extends Phaser.Scene {
         });
     }
 
-    preload () {
-        this.load.setBaseURL('http://localhost:8080');
-
-        this.load.image('arrow', '/img/arrow.png');
-        this.load.image('snow', '/img/snow.png');
-        this.load.image('fire', '/img/fire.png');
-        this.load.image('stone', '/img/stone.png');
-
-        this.charactersList.load(this.load);
-    }
-
     create() {
         this.charactersList.prepareAnimations(this.anims);
         this.generateHexagonsTexture('hexagons');
@@ -193,6 +182,10 @@ export class BattleView extends Phaser.Scene {
         const promises = [];
 
         this.leftUnits.forEach(unit => {
+            if (leftCode && unit.character.id === 'NULL') {
+                leftCode = `say('Я null, выбери другого')`;
+            }
+
             const evalPromise = this.codeSandbox.eval(leftCode, unit);
 
             evalPromise.then((actions) => {
@@ -203,6 +196,10 @@ export class BattleView extends Phaser.Scene {
         });
 
         this.rightUnits.forEach(unit => {
+            if (rightCode && unit.character.id === 'NULL') {
+                rightCode = `say('Я просто null, выбери другого')`;
+            }
+
             const evalPromise = this.codeSandbox.eval(rightCode, unit);
 
             evalPromise.then((actions) => {

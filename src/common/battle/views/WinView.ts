@@ -9,9 +9,11 @@ export class WinView extends Phaser.Scene {
     }
 
     create() {
-        this.add.text(200, 150, 'Победа!', {
-            font: '16px Courier',
-            fill: '#00ff00'
+        const text = this.add.text(200, 150, 'Победа!', {
+            font: '26px Courier',
+            fill: '#00cc00'
         });
+
+        text.setOrigin(.5);
     }
 }

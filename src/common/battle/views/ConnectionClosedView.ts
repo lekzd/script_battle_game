@@ -9,9 +9,11 @@ export class ConnectionClosedView extends Phaser.Scene {
     }
 
     create() {
-        this.add.text(200, 150, 'Connection closed', {
+        const text = this.add.text(200, 150, 'Соединение потеряно', {
             font: '16px Courier',
             fill: '#cc0000'
         });
+
+        text.setOrigin(.5);
     }
 }

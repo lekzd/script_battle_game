@@ -246,6 +246,7 @@ canvas {
   position: relative;
   z-index: 2;
   width: 64px;
+  min-width: 64px;
   height: 64px;
 }
 
@@ -293,4 +294,8 @@ canvas {
 .army-display {
   background: #1b1e27;
   width: 100px;
+}
+
+.unit-grey {
+  color: #367a91;
 }

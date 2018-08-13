@@ -5,7 +5,6 @@ import {IAction} from "../codeSandbox/CodeSandbox";
 import {getBattleApi} from "./BattleUnitBattleApi";
 import {BattleSide} from "./BattleSide";
 import {color} from "../helpers/color";
-import {Subject} from "rxjs/internal/Subject";
 
 interface IBattleUnitConfig {
     x: number;
@@ -293,11 +292,11 @@ export class BattleUnit {
 
         this.healthBar.clear();
 
-        this.healthBar.fillStyle(this.getHeathColor(this.health), 1);
-        this.healthBar.fillRect(-(width / 2), 12, healthWith, 2);
-
         this.healthBar.lineStyle(1, color('#11cc14'), 1);
         this.healthBar.strokeRect(-(width / 2), 12, width, 2);
+
+        this.healthBar.fillStyle(this.getHeathColor(this.health), 1);
+        this.healthBar.fillRect(-(width / 2), 12, healthWith, 2);
     }
 
     private getHeathColor(health: number): number {

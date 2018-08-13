@@ -9,9 +9,11 @@ export class LostView extends Phaser.Scene {
     }
 
     create() {
-        this.add.text(200, 150, 'Поражение', {
-            font: '16px Courier',
-            fill: '#911308'
+        const text = this.add.text(200, 150, 'Поражение', {
+            font: '26px Courier',
+            fill: '#cc0000'
         });
+
+        text.setOrigin(.5);
     }
 }
