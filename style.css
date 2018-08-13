@@ -56,7 +56,7 @@ body {
   margin: 5px;
   box-sizing: border-box;
   background: #1b1e27;
-  color: green;
+  color: #005c80;
   cursor: pointer;
   border: none;
   padding: 1px 6px;
@@ -67,7 +67,7 @@ body {
 }
 
 .runButton {
-  height: 40px;
+  height: 60px;
 }
 
 .ace_editor {
@@ -298,4 +298,20 @@ canvas {
 
 .unit-grey {
   color: #367a91;
+}
+
+.run-icon {
+  position: relative;
+  width: 20px;
+  height: 32px;
+  margin: auto;
+}
+
+.run-icon:before {
+  content: '';
+  border: 14px solid transparent;
+  border-left: 20px solid #09b309;
+  position: absolute;
+  top: 0;
+  left: 0;
 }

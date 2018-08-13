@@ -81,8 +81,8 @@ export class Toolbar {
 
         this.container.innerHTML = `
             <button id="run" class="runButton toolbar-button" type="button">
-              <div>Run</div>
-              (Ctrl + Enter)
+              <div class="run-icon"></div>
+              <small>(Ctrl + Enter)</small>
             </button>
             <div class="select-window">
                 <button id="select-1" class="toolbar-button select-button" type="button">
@@ -118,7 +118,12 @@ export class Toolbar {
                     }).join('')}
                 </div>
             </div>
-            <button id="push" class="runButton toolbar-button" type="button">git push</button>
+            <button id="push" class="runButton toolbar-button" type="button">
+              <div>
+                <img src="/img/push.svg" alt="" height="40" style="margin-bottom: -5px">
+              </div>
+              git push
+            </button>
         `;
 
         this.selectClick$.subscribe(event => {
