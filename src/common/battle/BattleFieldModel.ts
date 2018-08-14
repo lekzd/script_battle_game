@@ -77,7 +77,7 @@ export class BattleFieldModel {
                 this.dispatchError('y не может быть приведен к числу');
             }
 
-            const path = this.getPath(unit.x, unit.y, toX + unit.x, toY + unit.y);
+            const path = this.getPath(unit.x, unit.y, toX, toY);
 
             path.length = Math.min(path.length, unit.character.speed);
 

@@ -315,3 +315,95 @@ canvas {
   top: 0;
   left: 0;
 }
+
+.documentation {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+  z-index: 100;
+  background: rgba(0, 0, 0, .4);
+  display: none;
+}
+
+.documentation.opened {
+  display: block;
+}
+
+.documentation .container {
+  margin: 50px auto;
+  width: 100%;
+  max-width: 700px;
+  background: #1b1e27;
+  color: #409acf;
+  box-shadow: 0 0 20px rgba(0, 0, 0, .4);
+  padding: 5px 5px;
+}
+
+.documentation section {
+  position: relative;
+  background: #2a2e3c;
+  padding: 10px;
+}
+
+.documentation section.action {
+  padding-top: 25px;
+  background: #aeb67c;
+  color: #1f232d;
+}
+
+.documentation section.action:before {
+  content: 'действие';
+  position: absolute;
+  left: 15px;
+  top: 0;
+  background: #2a2e3c;
+  color: #608999;
+  padding: 2px 5px;
+  border-radius: 0 0 3px 3px;
+  font-size: 11px;
+}
+
+.documentation section.getter {
+  padding-top: 25px;
+  background: #7bad74;
+  color: #1f232d;
+}
+
+.documentation section.getter:before {
+  content: 'функция';
+  position: absolute;
+  left: 15px;
+  top: 0;
+  background: #2a2e3c;
+  color: #608999;
+  padding: 2px 5px;
+  border-radius: 0 0 3px 3px;
+  font-size: 11px;
+}
+
+.documentation section + section {
+  margin-top: 20px;
+}
+
+.documentation .signature {
+  background: rgba(0, 0, 0, .3);
+  border-left: 4px solid rgba(0, 0, 0, .3);
+  padding: 3px;
+  padding-left: 6px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.documentation h2 {
+  margin: 0 0 10px 10px;
+}
+
+.documentation .attr {
+  background: rgba(0, 0, 0, .3);
+  padding: 0 4px;
+  border-radius: 2px;
+  color: #fff;
+}

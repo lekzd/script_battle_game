@@ -3,9 +3,10 @@ import {CharactersList, ICharacterConfig} from "../characters/CharactersList";
 import {Inject} from "../InjectDectorator";
 import {filter, map} from 'rxjs/internal/operators';
 import {ClientState} from '../client/ClientState';
-import {BattleSide} from "../battle/BattleSide";
+import {Documentation} from './Documentation';
 
 export class Toolbar {
+    private documentation: Documentation;
 
     get buttons(): HTMLButtonElement[] {
         return Array.from(document.querySelectorAll('.select-button'));
@@ -124,6 +125,14 @@ export class Toolbar {
               </div>
               git push
             </button>
+            <button id="help" class="runButton toolbar-button" type="button">
+              <div>
+                ?
+              </div>
+              help
+            </button>
+            
+            <div id="documentation" class="documentation"></div>
         `;
 
         this.selectClick$.subscribe(event => {
@@ -158,6 +167,8 @@ export class Toolbar {
                     icon.className = `unit-img ${type}`;
                 })
             });
+
+        this.documentation = new Documentation(this.container.querySelector('#documentation'));
 
     }
 }

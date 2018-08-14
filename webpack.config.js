@@ -36,6 +36,12 @@ module.exports = function(env = {}) {
                     use: [
                         {loader: 'ts-loader'}
                     ]
+                },
+                {
+                    test: /\.html?$/,
+                    use: [
+                        {loader: 'raw-loader'}
+                    ]
                 }
             ]
         }

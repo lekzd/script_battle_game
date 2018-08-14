@@ -1,0 +1,164 @@
+<div class="container">
+    <section>
+        <h2>Заголовок</h2>
+
+        <section>
+            Код – чистый JS, исполняется последовательно для каждого юнита
+        </section>
+    </section>
+    <section>
+        <h2>API</h2>
+
+        <section class="action">
+            <div class="signature">
+                goTo(x: number, y: number)
+            </div>
+            <div class="description">
+                Переход на клетку <span class="attr">x</span>, <span class="attr">y</span>
+            </div>
+        </section>
+
+        <section class="action">
+            <div class="signature">
+                relativeGoTo(x: number, y: number)
+            </div>
+            <div class="description">
+                Переход на клетку <span class="attr">x</span>, <span class="attr">y</span> <strong>относительно позиции юнита</strong>
+            </div>
+        </section>
+
+        <section class="action">
+            <div class="signature">
+                goToEnemyAndHit(id: string)
+            </div>
+            <div class="description">
+                Переход в сторону противника по <span class="attr">id</span> и попытка атаки, если это возможно
+            </div>
+        </section>
+
+        <section class="action">
+            <div class="signature">
+                shoot(id: string)
+            </div>
+            <div class="description">
+                Стрелковая атака противника по <span class="attr">id</span>
+            </div>
+        </section>
+
+        <section class="action">
+            <div class="signature">
+                spell(id: string)
+            </div>
+            <div class="description">
+                Магическая атака противника по <span class="attr">id</span>
+            </div>
+        </section>
+
+        <!--<section class="action">-->
+            <!--<div class="signature">-->
+                <!--heal(id: string)-->
+            <!--</div>-->
+            <!--<div class="description"></div>-->
+        <!--</section>-->
+
+        <section class="action">
+            <div class="signature">
+                say(text: string)
+            </div>
+            <div class="description">
+                Сказать что-нибудь <span class="attr">text</span>
+            </div>
+        </section>
+
+        <section class="action">
+            <div class="signature">
+                attackRandom()
+            </div>
+            <div class="description">
+                Случайный выбор противника и атака, в зависмости от класс юнита
+            </div>
+        </section>
+
+        <section class="getter">
+            <div class="signature">
+                isShooter(): boolean
+            </div>
+            <div class="description">
+                Проверка, является ли юнит стрелком
+            </div>
+        </section>
+
+        <section class="getter">
+            <div class="signature">
+                isMagician(): boolean
+            </div>
+            <div class="description">
+                Проверка, является ли юнит магом
+            </div>
+        </section>
+
+        <section class="getter">
+            <div class="signature">
+                isInfantry(): boolean
+            </div>
+            <div class="description">
+                Проверка, является ли юнит пехотинцем
+            </div>
+        </section>
+
+        <section class="getter">
+            <div class="signature">
+                isAlive(): boolean
+            </div>
+            <div class="description">
+                Проверка, является ли юнит живым
+            </div>
+        </section>
+
+        <section class="getter">
+            <div class="signature">
+                getHealth(): number
+            </div>
+            <div class="description">
+                Возвращает здровье юнита от 0 до 100
+            </div>
+        </section>
+
+        <section class="getter">
+            <div class="signature">
+                getID(): string
+            </div>
+            <div class="description">
+                Возвращает ID юнита
+            </div>
+        </section>
+
+        <section class="getter">
+            <div class="signature">
+                getX(): number
+            </div>
+            <div class="description">
+                Возвращает X позицию юнита
+            </div>
+        </section>
+
+        <section class="getter">
+            <div class="signature">
+                getY(): number
+            </div>
+            <div class="description">
+                Возвращает Y позицию юнита
+            </div>
+        </section>
+
+        <section class="getter">
+            <div class="signature">
+                is(id: string): boolean
+            </div>
+            <div class="description">
+                Возвращает true если ID юнита равен <span class="attr">id</span>
+            </div>
+        </section>
+
+    </section>
+</div>

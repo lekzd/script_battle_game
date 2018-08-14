@@ -2,27 +2,32 @@ import {IAction} from './CodeSandbox';
 
 export function getUnitApi(unit: any, actions: IAction[]) {
     class UnitApi {
-        goTo(x, y) {
+
+        goTo(x: number, y: number) {
             actions.push({action: 'goTo', x: x, y: y});
         }
 
-        goToEnemyAndHit(id) {
+        relativeGoTo(x: number, y: number) {
+            actions.push({action: 'goTo', x: x + unit.x, y: y + unit.y});
+        }
+
+        goToEnemyAndHit(id: string) {
             actions.push({action: 'goToEnemyAndHit', id: id});
         }
 
-        shoot(id) {
+        shoot(id: string) {
             actions.push({action: 'shoot', id: id});
         }
 
-        spell(id) {
+        spell(id: string) {
             actions.push({action: 'spell', id: id});
         }
 
-        heal(id) {
+        heal(id: string) {
             actions.push({action: 'heal', id: id});
         }
 
-        say(text) {
+        say(text: string) {
             actions.push({action: 'say', text: text});
         }
 
@@ -30,31 +35,39 @@ export function getUnitApi(unit: any, actions: IAction[]) {
             actions.push({action: 'attackRandom'});
         }
 
-        isShooter() {
+        isShooter(): boolean {
             return unit.character.type === 'shooting';
         }
 
-        isMagician() {
+        isMagician(): boolean {
             return unit.character.type === 'magic';
         }
 
-        isInfantry() {
+        isInfantry(): boolean {
             return unit.character.type === 'melee';
         }
 
-        isAlive() {
+        isAlive(): boolean {
             return unit.health > 0;
         }
 
-        getHealth() {
+        getHealth(): number {
             return unit.health;
         }
 
-        getID() {
+        getID(): string {
             return unit.id;
         }
 
-        is(id) {
+        getX(): number {
+            return unit.x;
+        }
+
+        getY(): number {
+            return unit.y;
+        }
+
+        is(id: string): boolean {
             return unit.id === id;
         }
     }

@@ -25,11 +25,14 @@ export class BattleSession {
 
     private winPromise: Promise<ISessionResult>;
     private winResolve: (state: ISessionResult) => any;
+    private units: BattleUnit[] = [];
 
     start(units: BattleUnit[]): Promise<ISessionResult> {
         this.winPromise = new Promise<ISessionResult>(resolve => {
             this.winResolve = resolve;
         });
+
+        this.units = units;
 
         this.unitsStack.init(units);
 
@@ -39,7 +42,7 @@ export class BattleSession {
     }
 
     getSideDamage(side: BattleSide): number {
-        return this.unitsStack.all.reduce((summ, unit) => {
+        return this.units.reduce((summ, unit) => {
             return summ + (unit.side === side ? unit.gotDamage : 0);
         }, 0);
     }
@@ -78,11 +81,11 @@ export class BattleSession {
     }
 
     private hasAbsoluteWin(side: BattleSide): boolean {
-        return !this.unitsStack.all.some(unit => unit.side !== side && unit.health > 0)
+        return !this.units.some(unit => unit.side !== side && unit.health > 0)
     }
 
     private noActionsLeft(): boolean {
-        return !this.unitsStack.all.some(unit => unit.actions.length > 0)
+        return !this.units.some(unit => unit.actions.length > 0)
     }
 
     private getWinnerSide(): WinnerSide {

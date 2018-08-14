@@ -2,13 +2,18 @@ import {BattleUnit} from './BattleUnit';
 
 export class UnitsStack {
 
-    all: BattleUnit[] = [];
-    alive: BattleUnit[] = [];
     activeUnit: BattleUnit;
 
+    private alive: BattleUnit[] = [];
+
     init(units: BattleUnit[]) {
-        this.all = units.slice(0);
-        this.alive = units.slice(0);
+        this.alive = units.sort((a: BattleUnit, b: BattleUnit) => {
+            if (a.character.speed < b.character.speed) {
+                return 1;
+            }
+
+            return -1;
+        });
 
         this.alive.forEach(unit => {
             unit.hasTurn = true;
