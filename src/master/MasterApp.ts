@@ -1,4 +1,4 @@
-import {WebsocketConnection} from '../common/WebsocketConnection';
+import {IMessage, WebsocketConnection} from '../common/WebsocketConnection';
 import {Inject, setInject} from '../common/InjectDectorator';
 import {BattleGame, BattleState} from '../common/battle/BattleGame';
 import {Subject} from "rxjs/internal/Subject";
@@ -38,53 +38,7 @@ export class MasterApp {
         this.rightCode = new CodeDisplay(document.querySelector('.rightCode'));
 
         this.connection.onMessage$.subscribe(message => {
-            if (message.type === 'state') {
-                this.setState(message.data);
-            }
-
-            if (message.type === 'leftCode') {
-                this.leftCode.setCode(message.data.code);
-            }
-
-            if (message.type === 'rightCode') {
-                this.rightCode.setCode(message.data.code);
-            }
-
-            if (message.type === 'runCode') {
-                this.battleGame.runCode(message.data.leftCode, message.data.rightCode);
-            }
-
-            if (message.type === 'pushLeftCode') {
-                this.leftCode.setCode(message.data.code);
-                this.leftIsReady$.next();
-            }
-
-            if (message.type === 'pushRightCode') {
-                this.rightCode.setCode(message.data.code);
-                this.rightIsReady$.next();
-            }
-
-            if (message.type === 'leftState') {
-                const {state} = message.data;
-
-                this.leftCode.setState(state);
-                setInject(LeftArmy, state.army);
-            }
-
-            if (message.type === 'rightState') {
-                const {state} = message.data;
-
-                this.rightCode.setState(state);
-                setInject(RightArmy, state.army);
-            }
-
-            if (message.type === 'endSession') {
-                this.battleGame.showResults(message.data.sessionResult);
-            }
-
-            if (message.type === 'newSession') {
-                location.reload();
-            }
+            this.onMessage(message)
         });
 
         this.connection.onClose$.subscribe(() => {
@@ -101,12 +55,78 @@ export class MasterApp {
             this.connection.sendNewSession();
         });
 
+        // setTimeout(() => {
+        //     this.setState(BattleState.battle);
+        // }, 2000);
+        //
+        // setTimeout(() => {
+        //     const mock: ISessionResult = {
+        //         winner: WinnerSide.right,
+        //         damage: {
+        //             left: 250,
+        //             right: 500
+        //         }
+        //     };
+        //
+        //     this.battleGame.showResults(mock);
+        // }, 3000)
+
     }
 
-    private setState(state: BattleState) {
+    private setState(state: BattleState, stateParams?: any) {
         this.container.className = `master ${state}`;
 
-        this.battleGame.setState(state);
+        this.battleGame.setState(state, stateParams);
+    }
+
+    private onMessage(message: IMessage) {
+        if (message.type === 'state') {
+            this.setState(message.data);
+        }
+
+        if (message.type === 'leftCode') {
+            this.leftCode.setCode(message.data.code);
+        }
+
+        if (message.type === 'rightCode') {
+            this.rightCode.setCode(message.data.code);
+        }
+
+        if (message.type === 'runCode') {
+            this.battleGame.runCode(message.data.leftCode, message.data.rightCode);
+        }
+
+        if (message.type === 'pushLeftCode') {
+            this.leftCode.setCode(message.data.code);
+            this.leftIsReady$.next();
+        }
+
+        if (message.type === 'pushRightCode') {
+            this.rightCode.setCode(message.data.code);
+            this.rightIsReady$.next();
+        }
+
+        if (message.type === 'leftState') {
+            const {state} = message.data;
+
+            this.leftCode.setState(state);
+            setInject(LeftArmy, state.army);
+        }
+
+        if (message.type === 'rightState') {
+            const {state} = message.data;
+
+            this.rightCode.setState(state);
+            setInject(RightArmy, state.army);
+        }
+
+        if (message.type === 'endSession') {
+            this.battleGame.showResults(message.data.sessionResult);
+        }
+
+        if (message.type === 'newSession') {
+            location.reload();
+        }
     }
 
 }

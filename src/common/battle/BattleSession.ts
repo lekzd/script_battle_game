@@ -85,7 +85,7 @@ export class BattleSession {
     }
 
     private noActionsLeft(): boolean {
-        return !this.units.some(unit => unit.actions.length > 0)
+        return !this.units.some(unit => unit.actions.length > 0 && unit.health > 0)
     }
 
     private getWinnerSide(): WinnerSide {

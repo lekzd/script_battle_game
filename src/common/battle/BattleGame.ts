@@ -18,6 +18,8 @@ export enum BattleState {
 
 export class BattleGame {
 
+    stateParams: any = {};
+
     private game: Phaser.Game;
     private currentState: BattleState;
 
@@ -33,7 +35,7 @@ export class BattleGame {
         this.game = new Phaser.Game(config);
     }
 
-    setState(newState: BattleState, state: any = {}) {
+    setState(newState: BattleState, stateParams: any = {}) {
         if (this.currentState === newState) {
             return;
         }
@@ -41,6 +43,7 @@ export class BattleGame {
         this.game.scene.switch(BattleState.wait, newState);
 
         this.currentState = newState;
+        this.stateParams = stateParams || {};
     }
 
     runCode(leftCode: string, rightCode: string) {
@@ -55,6 +58,10 @@ export class BattleGame {
 
     showResults(sessionResult: ISessionResult) {
         this.setState(BattleState.results, sessionResult);
+
+        const resultsView = <ResultsView>this.game.scene.getScene(BattleState.results);
+
+        resultsView.setResults(sessionResult);
     }
 
     showWinnerScreen(sessionResult: ISessionResult) {

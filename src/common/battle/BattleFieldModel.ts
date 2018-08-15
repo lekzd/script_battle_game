@@ -86,6 +86,11 @@ export class BattleFieldModel {
 
         if (action.action === 'goToEnemyAndHit') {
             const enemy = this.getEnemy(action.id, unit);
+
+            if (!enemy) {
+                return unit.sayAction(`${action.id} не найден`);
+            }
+
             const path = this.getPath(unit.x, unit.y, enemy.x, enemy.y).slice(0, -1);
             const canHitEnemy = path.length <= unit.character.speed;
 
@@ -126,6 +131,10 @@ export class BattleFieldModel {
         if (action.action === 'shoot') {
             const enemy = this.getEnemy(action.id, unit);
 
+            if (!enemy) {
+                return unit.sayAction(`${action.id} не найден`);
+            }
+
             if (unit.character.type !== CharacterType.shooting) {
                 return unit.sayAction('Эй, я не умею стрелять');
             }
@@ -138,6 +147,10 @@ export class BattleFieldModel {
 
         if (action.action === 'spell') {
             const enemy = this.getEnemy(action.id, unit);
+
+            if (!enemy) {
+                return unit.sayAction(`${action.id} не найден`);
+            }
 
             if (unit.character.type !== CharacterType.magic) {
                 return unit.sayAction('Я не знаю магии!');
@@ -221,7 +234,7 @@ export class BattleFieldModel {
         });
 
         if (!units.length) {
-            this.dispatchError(`Противник с ID "${id}" не найден`);
+            return null;
         }
 
         const randomIndex = Math.floor(Math.random() * units.length);

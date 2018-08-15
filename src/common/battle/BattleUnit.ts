@@ -193,6 +193,18 @@ export class BattleUnit {
         this.idText.setVisible(true);
     }
 
+    makeCelebration(): any {
+        this.setAnimation('spellcast');
+
+        this.scene.tweens.add({
+            targets: this.sprite,
+            y: '-=50',
+            duration: 200,
+            repeat: -1,
+            yoyo: true
+        });
+    }
+
     private initGraphics() {
         this.container = (this.scene.add as any).container(this.renderLeft, this.renderTop);
         const shadow = this.generateShadow();
