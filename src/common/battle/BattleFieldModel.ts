@@ -161,7 +161,11 @@ export class BattleFieldModel {
 
 
         if (action.action === 'attackRandom') {
-            const enemy = this.getRandomEnemy(unit);
+            const enemy = this.getRandomUnit(unit);
+
+            if (!enemy) {
+                return unit.sayAction('себе подобных не трогаю!')
+            }
 
             if (unit.character.type === CharacterType.magic) {
                 return this.makeBulletAction(unit, enemy)
@@ -210,21 +214,29 @@ export class BattleFieldModel {
             this.dispatchError(`Не задан обязательный параметр id`);
         }
 
-        const unit = this.units.find(unit => {
-            return unit.side !== toUnit.side && unit.id.toLowerCase() === id.toString().toLowerCase();
+        const units = this.units.filter(unit => {
+            return unit.side !== toUnit.side
+                && unit.id.toLowerCase() === id.toString().toLowerCase()
+                && unit.health > 0
         });
 
-        if (!unit) {
+        if (!units.length) {
             this.dispatchError(`Противник с ID "${id}" не найден`);
         }
 
-        return unit;
+        const randomIndex = Math.floor(Math.random() * units.length);
+
+        return units[randomIndex];
     }
 
-    private getRandomEnemy(toUnit: BattleUnit): BattleUnit {
+    private getRandomUnit(toUnit: BattleUnit): BattleUnit {
         const enemies = this.units.filter(unit => {
-           return unit.side !== toUnit.side && unit.health > 0;
+           return unit.health > 0 && unit.id !== toUnit.id
         });
+
+        if (!enemies.length) {
+            return null;
+        }
 
         return enemies[Math.floor(Math.random() * enemies.length)];
     }

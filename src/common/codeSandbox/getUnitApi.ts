@@ -68,7 +68,7 @@ export function getUnitApi(unit: any, actions: IAction[]) {
         }
 
         is(id: string): boolean {
-            return unit.id === id;
+            return unit.id.toLowerCase() === `${id}`.toLowerCase();
         }
     }
 

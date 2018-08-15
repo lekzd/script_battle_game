@@ -68,6 +68,10 @@ export class CodeDisplay {
     }
 
     setState(state: any) {
+        if (!state.army) {
+            return;
+        }
+
         this.units.forEach((unit, index) => {
             const type = state.army[index];
 

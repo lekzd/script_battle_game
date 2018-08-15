@@ -68,6 +68,10 @@ wsServer.on('request', (request) => {
             connectionsStorage.endSession(data.sessionResult);
         }
 
+        if (data.type === 'newSession') {
+            connectionsStorage.newSession();
+        }
+
         console.log('message', data);
     }
 
