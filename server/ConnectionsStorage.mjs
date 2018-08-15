@@ -1,20 +1,14 @@
 import {Master} from "./Master";
 import {Player} from "./Player";
 
-const typesMap = {
-    'master': Master,
-    'leftPlayer': Player,
-    'rightPlayer': Player,
-};
-
 export class ConnectionsStorage {
 
     constructor() {
         this.connections = new Map();
 
-        this.master = null;
-        this.leftPlayer = null;
-        this.rightPlayer = null;
+        this.master = new Master(null, 'master');
+        this.leftPlayer = new Player(null, 'leftPlayer');
+        this.rightPlayer = new Player(null, 'rightPlayer');
     }
 
     isRegistered(connection) {
@@ -35,10 +29,8 @@ export class ConnectionsStorage {
     }
 
     tryRegisterEntity(connection, name) {
-        if (this[name] === null) {
-            const Constructor = typesMap[name];
-
-            this[name] = new Constructor(connection, name);
+        if (this[name].connection === null) {
+            this[name].setConnection(connection);
 
             this.connections.set(connection, name);
 
@@ -47,7 +39,7 @@ export class ConnectionsStorage {
             return true;
         }
 
-        if (this[name] !== null) {
+        if (this[name].connection !== null) {
             console.warn(`${name} already registered!`);
         }
 
@@ -60,7 +52,7 @@ export class ConnectionsStorage {
 
             this.connections.delete(connection);
 
-            this[role] = null;
+            this[role].connection = null;
 
             console.log(`connection with ${role} lost`);
         }
@@ -77,20 +69,28 @@ export class ConnectionsStorage {
     }
 
     setLeftState(state) {
+        this.leftPlayer.state = state;
         this.rightPlayer.setEnemyState(state);
+        this.leftPlayer.setEnemyState(this.rightPlayer.state);
         this.master.dispatchLeftState(state);
+        this.master.dispatchRightState(this.rightPlayer.state);
     }
 
     setRightState(state) {
+        this.rightPlayer.state = state;
         this.leftPlayer.setEnemyState(state);
+        this.rightPlayer.setEnemyState(this.leftPlayer.state);
         this.master.dispatchRightState(state);
+        this.master.dispatchLeftState(this.leftPlayer.state);
     }
 
     pushLeftCode(code) {
+        this.master.dispatchLeftState(this.leftPlayer.state);
         this.master.pushLeftCode(code);
     }
 
     pushRightCode(code) {
+        this.master.dispatchRightState(this.rightPlayer.state);
         this.master.pushRightCode(code);
     }
 
@@ -98,6 +98,12 @@ export class ConnectionsStorage {
         this.master.dispatchSessionResult(sessionResult);
         this.leftPlayer.dispatchSessionResult(sessionResult);
         this.rightPlayer.dispatchSessionResult(sessionResult);
+    }
+
+    newSession() {
+        this.master.dispatchNewSession();
+        this.leftPlayer.dispatchNewSession();
+        this.rightPlayer.dispatchNewSession();
     }
 
 }

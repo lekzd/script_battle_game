@@ -25,4 +25,8 @@ export class EnemyState {
         });
 
     }
+
+    clear() {
+        this.army = Object.assign({}, EMPTY_ARMY);
+    }
 }

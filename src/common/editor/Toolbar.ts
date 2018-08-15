@@ -20,6 +20,10 @@ export class Toolbar {
         return fromEvent(document.getElementById('push'), 'click');
     }
 
+    get helpButtonClick$(): Observable<Event> {
+        return fromEvent(document.getElementById('help'), 'click');
+    }
+
     get selectClick$(): Observable<MouseEvent> {
         return merge(
             ...this.buttons
@@ -123,13 +127,13 @@ export class Toolbar {
               <div>
                 <img src="/img/push.svg" alt="" height="40" style="margin-bottom: -5px">
               </div>
-              git push
+              Готово!
             </button>
             <button id="help" class="runButton toolbar-button" type="button">
-              <div>
+              <div class="help-icon">
                 ?
               </div>
-              help
+              Помощь
             </button>
             
             <div id="documentation" class="documentation"></div>
@@ -166,6 +170,11 @@ export class Toolbar {
 
                     icon.className = `unit-img ${type}`;
                 })
+            });
+
+        this.helpButtonClick$
+            .subscribe(() => {
+                this.documentation.opened = true;
             });
 
         this.documentation = new Documentation(this.container.querySelector('#documentation'));

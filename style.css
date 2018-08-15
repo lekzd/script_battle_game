@@ -438,3 +438,16 @@ canvas {
   color: #fff;
   margin-right: 6px;
 }
+
+.help-icon {
+    font-weight: bold;
+    font-size: 36px;
+    color: #12a2da;
+}
+
+#newSession {
+  position: fixed;
+  z-index: 100;
+  right: 0;
+  bottom: 0;
+}

@@ -28,4 +28,8 @@ export class ClientState {
             this.connection.sendRightState(newState);
         }
     }
+
+    clear() {
+        this.army = Object.assign({}, EMPTY_ARMY);
+    }
 }

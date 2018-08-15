@@ -1,5 +1,5 @@
 import * as jsdiff from "diff";
-import {BattleSide} from '../common/battle/BattleSide';
+import {EMPTY_ARMY} from '../common/client/EMPTY_ARMY';
 
 export class CodeDisplay {
 
@@ -73,6 +73,11 @@ export class CodeDisplay {
 
             unit.className = `unit-img ${type}`;
         })
+    }
+
+    clear() {
+        this.setState({army: EMPTY_ARMY})
+        this.setCode('');
     }
 
 }

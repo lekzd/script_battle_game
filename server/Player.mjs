@@ -4,11 +4,24 @@ export class Player {
         this.connection = connection;
         this.side = side;
         this.code = '';
+        this.state = {};
 
-        this.connection.send(JSON.stringify({
+        this._messagesToSend = [];
+
+        this._send({
             type: 'state',
             data: 'battle'
-        }))
+        });
+    }
+
+    setConnection(connection) {
+        this.connection = connection;
+
+        this._messagesToSend.forEach(message => {
+            this._send(message);
+        });
+
+        this._messagesToSend = [];
     }
 
     setCode(code) {
@@ -16,16 +29,36 @@ export class Player {
     }
 
     setEnemyState(state) {
-        this.connection.send(JSON.stringify({
+        this._send({
             type: 'enemyState',
             data: {state}
-        }))
+        });
     }
 
     dispatchSessionResult(sessionResult) {
-        this.connection.send(JSON.stringify({
+        this._send({
             type: 'endSession',
             data: {sessionResult}
-        }))
+        });
+    }
+
+    dispatchNewSession() {
+        this._messagesToSend = [];
+        this.state = {};
+        this.code = '';
+
+        this._send({
+            type: 'newSession'
+        });
+    }
+
+    _send(data) {
+        if (!this.connection) {
+            this._messagesToSend.push(data);
+
+            return;
+        }
+
+        this.connection.send(JSON.stringify(data));
     }
 }

@@ -125,4 +125,10 @@ export class WebsocketConnection {
             sessionResult
         }));
     }
+
+    sendNewSession() {
+        this.send(JSON.stringify({
+            type: 'newSession'
+        }));
+    }
 }

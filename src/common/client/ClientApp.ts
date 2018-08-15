@@ -76,6 +76,10 @@ export class ClientApp {
                     this.battleGame.showLoseScreen(message.data.sessionResult);
                 }
             }
+
+            if (message.type === 'newSession') {
+                location.reload();
+            }
         });
 
         this.connection.onClose$.subscribe(() => {

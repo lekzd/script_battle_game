@@ -7,6 +7,7 @@ import {CodeDisplay} from './CodeDisplay';
 import {LeftArmy} from "../left/LeftArmy";
 import {EMPTY_ARMY} from "../common/client/EMPTY_ARMY";
 import {RightArmy} from "../right/RightArmy";
+import {Observable, fromEvent} from 'rxjs/index';
 
 export class MasterApp {
 
@@ -21,6 +22,10 @@ export class MasterApp {
 
     get container(): HTMLElement {
         return document.querySelector('.master');
+    }
+
+    get newSessionClick$(): Observable<MouseEvent> {
+        return fromEvent<MouseEvent>(this.container.querySelector('#newSession'), 'click')
     }
 
     constructor() {
@@ -76,6 +81,10 @@ export class MasterApp {
             if (message.type === 'endSession') {
                 this.battleGame.showResults(message.data.sessionResult);
             }
+
+            if (message.type === 'newSession') {
+                location.reload();
+            }
         });
 
         this.connection.onClose$.subscribe(() => {
@@ -86,7 +95,11 @@ export class MasterApp {
             .subscribe(() => {
                 this.setState(BattleState.battle);
                 this.battleGame.runCode(this.leftCode.value, this.rightCode.value);
-            })
+            });
+
+        this.newSessionClick$.subscribe(() => {
+            this.connection.sendNewSession();
+        });
 
     }
 
