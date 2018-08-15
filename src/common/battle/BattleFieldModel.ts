@@ -93,9 +93,25 @@ export class BattleFieldModel {
 
             return this.animateUnitByPath(unit, path)
                 .then(() => {
-                    if (canHitEnemy) {
-                        enemy.hitHealth(10, unit);
+                    if (unit.character.type === CharacterType.magic) {
+                        return this.makeBulletAction(unit, enemy)
+                            .then(() => {
+                                enemy.hitHealth(10, unit);
+                            });
                     }
+
+                    if (unit.character.type === CharacterType.shooting) {
+                        return this.makeBulletAction(unit, enemy)
+                            .then(() => {
+                                enemy.hitHealth(10, unit);
+                            });
+                    }
+
+                    if (canHitEnemy) {
+                        return this.makeHitAction(unit, enemy);
+                    }
+
+                    return;
                 })
         }
 
@@ -104,13 +120,17 @@ export class BattleFieldModel {
                 this.dispatchError(`Не задан обязательный параметр text`);
             }
 
-            return unit.sayAction(action.text);
+            return unit.sayAction(action.text.toString());
         }
 
         if (action.action === 'shoot') {
             const enemy = this.getEnemy(action.id, unit);
 
-            return this.makeBulletAction(unit, enemy, 'shoot')
+            if (unit.character.type !== CharacterType.shooting) {
+                return unit.sayAction('Эй, я не умею стрелять');
+            }
+
+            return this.makeBulletAction(unit, enemy)
                 .then(() => {
                     enemy.hitHealth(10, unit);
                 });
@@ -119,7 +139,11 @@ export class BattleFieldModel {
         if (action.action === 'spell') {
             const enemy = this.getEnemy(action.id, unit);
 
-            return this.makeBulletAction(unit, enemy, 'spellcast')
+            if (unit.character.type !== CharacterType.magic) {
+                return unit.sayAction('Я не знаю магии!');
+            }
+
+            return this.makeBulletAction(unit, enemy)
                 .then(() => {
                     enemy.hitHealth(10, unit);
                 });
@@ -128,7 +152,11 @@ export class BattleFieldModel {
         if (action.action === 'heal') {
             const enemy = this.getFriend(action.id, unit);
 
-            return this.makeBulletAction(unit, enemy, 'spellcast');
+            if (unit.character.type !== CharacterType.magic) {
+                return unit.sayAction('Я не умею лечить!');
+            }
+
+            return this.makeBulletAction(unit, enemy);
         }
 
 
@@ -136,14 +164,14 @@ export class BattleFieldModel {
             const enemy = this.getRandomEnemy(unit);
 
             if (unit.character.type === CharacterType.magic) {
-                return this.makeBulletAction(unit, enemy, 'spellcast')
+                return this.makeBulletAction(unit, enemy)
                     .then(() => {
                         enemy.hitHealth(10, unit);
                     });
             }
 
             if (unit.character.type === CharacterType.shooting) {
-                return this.makeBulletAction(unit, enemy, 'shoot')
+                return this.makeBulletAction(unit, enemy)
                     .then(() => {
                         enemy.hitHealth(10, unit);
                     });
@@ -157,7 +185,7 @@ export class BattleFieldModel {
             return this.animateUnitByPath(unit, path)
                 .then(() => {
                     if (canHitEnemy) {
-                        return this.makeHitAction(unit, enemy, 'slash');
+                        return this.makeHitAction(unit, enemy);
                     }
 
                     return;
@@ -231,8 +259,9 @@ export class BattleFieldModel {
         });
     }
 
-    private makeBulletAction(fromUnit: BattleUnit, toUnit: BattleUnit, animation: IAnimationName): Promise<void> {
+    private makeBulletAction(fromUnit: BattleUnit, toUnit: BattleUnit): Promise<void> {
         const type = fromUnit.character.bulletType;
+        const animation = fromUnit.character.attackAnimation;
 
         fromUnit.setAnimation(animation);
 
@@ -249,7 +278,9 @@ export class BattleFieldModel {
         })
     }
 
-    private makeHitAction(fromUnit: BattleUnit, toUnit: BattleUnit, animation: IAnimationName): Promise<void> {
+    private makeHitAction(fromUnit: BattleUnit, toUnit: BattleUnit): Promise<void> {
+        const animation = fromUnit.character.attackAnimation;
+
         fromUnit.setAnimation(animation);
 
         return new Promise(resolve => {

@@ -1,9 +1,15 @@
 <div class="container">
     <section>
-        <h2>Заголовок</h2>
+        <h2>FAQ</h2>
 
         <section>
-            Код – чистый JS, исполняется последовательно для каждого юнита
+            <ul>
+                <li>Ваша задача – написать код ИИ для своих юнитов</li>
+                <li>Есть три класса юнитов: маги, стрелки и пехотинцы</li>
+                <li>Код – чистый JS, исполняется последовательно для каждого юнита</li>
+                <li>Код можно запускать для своих юнитов</li>
+                <li>После нажатия git push обоими игроками, оба кода будут запущены на общем игровом поле</li>
+            </ul>
         </section>
     </section>
     <section>
@@ -33,6 +39,7 @@
             </div>
             <div class="description">
                 Переход в сторону противника по <span class="attr">id</span> и попытка атаки, если это возможно
+                <div class="exclamation"><span class="class">пехотинец</span> атакует только если может дотянуться до противника</div>
             </div>
         </section>
 
@@ -42,6 +49,7 @@
             </div>
             <div class="description">
                 Стрелковая атака противника по <span class="attr">id</span>
+                <div class="exclamation">применимо только к <span class="class">стрелкам</span></div>
             </div>
         </section>
 
@@ -51,6 +59,7 @@
             </div>
             <div class="description">
                 Магическая атака противника по <span class="attr">id</span>
+                <div class="exclamation">применимо только к <span class="class">магам</span></div>
             </div>
         </section>
 
@@ -75,7 +84,9 @@
                 attackRandom()
             </div>
             <div class="description">
-                Случайный выбор противника и атака, в зависмости от класс юнита
+                Случайный выбор противника и атака, в зависмости от класса юнита
+
+                <div class="exclamation"><span class="class">пехотинец</span> атакует только если может дотянуться до противника</div>
             </div>
         </section>
 

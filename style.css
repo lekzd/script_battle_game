@@ -398,7 +398,10 @@ canvas {
 }
 
 .documentation h2 {
-  margin: 0 0 10px 10px;
+  font-size: 30px;
+  font-weight: normal;
+  text-align: center;
+  margin: 0 0 15px;
 }
 
 .documentation .attr {
@@ -406,4 +409,32 @@ canvas {
   padding: 0 4px;
   border-radius: 2px;
   color: #fff;
+}
+
+.documentation ul{
+  margin-top: 0;
+}
+
+.documentation ul li + li {
+  margin-top: 15px;
+}
+
+.documentation .exclamation {
+  color: #3f465b;
+  font-style: italic;
+  margin-top: 5px;
+}
+
+.documentation .class {
+  font-weight: bold;
+}
+
+.documentation .exclamation:before {
+  content: '!';
+  font-style: normal;
+  background: rgba(86, 9, 9, 0.45);
+  padding: 0 4px;
+  border-radius: 50%;
+  color: #fff;
+  margin-right: 6px;
 }

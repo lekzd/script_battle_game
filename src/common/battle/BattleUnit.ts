@@ -111,7 +111,6 @@ export class BattleUnit {
             this.sayText.setVisible(true);
 
             setTimeout(() => {
-
                 resolve();
             }, 300);
 
