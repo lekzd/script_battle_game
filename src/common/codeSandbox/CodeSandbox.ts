@@ -44,8 +44,16 @@ export class CodeSandbox {
                 const unit = message.data;
                 
                 const unitApi = (${getUnitApi.toString()})(unit, actions);
+                const apis = {console, Math, parseInt, parseFloat};
+                const nativePostMessage = this.postMessage;
                 
-                const sandboxProxy = new Proxy(Object.assign(unitApi, {console}), {has, get});
+                const sandboxProxy = new Proxy(Object.assign(unitApi, apis), {has, get});
+                
+                Object.keys(this).forEach(key => {
+                    delete this[key];
+                });
+                
+                this.Function = function() { return {'неплохо': 'неплохо =)'} };
                 
                 with (sandboxProxy) {
                     (function() {
@@ -54,7 +62,7 @@ export class CodeSandbox {
                         } catch (e) {
                             console.error(e);
                         }
-                    }).call({hello: 'how are you?'})
+                    }).call({"слишком": 'просто'})
                 }
                 
                 function has (target, key) {
@@ -66,7 +74,7 @@ export class CodeSandbox {
                     return target[key];
                 }
             
-                postMessage(JSON.stringify(actions));
+                nativePostMessage(JSON.stringify(actions));
             }`;
     }
 
