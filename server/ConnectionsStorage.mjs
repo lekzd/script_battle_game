@@ -69,7 +69,7 @@ export class ConnectionsStorage {
     }
 
     setLeftState(state) {
-        this.leftPlayer.state = state;
+        this.leftPlayer.state = Object.assign(this.leftPlayer.state, state);
         this.rightPlayer.setEnemyState(state);
         this.leftPlayer.setEnemyState(this.rightPlayer.state);
         this.master.dispatchLeftState(state);
@@ -77,7 +77,7 @@ export class ConnectionsStorage {
     }
 
     setRightState(state) {
-        this.rightPlayer.state = state;
+        this.rightPlayer.state = Object.assign(this.rightPlayer.state, state);
         this.leftPlayer.setEnemyState(state);
         this.rightPlayer.setEnemyState(this.leftPlayer.state);
         this.master.dispatchRightState(state);

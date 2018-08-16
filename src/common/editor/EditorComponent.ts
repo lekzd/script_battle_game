@@ -9,8 +9,12 @@ import {fromEvent, merge, Observable, Subject} from 'rxjs/index';
 import {auditTime, filter} from "rxjs/operators";
 import {SandboxAutocomplete} from './SandboxAutocomplete';
 import {Editor} from 'brace';
-import {map} from 'rxjs/internal/operators';
+import {debounceTime, map, switchMap} from 'rxjs/internal/operators';
 import {Toolbar} from "./Toolbar";
+import {Inject} from '../InjectDectorator';
+import {WebsocketConnection} from '../WebsocketConnection';
+import {ClientState} from '../client/ClientState';
+import {BattleSide} from '../battle/BattleSide';
 
 export class EditorComponent {
 
@@ -20,6 +24,8 @@ export class EditorComponent {
 
     toolbar: Toolbar;
 
+    @Inject(ClientState) private clientState: ClientState;
+    @Inject(WebsocketConnection) private connection: WebsocketConnection;
     private editor: Editor;
 
     get ctrlEnter$(): Observable<KeyboardEvent> {
@@ -27,6 +33,14 @@ export class EditorComponent {
             .pipe(
                 filter(event => this.isWindowsCtrlEnter(event) || this.isUnixCtrlEnter(event))
             );
+    }
+
+    get loginInput$(): Observable<string> {
+        return fromEvent(document.querySelector('#nickname'), 'input')
+            .pipe(
+                debounceTime(300),
+                switchMap(event => (event.target as HTMLInputElement).value)
+            )
     }
 
     constructor() {
@@ -42,6 +56,15 @@ export class EditorComponent {
         this.toolbar.pushButtonClick$
             .subscribe(() => {
                 this.pushCode$.next(this.editor.getValue());
+            });
+
+        this.loginInput$
+            .subscribe(value => {
+                if (this.clientState.side === BattleSide.left) {
+                    this.connection.sendLeftState({name: value});
+                } else {
+                    this.connection.sendRightState({name: value});
+                }
             });
 
     }

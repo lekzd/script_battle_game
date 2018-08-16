@@ -451,3 +451,30 @@ canvas {
   right: 0;
   bottom: 0;
 }
+
+.name {
+    height: 47px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #005c80;
+    background: #272822;
+    box-sizing: border-box;
+    padding: 0 15px;
+    border-bottom: 1px solid #007a9c;
+}
+
+.name label {
+    width: 100px;
+}
+
+.name input {
+    flex-grow: 1;
+    height: 24px;
+    font-size: 16px;
+    box-sizing: border-box;
+    background: #171921;
+    color: #005c80;
+    border: none;
+    padding: 0 3px;
+}
