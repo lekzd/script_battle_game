@@ -1,6 +1,6 @@
 
 import template from './documentation.template.html';
-import {fromEvent, Observable} from 'rxjs/index';
+import {fromEvent, merge, Observable} from 'rxjs/index';
 import {filter} from 'rxjs/internal/operators';
 
 export class Documentation {
@@ -14,16 +14,24 @@ export class Documentation {
             .pipe(filter(event => event.target === this.container))
     }
 
+    get onEscape$(): Observable<KeyboardEvent> {
+        return fromEvent<KeyboardEvent>(window, 'keydown')
+            .pipe(filter(event => event.keyCode === 27))
+    }
+
     constructor(private container: HTMLElement) {
 
         this.container.innerHTML = template;
 
         this.opened = true;
 
-        this.backdropClick$
+        merge(
+            this.onEscape$,
+            this.backdropClick$
+        )
             .subscribe(() => {
                 this.opened = false;
-            })
+            });
 
     }
 

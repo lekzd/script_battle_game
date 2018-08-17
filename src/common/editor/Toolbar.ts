@@ -4,6 +4,7 @@ import {Inject} from "../InjectDectorator";
 import {filter, map} from 'rxjs/internal/operators';
 import {ClientState} from '../client/ClientState';
 import {Documentation} from './Documentation';
+import {elementHasParent} from '../helpers/elementHasParent';
 
 export class Toolbar {
     private documentation: Documentation;
@@ -75,6 +76,22 @@ export class Toolbar {
         });
 
         this._selectedItem = value;
+    }
+
+    get onEscape$(): Observable<KeyboardEvent> {
+        return fromEvent<KeyboardEvent>(window, 'keydown')
+            .pipe(
+                filter(() => this.isSelectorOpen),
+                filter(event => event.keyCode === 27)
+            )
+    }
+
+    get outsideSelectorClick$(): Observable<MouseEvent> {
+        return fromEvent<MouseEvent>(window, 'keydown')
+            .pipe(
+                filter(() => this.isSelectorOpen),
+                filter(event => !elementHasParent((event.target as HTMLElement), this.selectWindow))
+            )
     }
 
     @Inject(ClientState) private clientState: ClientState;
@@ -159,6 +176,15 @@ export class Toolbar {
 
                 this.clientState.set({army: army});
 
+                this.isSelectorOpen = false;
+            });
+
+
+        merge(
+            this.onEscape$,
+            this.outsideSelectorClick$
+        )
+            .subscribe(() => {
                 this.isSelectorOpen = false;
             });
 

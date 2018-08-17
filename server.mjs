@@ -1,6 +1,7 @@
 import websocket from 'websocket';
 import http from 'http';
 import {ConnectionsStorage} from "./server/ConnectionsStorage";
+import {LeaderBoard} from "./server/LeaderBoard.mjs";
 
 const server = http.createServer((request, response) => {
     // process HTTP request. Since we're writing just WebSockets
@@ -18,6 +19,7 @@ const wsServer = new WebSocketServer({
 });
 
 const connectionsStorage = new ConnectionsStorage();
+const leaderBoard = new LeaderBoard();
 
 // WebSocket server
 wsServer.on('request', (request) => {
@@ -65,6 +67,18 @@ wsServer.on('request', (request) => {
         }
 
         if (data.type === 'sendWinner') {
+            const state = Object.assign({}, data.sessionResult, {
+                state: {
+                    left: connectionsStorage.leftPlayer.state,
+                    right: connectionsStorage.rightPlayer.state
+                },
+                code: {
+                    left: connectionsStorage.leftPlayer.code,
+                    right: connectionsStorage.rightPlayer.code
+                }
+            });
+
+            leaderBoard.write(state);
             connectionsStorage.endSession(data.sessionResult);
         }
 

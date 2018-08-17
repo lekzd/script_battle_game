@@ -23,9 +23,9 @@ export function getUnitApi(unit: any, actions: IAction[]) {
             actions.push({action: 'spell', id: id});
         }
 
-        heal(id: string) {
-            actions.push({action: 'heal', id: id});
-        }
+        // heal(id: string) {
+        //     actions.push({action: 'heal', id: id});
+        // }
 
         say(text: string) {
             actions.push({action: 'say', text: text});
@@ -47,17 +47,17 @@ export function getUnitApi(unit: any, actions: IAction[]) {
             return unit.character.type === 'melee';
         }
 
-        isAlive(): boolean {
-            return unit.health > 0;
-        }
+        // isAlive(): boolean {
+        //     return unit.health > 0;
+        // }
 
         getHealth(): number {
             return unit.health;
         }
 
-        getID(): string {
-            return unit.id;
-        }
+        // getID(): string {
+        //     return unit.id;
+        // }
 
         getX(): number {
             return unit.x;
