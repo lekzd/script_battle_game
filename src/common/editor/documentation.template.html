@@ -3,13 +3,41 @@
         <h2>FAQ</h2>
 
         <section>
+            <ol class="main">
+                <li>
+                    <div>
+                        Соберите отряд, выбирая из трех разных классов юнитов
+                    </div>
+                    <div>
+                        <img src="/img/tuttorial_select.png" alt="" width="300">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Напишите код ИИ для своей армии, его можно запускать локально
+                    </div>
+                    <div>
+                        <img src="/img/tuttorial_run.png" alt="" width="100">
+                    </div>
+                </li>
+                <li>
+                    <div>
+                        Отправьте код, чтобы сразиться с противником
+                    </div>
+                    <div>
+                        <img src="/img/tuttorial_send.png" alt="" width="100">
+                    </div>
+                </li>
+            </ol>
+        </section>
+
+        <section>
             <ul>
-                <li>Ваша задача – написать код ИИ для своих юнитов</li>
                 <li>Есть три класса юнитов: маги, стрелки и пехотинцы</li>
                 <li>Код – чистый JS, исполняется последовательно для каждого юнита</li>
-                <li>Код можно запускать для своих юнитов до отправки</li>
                 <li>Очередность хода зависит от скорости юнита, быстрые ходят первыми</li>
                 <li>После нажатия "Готово" обоими игроками, оба кода будут запущены на общем игровом поле</li>
+                <li>Победитель определяется либо после полной победы одной из сторон, либо по очкам после окончания выполнения кода</li>
             </ul>
         </section>
     </section>
@@ -31,6 +59,7 @@
             </div>
             <div class="description">
                 Переход на клетку <span class="attr">x</span>, <span class="attr">y</span> <strong>относительно позиции юнита</strong>
+                <div class="exclamation">для правого игрока перемещения влево будут с отрицательным <span class="attr">x</span></div>
             </div>
         </section>
 
@@ -172,5 +201,45 @@
             </div>
         </section>
 
+    </section>
+    <section>
+        <h2>Примеры кода</h2>
+
+        <section>
+            <p>
+                Так как код исполняется последовательно для каждого юнита, требуется разделять поведение юнитов:
+            </p>
+
+            <p>
+                сделать это можно по классу персонажа
+            </p>
+<pre class="code">
+    if (isShooter()) {
+        shoot('ie')
+    }
+    if (isMagician()) {
+        spell('ie')
+    }
+    if (isInfantry()) {
+        goToEnemyAndHit('ie')
+    }
+</pre>
+
+            <p>или по <span class="attr">id</span></p>
+<pre class="code">
+    if (is('eval')) {
+        spell('ie')
+    }
+</pre>
+            <p>
+                <span class="attr">id</span> юнита написан около него самого
+            </p>
+            <p>
+                <img src="/img/tuttorial_id.png" width="100">
+            </p>
+            <p>
+                В случае, если на поле есть несколько юнитов с одинаковыми <span class="attr">id</span>, будет выбран случайный из них
+            </p>
+        </section>
     </section>
 </div>

@@ -39,7 +39,7 @@ export class EditorComponent {
         return fromEvent(document.querySelector('#nickname'), 'input')
             .pipe(
                 debounceTime(300),
-                switchMap(event => (event.target as HTMLInputElement).value)
+                switchMap(event => [(event.target as HTMLInputElement).value])
             )
     }
 

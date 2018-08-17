@@ -15,23 +15,32 @@ export class CodeDisplay {
         return Array.from(this.container.querySelectorAll('.unit-img'));
     }
 
+    set name(value: string) {
+        (this.container.querySelector('.name') as HTMLElement).innerText = value;
+    }
+
     constructor(private container: HTMLElement) {
         this.container.innerHTML = `
-            <div class="army-display">
-                <div id="select-1" class="toolbar-button select-button">
-                    <div class="unit-img character_null"></div>
-                </div>
-                <div id="select-2" class="toolbar-button select-button">
-                    <div class="unit-img character_null"></div>
-                </div>
-                <div id="select-3" class="toolbar-button select-button">
-                    <div class="unit-img character_null"></div>
-                </div>
-                <div id="select-4" class="toolbar-button select-button">
-                    <div class="unit-img character_null"></div>
-                </div>
+            <div class="name">
+                --без имени--
             </div>
-            <pre></pre>
+            <div class="code-container">
+                <div class="army-display">
+                    <div id="select-1" class="toolbar-button select-button">
+                        <div class="unit-img character_null"></div>
+                    </div>
+                    <div id="select-2" class="toolbar-button select-button">
+                        <div class="unit-img character_null"></div>
+                    </div>
+                    <div id="select-3" class="toolbar-button select-button">
+                        <div class="unit-img character_null"></div>
+                    </div>
+                    <div id="select-4" class="toolbar-button select-button">
+                        <div class="unit-img character_null"></div>
+                    </div>
+                </div>
+                <pre></pre>
+            </div>
         `;
 
         this.pre = this.container.querySelector('pre');
@@ -68,15 +77,17 @@ export class CodeDisplay {
     }
 
     setState(state: any) {
-        if (!state.army) {
-            return;
+        if (state.army) {
+            this.units.forEach((unit, index) => {
+                const type = state.army[index];
+
+                unit.className = `unit-img ${type}`;
+            })
         }
 
-        this.units.forEach((unit, index) => {
-            const type = state.army[index];
-
-            unit.className = `unit-img ${type}`;
-        })
+        if (state.name) {
+            this.name = state.name;
+        }
     }
 
     clear() {

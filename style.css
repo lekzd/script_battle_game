@@ -125,6 +125,7 @@ canvas {
 .codeDisplay {
   position: absolute;
   top: 0;
+  flex-direction: column;
   box-sizing: border-box;
   color: #79dc24;
   height: 100%;
@@ -139,7 +140,6 @@ canvas {
   flex-grow: 1;
   box-sizing: border-box;
   width: 100%;
-  height: 100%;
   overflow: hidden;
   padding: 20px;
   background: #272822;
@@ -152,6 +152,18 @@ canvas {
 
 .rightCode {
   right: 0;
+}
+
+.code-container {
+  display: flex;
+  flex-grow: 1;
+}
+
+.rightCode .code-container {
+  flex-direction: row-reverse;
+}
+
+.rightCode .name {
   flex-direction: row-reverse;
 }
 
@@ -411,6 +423,13 @@ canvas {
   color: #fff;
 }
 
+.documentation .code {
+  background: rgba(0, 0, 0, .3);
+  padding: 15px;
+  border-radius: 2px;
+  color: #fff;
+}
+
 .documentation ul{
   margin-top: 0;
 }
@@ -427,6 +446,20 @@ canvas {
 
 .documentation .class {
   font-weight: bold;
+}
+
+.documentation .main {
+  text-align: center;
+  color: #5f99b2;
+  font-size: 20px;
+}
+
+.documentation .main div + div {
+  margin-top: 10px;
+}
+
+.documentation .main li {
+  margin-bottom: 30px;
 }
 
 .documentation .exclamation:before {
