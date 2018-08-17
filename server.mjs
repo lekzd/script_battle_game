@@ -3,11 +3,13 @@ import http from 'http';
 import {ConnectionsStorage} from "./server/ConnectionsStorage";
 import {LeaderBoard} from "./server/LeaderBoard.mjs";
 
+const leaderBoard = new LeaderBoard();
+
 const server = http.createServer((request, response) => {
     // process HTTP request. Since we're writing just WebSockets
     // server we don't have to implement anything.
 
-    response.end('OK');
+    response.end(leaderBoard.toHTML());
 });
 server.listen(1337, () => {});
 
@@ -19,7 +21,6 @@ const wsServer = new WebSocketServer({
 });
 
 const connectionsStorage = new ConnectionsStorage();
-const leaderBoard = new LeaderBoard();
 
 // WebSocket server
 wsServer.on('request', (request) => {

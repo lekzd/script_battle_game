@@ -9,12 +9,13 @@ import {fromEvent, merge, Observable, Subject} from 'rxjs/index';
 import {auditTime, filter} from "rxjs/operators";
 import {SandboxAutocomplete} from './SandboxAutocomplete';
 import {Editor} from 'brace';
-import {debounceTime, map, switchMap} from 'rxjs/internal/operators';
+import {debounceTime, map, sample, switchMap} from 'rxjs/internal/operators';
 import {Toolbar} from "./Toolbar";
 import {Inject} from '../InjectDectorator';
 import {WebsocketConnection} from '../WebsocketConnection';
 import {ClientState} from '../client/ClientState';
 import {BattleSide} from '../battle/BattleSide';
+import {CharactersList} from '../characters/CharactersList';
 
 export class EditorComponent {
 
@@ -26,6 +27,8 @@ export class EditorComponent {
 
     @Inject(ClientState) private clientState: ClientState;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
+    @Inject(CharactersList) private charactersList: CharactersList;
+
     private editor: Editor;
 
     get ctrlEnter$(): Observable<KeyboardEvent> {
@@ -41,6 +44,10 @@ export class EditorComponent {
                 debounceTime(300),
                 switchMap(event => [(event.target as HTMLInputElement).value])
             )
+    }
+
+    get sampleClick$(): Observable<Event> {
+        return fromEvent(document.querySelector('#sample'), 'click')
     }
 
     constructor() {
@@ -66,6 +73,11 @@ export class EditorComponent {
                     this.connection.sendRightState({name: value});
                 }
             });
+
+        this.sampleClick$
+            .subscribe(() => {
+                this.generateSampleCode();
+            })
 
     }
 
@@ -95,5 +107,27 @@ export class EditorComponent {
             .pipe(auditTime(300));
 
         langTools.addCompleter(new SandboxAutocomplete());
+    }
+
+    private generateSampleCode() {
+        let sampleCode = ``;
+
+        Object.keys(this.clientState.army)
+            .map(index => this.charactersList.get(this.clientState.army[index]))
+            .filter(({id}) => id !== 'NULL')
+            .map(({id}) => id)
+            .forEach(id => {
+                sampleCode += `// проверка юнита по ID
+if (is('${id}')) {
+    // действие
+    say('Привет, я ${id}!')
+}`
+        });
+
+        if (sampleCode === '') {
+            sampleCode = '// выберите хоть одного юнита'
+        }
+
+        this.editor.setValue(sampleCode);
     }
 }

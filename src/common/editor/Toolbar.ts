@@ -1,7 +1,7 @@
 import {fromEvent, merge, Observable} from "rxjs/index";
 import {CharactersList, ICharacterConfig} from "../characters/CharactersList";
 import {Inject} from "../InjectDectorator";
-import {filter, map} from 'rxjs/internal/operators';
+import {filter, map, tap} from 'rxjs/internal/operators';
 import {ClientState} from '../client/ClientState';
 import {Documentation} from './Documentation';
 import {elementHasParent} from '../helpers/elementHasParent';
@@ -82,15 +82,21 @@ export class Toolbar {
         return fromEvent<KeyboardEvent>(window, 'keydown')
             .pipe(
                 filter(() => this.isSelectorOpen),
-                filter(event => event.keyCode === 27)
+                filter(event => event.keyCode === 27),
+                tap(event => {
+                    event.preventDefault();
+                })
             )
     }
 
     get outsideSelectorClick$(): Observable<MouseEvent> {
-        return fromEvent<MouseEvent>(window, 'keydown')
+        return fromEvent<MouseEvent>(window, 'click')
             .pipe(
                 filter(() => this.isSelectorOpen),
-                filter(event => !elementHasParent((event.target as HTMLElement), this.selectWindow))
+                filter(event => !elementHasParent((event.target as HTMLElement), this.selectWindow)),
+                tap(event => {
+                    event.preventDefault();
+                })
             )
     }
 
@@ -129,11 +135,14 @@ export class Toolbar {
                                     <div class="unit-id">${characterConfig.id}
                                         <span class="unit-grey">${characterConfig.title}</span>
                                     </div>
-                                    <div class="unit-grey">Атака / защита</div>
-                                    <div class="unit-mellee"><span class="unit-grey">ближний</span> ${characterConfig.mellee.attack.max} / ${characterConfig.mellee.defence.max}</div>
-                                    <div class="unit-shooting"><span class="unit-grey">стрельба</span> ${characterConfig.shoot.attack.max} / ${characterConfig.shoot.defence.max}</div>
-                                    <div class="unit-magic"><span class="unit-grey">магия</span> ${characterConfig.magic.attack.max} / ${characterConfig.magic.defence.max}</div>
-                                    <div class="unit-magic"><span class="unit-grey">скорость</span> ${characterConfig.speed}</div>
+                                    <div class="unit-values">
+                                        <div class="unit-grey">атака / защита</div>
+                                        <div class="unit-mellee"><span class="unit-grey">ближний</span> ${characterConfig.mellee.attack.max} / ${characterConfig.mellee.defence.max}</div>
+                                        <div class="unit-shooting"><span class="unit-grey">стрельба</span> ${characterConfig.shoot.attack.max} / ${characterConfig.shoot.defence.max}</div>
+                                        <div class="unit-magic"><span class="unit-grey">магия</span> ${characterConfig.magic.attack.max} / ${characterConfig.magic.defence.max}</div>
+                                        <div class="unit-magic"><span class="unit-grey">скорость</span> ${characterConfig.speed}</div>
+                                    </div>
+                                  
                                 </div>
                             </section>
                         `;

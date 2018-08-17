@@ -264,11 +264,26 @@ canvas {
 
 .unit-description {
     position: relative;
+    display: flex;
     z-index: 2;
     flex-grow: 1;
 }
 
+.unit-id {
+  width: 50%;
+  box-sizing: border-box;
+  padding-right: 10px;
+}
+
+.unit-values {
+  width: 50%;
+  font-size: 14px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 3px 6px;
+}
+
 .character_null {
+  position: relative;
   background: url('/img/character_null.png');
   background-position: 0 -135px;
 }
@@ -490,7 +505,7 @@ canvas {
     display: flex;
     flex-direction: row;
     align-items: center;
-    color: #005c80;
+    color: #69909f;
     background: #272822;
     box-sizing: border-box;
     padding: 0 15px;
@@ -503,11 +518,31 @@ canvas {
 
 .name input {
     flex-grow: 1;
-    height: 24px;
-    font-size: 16px;
+    height: 28px;
+    font-size: 14px;
     box-sizing: border-box;
     background: #171921;
-    color: #005c80;
+    color: #69909f;
     border: none;
-    padding: 0 3px;
+    padding: 0 8px;
+    outline: none;
+}
+
+.name input:focus {
+  outline: 1px solid #384863;
+}
+
+.sample-button {
+  border: 1px solid #343e4b;
+  background: #2a2e3c;
+  height: 28px;
+  color: #5e7087;
+  margin-left: 20px;
+  padding: 0 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.sample-button:hover {
+  background: #343e4b;
 }
