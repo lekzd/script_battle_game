@@ -9,6 +9,8 @@ export class ResultsView extends Phaser.Scene {
 
     @Inject(BattleFieldModel) private battleFieldModel: BattleFieldModel;
 
+    private text: Phaser.GameObjects.Text;
+
     constructor() {
         super({
             key: 'results'
@@ -24,28 +26,36 @@ export class ResultsView extends Phaser.Scene {
         graphics.setAlpha(0.6);
         graphics.fillRect(0, 0, 400, 300);
 
-        const text = this.add.text(200, 150, 'Результаты', {
+        this.text = this.add.text(200, 150, 'Результаты', {
             font: '16px Courier',
             align: 'right',
             fill: '#00ff00'
         });
 
-        text.setOrigin(0.5);
+        this.text.setOrigin(0.5);
     }
 
     setResults(results: ISessionResult) {
         const isLeftWins = results.winner === WinnerSide.left;
         const isRightWins = results.winner === WinnerSide.right;
         let units = [];
+        let result = '';
 
         if (isLeftWins) {
             units = this.getAliveUnits(BattleSide.left);
+            result = 'Победил левый';
         }
 
         if (isRightWins) {
             units = this.getAliveUnits(BattleSide.right);
+            result = 'Победил правый';
         }
 
+        if (!result) {
+            result = 'Ничья';
+        }
+
+        this.text.setText(result);
         this.makeCelebration(units);
     }
 

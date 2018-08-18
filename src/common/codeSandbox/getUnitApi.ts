@@ -51,21 +51,21 @@ export function getUnitApi(unit: any, actions: IAction[]) {
         //     return unit.health > 0;
         // }
 
-        getHealth(): number {
-            return unit.health;
-        }
+        // getHealth(): number {
+        //     return unit.health;
+        // }
 
         // getID(): string {
         //     return unit.id;
         // }
 
-        getX(): number {
-            return unit.x;
-        }
-
-        getY(): number {
-            return unit.y;
-        }
+        // getX(): number {
+        //     return unit.x;
+        // }
+        //
+        // getY(): number {
+        //     return unit.y;
+        // }
 
         is(id: string): boolean {
             return unit.id.toLowerCase() === `${id}`.toLowerCase();

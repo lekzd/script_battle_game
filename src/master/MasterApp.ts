@@ -48,7 +48,10 @@ export class MasterApp {
         combineLatest(this.leftIsReady$.asObservable(), this.rightIsReady$.asObservable())
             .subscribe(() => {
                 this.setState(BattleState.battle);
-                this.battleGame.runCode(this.leftCode.value, this.rightCode.value);
+
+                setTimeout(() => {
+                    this.battleGame.runCode(this.leftCode.value, this.rightCode.value);
+                }, 3000);
             });
 
         this.newSessionClick$.subscribe(() => {
@@ -121,7 +124,9 @@ export class MasterApp {
         }
 
         if (message.type === 'endSession') {
-            this.battleGame.showResults(message.data.sessionResult);
+            if (this.battleGame.currentState !== BattleState.results) {
+                this.battleGame.showResults(message.data.sessionResult);
+            }
         }
 
         if (message.type === 'newSession') {

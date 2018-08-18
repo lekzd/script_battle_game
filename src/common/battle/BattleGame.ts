@@ -19,9 +19,9 @@ export enum BattleState {
 export class BattleGame {
 
     stateParams: any = {};
+    currentState: BattleState;
 
     private game: Phaser.Game;
-    private currentState: BattleState;
 
     constructor() {
         const config = {

@@ -1,3 +1,4 @@
+import fs from 'fs';
 
 export class LeaderBoard {
 
@@ -11,6 +12,8 @@ export class LeaderBoard {
         });
 
         this.data.push(item);
+
+        this._writeToFile('./leaderboard.json', item)
     }
 
     toHTML() {
@@ -26,6 +29,27 @@ export class LeaderBoard {
                 `).join('')}
             </table>
         `;
+    }
+
+    _writeToFile(path, item) {
+        const contents = fs.readFileSync(path, 'utf8');
+        let data = [];
+
+        try {
+            data = JSON.parse(contents.toString());
+        } catch (e) {
+            data = [];
+        }
+
+        data.push(item);
+
+        fs.writeFile(path, JSON.stringify(data), (err) => {
+            if(err) {
+                return console.log(err);
+            }
+
+            console.log("ratings saved!");
+        });
     }
 
 }
