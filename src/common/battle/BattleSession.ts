@@ -72,7 +72,6 @@ export class BattleSession {
                 const winnerSide = this.getWinnerSide();
 
                 if (this.isStopped) {
-                    console.log('isStopped');
                     this.stopResolve();
                     return;
                 }

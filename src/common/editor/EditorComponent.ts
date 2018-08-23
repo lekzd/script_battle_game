@@ -114,11 +114,11 @@ export class EditorComponent {
 
         this.getUniqueIdList()
             .forEach(id => {
-                sampleCode += `// проверка юнита по ID
-if (is('${id}')) {
-    // действие
-    say('Привет, я ${id}!')
-}`
+                sampleCode += `// проверка юнита по ID\r` +
+                              `if (is('${id}')) {\r` +
+                              `    // действие\r` +
+                              `   say('Привет, я ${id}!')\r` +
+                              `}\r`
         });
 
         if (sampleCode === '') {

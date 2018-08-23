@@ -182,11 +182,13 @@ export class BattleView extends Phaser.Scene {
         const promises = [];
 
         this.leftUnits.forEach(unit => {
+            let unitCode = leftCode;
+
             if (leftCode && unit.character.id === 'NULL') {
-                leftCode = `say('Я null, выбери другого')`;
+                unitCode = `say('Я null, выбери другого')`;
             }
 
-            const evalPromise = this.codeSandbox.eval(leftCode, unit);
+            const evalPromise = this.codeSandbox.eval(unitCode, unit);
 
             evalPromise.then((actions) => {
                 unit.setActions(actions);
@@ -196,11 +198,13 @@ export class BattleView extends Phaser.Scene {
         });
 
         this.rightUnits.forEach(unit => {
+            let unitCode = rightCode;
+
             if (rightCode && unit.character.id === 'NULL') {
-                rightCode = `say('Я просто null, выбери другого')`;
+                unitCode = `say('Я просто null, выбери другого')`;
             }
 
-            const evalPromise = this.codeSandbox.eval(rightCode, unit);
+            const evalPromise = this.codeSandbox.eval(unitCode, unit);
 
             evalPromise.then((actions) => {
                 unit.setActions(actions);
