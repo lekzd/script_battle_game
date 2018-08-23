@@ -63,8 +63,6 @@ export class BattleFieldModel {
     }
 
     doAction(unit: BattleUnit, action: IAction): Promise<any> {
-        console.log('doAction', action);
-
         if (action.action === 'goTo') {
             const toX = parseInt(action.x, 10);
             const toY = parseInt(action.y, 10);

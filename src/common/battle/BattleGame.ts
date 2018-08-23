@@ -47,8 +47,6 @@ export class BattleGame {
     }
 
     runCode(leftCode: string, rightCode: string) {
-        console.log('runCode', leftCode);
-
         this.setState(BattleState.battle);
 
         const battleView = <BattleView>this.game.scene.getScene(BattleState.battle);

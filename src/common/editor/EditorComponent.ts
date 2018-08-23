@@ -112,10 +112,7 @@ export class EditorComponent {
     private generateSampleCode() {
         let sampleCode = ``;
 
-        Object.keys(this.clientState.army)
-            .map(index => this.charactersList.get(this.clientState.army[index]))
-            .filter(({id}) => id !== 'NULL')
-            .map(({id}) => id)
+        this.getUniqueIdList()
             .forEach(id => {
                 sampleCode += `// проверка юнита по ID
 if (is('${id}')) {
@@ -129,5 +126,14 @@ if (is('${id}')) {
         }
 
         this.editor.setValue(sampleCode);
+    }
+
+    getUniqueIdList(): Set<string> {
+        const ids = Object.keys(this.clientState.army)
+            .map(index => this.charactersList.get(this.clientState.army[index]))
+            .filter(({id}) => id !== 'NULL')
+            .map(({id}) => id);
+
+        return new Set(ids);
     }
 }

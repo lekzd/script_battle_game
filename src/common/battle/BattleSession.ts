@@ -25,7 +25,10 @@ export class BattleSession {
 
     private winPromise: Promise<ISessionResult>;
     private winResolve: (state: ISessionResult) => any;
+    private stopResolve: () => any;
     private units: BattleUnit[] = [];
+    private isStopped = false;
+    private firstLaunch = true;
 
     start(units: BattleUnit[]): Promise<ISessionResult> {
         this.winPromise = new Promise<ISessionResult>(resolve => {
@@ -33,12 +36,27 @@ export class BattleSession {
         });
 
         this.units = units;
+        this.isStopped = false;
 
         this.unitsStack.init(units);
 
         this.newTurn();
 
         return this.winPromise;
+    }
+
+    stop(): Promise<void> {
+        if (this.firstLaunch || this.isStopped) {
+            this.firstLaunch = false;
+
+            return Promise.resolve();
+        }
+
+        this.isStopped = true;
+
+        return new Promise(resolve => {
+            this.stopResolve = resolve;
+        });
     }
 
     getSideDamage(side: BattleSide): number {
@@ -53,6 +71,12 @@ export class BattleSession {
             .then(() => {
                 const winnerSide = this.getWinnerSide();
 
+                if (this.isStopped) {
+                    console.log('isStopped');
+                    this.stopResolve();
+                    return;
+                }
+
                 if (winnerSide) {
                     this.winResolve({
                         winner: winnerSide,
@@ -61,6 +85,8 @@ export class BattleSession {
                             right: this.getSideDamage(BattleSide.left)
                         }
                     });
+
+                    this.isStopped = true;
 
                     return;
                 }

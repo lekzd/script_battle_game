@@ -19,6 +19,7 @@
     "diff": "^3.5.0",
     "phaser": "^3.11.0",
     "rxjs": "^6.2.2",
+    "spel2js": "^0.2.5",
     "websocket": "^1.0.26"
   },
   "devDependencies": {

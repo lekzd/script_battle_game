@@ -1,9 +1,20 @@
 import fs from 'fs';
 
+const path = './leaderboard.json';
+
 export class LeaderBoard {
 
     constructor() {
         this.data = [];
+
+        const contents = fs.readFileSync(path, 'utf8');
+        this.data = [];
+
+        try {
+            this.data = JSON.parse(contents.toString());
+        } catch (e) {
+            this.data = [];
+        }
     }
 
     write(sessionResult) {
@@ -13,7 +24,7 @@ export class LeaderBoard {
 
         this.data.push(item);
 
-        this._writeToFile('./leaderboard.json', item)
+        this._writeToFile(path, item)
     }
 
     toHTML() {
@@ -21,9 +32,10 @@ export class LeaderBoard {
             <table>
                 ${this.data.map(row => `
                     <tr>
-                        <td>${row.time}</td>
                         <td>${row.winner}</td>
+                        <td>${row.state.left.name}</td>
                         <td>${row.damage.left}</td>
+                        <td>${row.state.right.name}</td>
                         <td>${row.damage.right}</td>
                     </tr>
                 `).join('')}

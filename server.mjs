@@ -63,10 +63,6 @@ wsServer.on('request', (request) => {
             connectionsStorage.pushRightCode(data.code);
         }
 
-        if (data.type === 'pushRightCode') {
-            connectionsStorage.pushRightCode(data.code);
-        }
-
         if (data.type === 'sendWinner') {
             const state = Object.assign({}, data.sessionResult, {
                 state: {

@@ -211,13 +211,16 @@ export class BattleView extends Phaser.Scene {
 
         Promise.all(promises)
             .then(() => {
+                return this.battleSession.stop();
+            })
+            .then(() => {
                 return this.battleSession.start([...this.leftUnits, ...this.rightUnits]);
             })
             .then((sessionResult: ISessionResult) => {
-                if (this.connection.isMaster) {
+                if (sessionResult && this.connection.isMaster) {
                     this.dispatchWinner(sessionResult);
                 }
-            });
+            })
     }
 
     private createBullet(fromUnit: BattleUnit, toUnit: BattleUnit, type: BulletType) {
