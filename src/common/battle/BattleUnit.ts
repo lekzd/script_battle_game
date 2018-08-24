@@ -44,7 +44,6 @@ export class BattleUnit {
     private container: any;
     private healthBar: Phaser.GameObjects.Graphics;
     private idText: Phaser.GameObjects.Text;
-    private spriteZ: number;
 
     get renderLeft(): number {
         return this.battleFieldDrawer.getHexagonLeft(this.x, this.y) + 16;
@@ -87,6 +86,7 @@ export class BattleUnit {
             : BattleSide.left;
 
         this.setPosition(x, y);
+        this.container.setDepth(y);
         this.setAnimation('walk');
 
         return new Promise(resolve => {
@@ -123,12 +123,6 @@ export class BattleUnit {
     setAnimation(animationName: IAnimationName) {
         const turnKey = this.rotation === BattleSide.right ? 'left' : 'right';
         const phaserAnimationName = `${this.type}_${animationName}_${turnKey}`;
-
-        if (animationName === 'idle') {
-            this.container.setZ(this.spriteZ);
-        } else {
-            this.container.setZ(10);
-        }
 
         this.sprite.play(phaserAnimationName, false, 0);
     }
@@ -220,8 +214,7 @@ export class BattleUnit {
         this.container.add(this.sayText);
         this.container.add(this.idText);
         this.container.add(this.healthBar);
-
-        this.spriteZ = this.sprite.z;
+        this.container.setDepth(this.y);
 
         this.setAnimation('idle');
     }
@@ -374,5 +367,7 @@ export class BattleUnit {
                 this.idText.setVisible(false);
             }
         });
+
+        this.container.setDepth(0);
     }
 }

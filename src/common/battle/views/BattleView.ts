@@ -242,6 +242,8 @@ export class BattleView extends Phaser.Scene {
             graphics.flipX = true;
         }
 
+        graphics.setDepth(top);
+
         this.tweens.add({
             targets: graphics,
             x: left2,
