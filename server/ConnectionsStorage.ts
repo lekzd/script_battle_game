@@ -14,7 +14,7 @@ export class ConnectionsStorage {
     leftPlayer = new Player(null);
     rightPlayer = new Player(null);
 
-    private state: IState;
+    private state: Partial<IState> = {};
 
     isRegistered(connection) {
         return this.connections.has(connection);

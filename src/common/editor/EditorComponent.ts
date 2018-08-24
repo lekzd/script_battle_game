@@ -9,7 +9,7 @@ import {fromEvent, merge, Observable, Subject} from 'rxjs/index';
 import {auditTime, filter} from "rxjs/operators";
 import {SandboxAutocomplete} from './SandboxAutocomplete';
 import {Editor} from 'brace';
-import {debounceTime, map, sample, switchMap, tap} from 'rxjs/internal/operators';
+import {debounceTime, map, switchMap, tap} from 'rxjs/internal/operators';
 import {Toolbar} from "./Toolbar";
 import {Inject} from '../InjectDectorator';
 import {WebsocketConnection} from '../WebsocketConnection';
@@ -17,11 +17,15 @@ import {ClientState} from '../client/ClientState';
 import {BattleSide} from '../battle/BattleSide';
 import {CharactersList} from '../characters/CharactersList';
 
+interface IPointer {
+    x: number;
+    y: number;
+}
+
 export class EditorComponent {
 
     runCode$ = new Subject<string>();
     pushCode$ = new Subject<string>();
-    change$: Observable<string>;
 
     toolbar: Toolbar;
 
@@ -51,6 +55,24 @@ export class EditorComponent {
         return fromEvent(document.querySelector('#sample'), 'click')
     }
 
+    get editorScroll$(): Observable<IPointer> {
+        return merge(
+            fromEvent(<any>this.editor.session, 'changeScrollLeft'),
+            fromEvent(<any>this.editor.session, 'changeScrollTop')
+        )
+            .pipe(map(() => ({
+                x: this.editor.session.getScrollLeft(),
+                y: this.editor.session.getScrollTop()
+            })))
+            .pipe(auditTime(300));
+    }
+
+    get change$(): Observable<string> {
+        return fromEvent(this.editor, 'change')
+            .pipe(map(() => this.editor.getValue()))
+            .pipe(auditTime(300));
+    }
+
     constructor() {
         this.initEditor();
 
@@ -78,7 +100,7 @@ export class EditorComponent {
         this.sampleClick$
             .subscribe(() => {
                 this.generateSampleCode();
-            })
+            });
 
     }
 
@@ -106,10 +128,6 @@ export class EditorComponent {
             enableBasicAutocompletion: true,
             enableLiveAutocompletion: true
         });
-
-        this.change$ = fromEvent(this.editor, 'change')
-            .pipe(map(() => this.editor.getValue()))
-            .pipe(auditTime(300));
 
         langTools.addCompleter(new SandboxAutocomplete());
     }

@@ -1,6 +1,14 @@
 import {BattleSide} from './battle/BattleSide';
 import {WinnerSide} from './battle/BattleSession';
 
+export interface IEditorState {
+    code: string;
+    scrollX: number;
+    scrollY: number;
+    cursorX: number;
+    cursorY: number;
+}
+
 export interface IPlayerState {
     name: string;
     side: BattleSide;
@@ -12,13 +20,7 @@ export interface IPlayerState {
         3: string;
     };
 
-    editor: {
-        code: string;
-        scrollX: number;
-        scrollY: number;
-        cursorX: number;
-        cursorY: number;
-    }
+    editor: IEditorState;
 }
 
 export interface IState {

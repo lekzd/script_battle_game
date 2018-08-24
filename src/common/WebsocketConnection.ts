@@ -1,7 +1,9 @@
-import {Subject} from 'rxjs/index';
+import {Observable, Subject} from 'rxjs/index';
 import {ISessionResult} from "./battle/BattleSession";
 import {Inject} from './InjectDectorator';
 import {Environment} from './Environment';
+import {IState} from './state.model';
+import {filter, pluck} from 'rxjs/internal/operators';
 
 export interface IMessage {
     type: string;
@@ -49,6 +51,15 @@ export class WebsocketConnection {
             }
             // handle incoming message
         };
+    }
+
+    onState$<T>(...path: string[]): Observable<T> {
+        return this.onMessage$
+            .pipe(
+                filter(message => message.type === 'setState'),
+                pluck<IMessage, T>('data', ...path),
+                filter(data => !!data)
+            )
     }
 
     send(message: string) {
@@ -129,6 +140,13 @@ export class WebsocketConnection {
     sendNewSession() {
         this.send(JSON.stringify({
             type: 'newSession'
+        }));
+    }
+
+    sendState(state: Partial<IState>) {
+        this.send(JSON.stringify({
+            type: 'state',
+            state
         }));
     }
 }

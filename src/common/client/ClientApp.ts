@@ -8,6 +8,7 @@ import {LeftArmy} from "../../left/LeftArmy";
 import {EnemyState} from "./EnemyState";
 import {RightArmy} from "../../right/RightArmy";
 import {ISessionResult} from "../battle/BattleSession";
+import {IState} from '../state.model';
 
 export class ClientApp {
 
@@ -60,6 +61,23 @@ export class ClientApp {
             } else {
                 this.connection.sendRightCode(code);
             }
+        });
+
+        this.editorComponent.editorScroll$.subscribe(pointer => {
+            const newState = <IState>{
+                left: {editor: {}},
+                right: {editor: {}}
+            };
+
+            if (side === BattleSide.left) {
+                newState.left.editor.scrollX = pointer.x;
+                newState.left.editor.scrollY = pointer.y;
+            } else {
+                newState.right.editor.scrollX = pointer.x;
+                newState.right.editor.scrollY = pointer.y;
+            }
+
+            this.connection.sendState(newState);
         });
 
         this.connection.onMessage$.subscribe(message => {

@@ -140,7 +140,7 @@ canvas {
   flex-grow: 1;
   box-sizing: border-box;
   width: 100%;
-  overflow: hidden;
+  overflow: auto;
   padding: 20px;
   background: #272822;
   border: 2px solid #007b9c;
@@ -502,6 +502,7 @@ canvas {
 
 .name {
     height: 47px;
+    min-height: 47px;
     display: flex;
     flex-direction: row;
     align-items: center;

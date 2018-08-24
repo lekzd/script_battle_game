@@ -8,6 +8,7 @@ import {LeftArmy} from "../left/LeftArmy";
 import {EMPTY_ARMY} from "../common/client/EMPTY_ARMY";
 import {RightArmy} from "../right/RightArmy";
 import {Observable, fromEvent} from 'rxjs/index';
+import {IPlayerState} from '../common/state.model';
 
 export class MasterApp {
 
@@ -57,6 +58,16 @@ export class MasterApp {
         this.newSessionClick$.subscribe(() => {
             this.connection.sendNewSession();
         });
+
+        this.connection.onState$('left')
+            .subscribe((state: IPlayerState) => {
+                this.leftCode.setState(state);
+            });
+
+        this.connection.onState$('right')
+            .subscribe((state: IPlayerState) => {
+                this.rightCode.setState(state);
+            });
 
         // setTimeout(() => {
         //     this.setState(BattleState.battle);

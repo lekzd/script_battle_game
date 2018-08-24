@@ -1,5 +1,6 @@
 import * as jsdiff from "diff";
 import {EMPTY_ARMY} from '../common/client/EMPTY_ARMY';
+import {IPlayerState} from '../common/state.model';
 
 export class CodeDisplay {
 
@@ -76,7 +77,7 @@ export class CodeDisplay {
         this.pre.appendChild(fragment);
     }
 
-    setState(state: any) {
+    setState(state: Partial<IPlayerState>) {
         if (state.army) {
             this.units.forEach((unit, index) => {
                 const type = state.army[index];
@@ -88,10 +89,14 @@ export class CodeDisplay {
         if (state.name) {
             this.name = state.name;
         }
+
+        if (state.editor) {
+            this.pre.scroll(state.editor.scrollX || 0, state.editor.scrollY || 0);
+        }
     }
 
     clear() {
-        this.setState({army: EMPTY_ARMY})
+        this.setState({army: EMPTY_ARMY});
         this.setCode('');
     }
 

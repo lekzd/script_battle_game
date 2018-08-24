@@ -84,7 +84,7 @@ wsServer.on('request', (request) => {
         }
 
         if (data.type === 'state') {
-            connectionsStorage.setState(data.data);
+            connectionsStorage.setState(data.state);
         }
 
         console.log('message', data);
