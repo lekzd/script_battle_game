@@ -1,14 +1,14 @@
-import fs from 'fs';
+import * as fs from 'fs';
 
 const path = './leaderboard.json';
 
 export class LeaderBoard {
 
+    data = [];
+
     constructor() {
-        this.data = [];
 
         const contents = fs.readFileSync(path, 'utf8');
-        this.data = [];
 
         try {
             this.data = JSON.parse(contents.toString());

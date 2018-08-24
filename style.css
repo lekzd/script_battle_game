@@ -412,7 +412,7 @@ canvas {
 }
 
 .documentation section + section {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .documentation .signature {

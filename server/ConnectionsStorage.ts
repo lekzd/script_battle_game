@@ -1,15 +1,20 @@
 import {Master} from "./Master";
 import {Player} from "./Player";
+import {IState} from '../src/common/state.model';
+import {mergeDeep} from '../src/common/helpers/mergeDeep';
+
+type Partial<T> = {
+    [P in keyof T]?: T[P];
+}
 
 export class ConnectionsStorage {
 
-    constructor() {
-        this.connections = new Map();
+    connections = new Map();
+    master = new Master(null);
+    leftPlayer = new Player(null);
+    rightPlayer = new Player(null);
 
-        this.master = new Master(null, 'master');
-        this.leftPlayer = new Player(null, 'leftPlayer');
-        this.rightPlayer = new Player(null, 'rightPlayer');
-    }
+    private state: IState;
 
     isRegistered(connection) {
         return this.connections.has(connection);
@@ -104,6 +109,14 @@ export class ConnectionsStorage {
         this.master.dispatchNewSession();
         this.leftPlayer.dispatchNewSession();
         this.rightPlayer.dispatchNewSession();
+    }
+
+    setState(newState: Partial<IState>) {
+        this.state = mergeDeep(this.state, newState);
+
+        this.master.setState(this.state);
+        this.leftPlayer.setState(this.state);
+        this.rightPlayer.setState(this.state);
     }
 
 }

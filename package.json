@@ -6,6 +6,7 @@
   "scripts": {
     "build": "webpack",
     "start": "webpack-dev-server",
+    "server": "ts-node ./server/index.ts",
     "release": "npm run build && npm run release:copy && npm run release:zip",
     "release:copy": "cp -R ./img ./public && cp style.css ./public",
     "release:zip": "zip -r archive.zip . -x *.git* *.map *.idea* src/**\\* node_modules/**\\*",
@@ -20,10 +21,13 @@
     "phaser": "^3.11.0",
     "rxjs": "^6.2.2",
     "spel2js": "^0.2.5",
+    "ts-node": "^7.0.1",
     "websocket": "^1.0.26"
   },
   "devDependencies": {
     "@develephant/types-phaser": "^1.0.1",
+    "@types/websocket": "0.0.39",
+    "@types/node": "^10.9.1",
     "html-webpack-plugin": "^3.2.0",
     "raw-loader": "^0.5.1",
     "ts-loader": "^4.4.2",

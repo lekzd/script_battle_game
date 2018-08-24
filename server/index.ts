@@ -1,7 +1,7 @@
-import websocket from 'websocket';
-import http from 'http';
-import {ConnectionsStorage} from "./server/ConnectionsStorage";
-import {LeaderBoard} from "./server/LeaderBoard.mjs";
+import * as websocket from 'websocket';
+import * as http from 'http';
+import {ConnectionsStorage} from "./ConnectionsStorage";
+import {LeaderBoard} from "./LeaderBoard";
 
 const leaderBoard = new LeaderBoard();
 
@@ -81,6 +81,10 @@ wsServer.on('request', (request) => {
 
         if (data.type === 'newSession') {
             connectionsStorage.newSession();
+        }
+
+        if (data.type === 'state') {
+            connectionsStorage.setState(data.data);
         }
 
         console.log('message', data);
