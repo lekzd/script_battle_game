@@ -38,7 +38,7 @@ module.exports = function(env = {}) {
                     ]
                 },
                 {
-                    test: /\.html?$/,
+                    test: /\.template\.html?$/,
                     use: [
                         {loader: 'raw-loader'}
                     ]

@@ -9,7 +9,7 @@ import {fromEvent, merge, Observable, Subject} from 'rxjs/index';
 import {auditTime, filter} from "rxjs/operators";
 import {SandboxAutocomplete} from './SandboxAutocomplete';
 import {Editor} from 'brace';
-import {debounceTime, map, sample, switchMap} from 'rxjs/internal/operators';
+import {debounceTime, map, sample, switchMap, tap} from 'rxjs/internal/operators';
 import {Toolbar} from "./Toolbar";
 import {Inject} from '../InjectDectorator';
 import {WebsocketConnection} from '../WebsocketConnection';
@@ -34,7 +34,8 @@ export class EditorComponent {
     get ctrlEnter$(): Observable<KeyboardEvent> {
         return fromEvent<KeyboardEvent>(document, 'keydown')
             .pipe(
-                filter(event => this.isWindowsCtrlEnter(event) || this.isUnixCtrlEnter(event))
+                filter(e => this.isWindowsCtrlEnter(e) || this.isUnixCtrlEnter(e) || this.isCtrlS(e)),
+                tap(e => e.preventDefault())
             );
     }
 
@@ -87,6 +88,10 @@ export class EditorComponent {
 
     private isUnixCtrlEnter(event: KeyboardEvent): boolean {
         return event.keyCode === 13 && (event.ctrlKey || event.metaKey);
+    }
+
+    private isCtrlS(event: KeyboardEvent): boolean {
+        return event.keyCode === 83 && (event.ctrlKey || event.metaKey);
     }
 
     private initEditor() {

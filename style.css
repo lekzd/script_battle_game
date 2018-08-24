@@ -38,7 +38,7 @@ body {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  border: 2px solid #007b9c;
+  border: 1px solid #007b9c;
   height: 100%;
   box-sizing: border-box;
 }
@@ -506,14 +506,14 @@ canvas {
     flex-direction: row;
     align-items: center;
     color: #69909f;
-    background: #272822;
+    background: #2a2e3c;
     box-sizing: border-box;
     padding: 0 15px;
     border-bottom: 1px solid #007a9c;
 }
 
 .name label {
-    width: 100px;
+    width: 50px;
 }
 
 .name input {
@@ -530,13 +530,14 @@ canvas {
 
 .name input:focus {
   outline: 1px solid #384863;
+  outline-offset: 0;
 }
 
 .sample-button {
-  border: 1px solid #343e4b;
+  border: 1px solid #3d4958;
   background: #2a2e3c;
   height: 28px;
-  color: #5e7087;
+  color: #618eb5;
   margin-left: 20px;
   padding: 0 20px;
   font-size: 16px;
