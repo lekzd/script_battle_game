@@ -8,7 +8,7 @@ import {LeftArmy} from "../../left/LeftArmy";
 import {EnemyState} from "./EnemyState";
 import {RightArmy} from "../../right/RightArmy";
 import {ISessionResult} from "../battle/BattleSession";
-import {IState} from '../state.model';
+import {IPlayerState, IState} from '../state.model';
 import {distinctUntilChanged} from 'rxjs/internal/operators';
 
 export class ClientApp {
@@ -140,12 +140,28 @@ export class ClientApp {
 
         const enemySide = side === BattleSide.left ? 'right' : 'left';
 
-        this.connection.onState$(enemySide).subscribe(state => {
+        this.connection.onState$<IPlayerState>(enemySide).subscribe(state => {
             this.enemyState.set(state);
+
+            if (enemySide === BattleSide.left && state.army) {
+                setInject(LeftArmy, state.army)
+            }
+
+            if (enemySide === BattleSide.right && state.army) {
+                setInject(RightArmy, state.army)
+            }
         });
 
-        this.connection.onState$(side).subscribe(state => {
+        this.connection.onState$<IPlayerState>(side).subscribe(state => {
             this.clientState.set(state || {});
+
+            if (side === BattleSide.left && state.army) {
+                setInject(LeftArmy, state.army)
+            }
+
+            if (side === BattleSide.right && state.army) {
+                setInject(RightArmy, state.army)
+            }
         });
 
     }

@@ -5,7 +5,7 @@ import "brace/mode/javascript";
 import "brace/theme/monokai"
 import "brace/ext/language_tools"
 
-import {fromEvent, merge, Observable, Subject} from 'rxjs/index';
+import {fromEvent, merge, NEVER, Observable, of, Subject} from 'rxjs/index';
 import {auditTime, filter} from "rxjs/operators";
 import {SandboxAutocomplete} from './SandboxAutocomplete';
 import {Editor} from 'brace';
@@ -89,6 +89,15 @@ export class EditorComponent {
             });
 
         this.toolbar.pushButtonClick$
+            .pipe(switchMap(response => {
+                if (this.clientState.name) {
+                    return of(response);
+                }
+
+                alert('Не забудьте вписать имя');
+
+                return NEVER;
+            }))
             .subscribe(() => {
                 this.pushCode$.next(this.editor.getValue());
             });
