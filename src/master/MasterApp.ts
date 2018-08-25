@@ -9,6 +9,7 @@ import {RightArmy} from "../right/RightArmy";
 import {Observable, fromEvent} from 'rxjs/index';
 import {IPlayerState} from '../common/state.model';
 import {filter} from 'rxjs/internal/operators';
+import {BattleSide} from '../common/battle/BattleSide';
 
 export class MasterApp {
 
@@ -42,8 +43,8 @@ export class MasterApp {
         setInject(LeftArmy, Object.assign({}, EMPTY_ARMY));
         setInject(RightArmy, Object.assign({}, EMPTY_ARMY));
 
-        this.leftCode = new CodeDisplay(document.querySelector('.leftCode'));
-        this.rightCode = new CodeDisplay(document.querySelector('.rightCode'));
+        this.leftCode = new CodeDisplay(document.querySelector('.leftCode'), BattleSide.left);
+        this.rightCode = new CodeDisplay(document.querySelector('.rightCode'), BattleSide.right);
 
         this.connection.onMessage$.subscribe(message => {
             this.onMessage(message)

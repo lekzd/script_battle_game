@@ -1,6 +1,8 @@
 import * as jsdiff from "diff";
 import {EMPTY_ARMY} from '../common/client/EMPTY_ARMY';
 import {IPlayerState} from '../common/state.model';
+import {ClientComponent} from '../common/client/ClientComponent';
+import {BattleSide} from '../common/battle/BattleSide';
 
 export class CodeDisplay {
 
@@ -16,11 +18,7 @@ export class CodeDisplay {
         return Array.from(this.container.querySelectorAll('.unit-img'));
     }
 
-    set name(value: string) {
-        (this.container.querySelector('.name') as HTMLElement).innerText = value;
-    }
-
-    constructor(private container: HTMLElement) {
+    constructor(private container: HTMLElement, side: BattleSide) {
         this.container.innerHTML = `
             <div class="name">
                 --без имени--
@@ -45,6 +43,8 @@ export class CodeDisplay {
         `;
 
         this.pre = this.container.querySelector('pre');
+
+        new ClientComponent(this.container.querySelector('.name'), side);
     }
 
     setCode(code: string) {
@@ -84,10 +84,6 @@ export class CodeDisplay {
 
                 unit.className = `unit-img ${type}`;
             })
-        }
-
-        if (state.name) {
-            this.name = state.name;
         }
 
         if (state.editor) {

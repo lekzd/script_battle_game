@@ -10,6 +10,7 @@ import {RightArmy} from "../../right/RightArmy";
 import {ISessionResult} from "../battle/BattleSession";
 import {IPlayerState, IState} from '../state.model';
 import {distinctUntilChanged} from 'rxjs/internal/operators';
+import {ClientComponent} from './ClientComponent';
 
 export class ClientApp {
 
@@ -138,7 +139,10 @@ export class ClientApp {
             this.battleGame.setState(BattleState.connectionClosed);
         });
 
-        const enemySide = side === BattleSide.left ? 'right' : 'left';
+        const enemySide = side === BattleSide.left ? BattleSide.right : BattleSide.left;
+
+        new ClientComponent(document.querySelector('#enemyClient'), enemySide);
+        new ClientComponent(document.querySelector('#myClient'), side);
 
         this.connection.onState$<IPlayerState>(enemySide).subscribe(state => {
             this.enemyState.set(state);

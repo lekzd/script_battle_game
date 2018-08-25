@@ -1,7 +1,7 @@
 body {
   background: #000;
   margin: 0;
-  font-family: Courier, sans-serif;
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Arial,sans-serif;
 }
 
 .player {
@@ -130,12 +130,12 @@ canvas {
   color: #79dc24;
   height: 100%;
   width: 50%;
-  font-family: monospace;
   font-size: 18px;
   display: none;
 }
 
 .codeDisplay pre {
+  font-family: monospace;
   margin: 0;
   flex-grow: 1;
   box-sizing: border-box;
@@ -547,4 +547,53 @@ canvas {
 
 .sample-button:hover {
   background: #343e4b;
+}
+
+.client {
+  display: flex;
+  align-items: center;
+}
+
+.client.right {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.client-status {
+  width: 110px;
+}
+
+.client-status.ready {
+  color: greenyellow;
+}
+
+.client-status.wait {
+  color: #826f2c;
+}
+
+.client-connection {
+  width: 10px;
+  height: 10px;
+  margin: 0 10px;
+  border-radius: 50%;
+  background: greenyellow;
+  position: relative;
+}
+
+.clients-display {
+  height: 47px;
+  min-height: 47px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #69909f;
+  background: #2a2e3c;
+  box-sizing: border-box;
+  padding: 0 15px;
+  border-bottom: 1px solid #007a9c;
+}
+
+.clients-display > .left,
+.clients-display > .right {
+  width: 50%;
 }
