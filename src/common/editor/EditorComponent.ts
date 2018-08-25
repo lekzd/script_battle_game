@@ -168,11 +168,11 @@ export class EditorComponent {
 
         this.getUniqueIdList()
             .forEach(id => {
-                sampleCode += `// проверка юнита по ID\r` +
-                              `if (is('${id}')) {\r` +
-                              `    // действие\r` +
-                              `   say('Привет, я ${id}!')\r` +
-                              `}\r`
+                sampleCode += `// проверка юнита по ID\n` +
+                              `if (is('${id}')) {\n` +
+                              `    // действие\n` +
+                              `   say('Привет, я ${id}!')\n` +
+                              `}\n`
         });
 
         if (sampleCode === '') {
