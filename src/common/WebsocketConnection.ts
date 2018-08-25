@@ -58,7 +58,7 @@ export class WebsocketConnection {
             .pipe(
                 filter(message => message.type === 'setState'),
                 pluck<IMessage, T>('data', ...path),
-                filter(data => !!data)
+                filter(data => data !== null || data !== undefined)
             )
     }
 
@@ -85,20 +85,6 @@ export class WebsocketConnection {
     registerAsRightPlayer() {
         this.send(JSON.stringify({
             type: 'registerRightPlayer'
-        }));
-    }
-
-    pushLeftCode(code: any) {
-        this.send(JSON.stringify({
-            type: 'pushLeftCode',
-            code
-        }));
-    }
-
-    pushRightCode(code: any) {
-        this.send(JSON.stringify({
-            type: 'pushRightCode',
-            code
         }));
     }
 

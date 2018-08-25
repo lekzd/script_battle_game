@@ -39,39 +39,15 @@ wsServer.on('request', (request) => {
             return;
         }
 
-        if (data.type === 'leftCode') {
-            connectionsStorage.setLeftCode(data.code);
-        }
-
-        if (data.type === 'rightCode') {
-            connectionsStorage.setRightCode(data.code);
-        }
-
-        if (data.type === 'leftState') {
-            connectionsStorage.setLeftState(data.state);
-        }
-
-        if (data.type === 'rightState') {
-            connectionsStorage.setRightState(data.state);
-        }
-
-        if (data.type === 'pushLeftCode') {
-            connectionsStorage.pushLeftCode(data.code);
-        }
-
-        if (data.type === 'pushRightCode') {
-            connectionsStorage.pushRightCode(data.code);
-        }
-
         if (data.type === 'sendWinner') {
             const state = Object.assign({}, data.sessionResult, {
                 state: {
-                    left: connectionsStorage.leftPlayer.state,
-                    right: connectionsStorage.rightPlayer.state
+                    left: connectionsStorage.state.left,
+                    right: connectionsStorage.state.right
                 },
                 code: {
-                    left: connectionsStorage.leftPlayer.code,
-                    right: connectionsStorage.rightPlayer.code
+                    left: connectionsStorage.state.left.editor.code,
+                    right: connectionsStorage.state.right.editor.code
                 }
             });
 

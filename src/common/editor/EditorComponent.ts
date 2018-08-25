@@ -16,7 +16,7 @@ import {WebsocketConnection} from '../WebsocketConnection';
 import {ClientState} from '../client/ClientState';
 import {BattleSide} from '../battle/BattleSide';
 import {CharactersList} from '../characters/CharactersList';
-import {IState} from '../state.model';
+import {IPlayerState, IState} from '../state.model';
 
 interface IPointer {
     x: number;
@@ -44,8 +44,12 @@ export class EditorComponent {
             );
     }
 
+    get nameInput(): HTMLInputElement {
+        return document.querySelector('#nickname');
+    }
+
     get loginInput$(): Observable<string> {
-        return fromEvent(document.querySelector('#nickname'), 'input')
+        return fromEvent(this.nameInput, 'input')
             .pipe(
                 debounceTime(300),
                 switchMap(event => [(event.target as HTMLInputElement).value])
@@ -110,6 +114,11 @@ export class EditorComponent {
                 this.generateSampleCode();
             });
 
+        this.connection.onState$<IPlayerState>(this.clientState.side)
+            .subscribe(state => {
+                this.nameInput.value = state.name || '';
+            })
+
     }
 
     private isWindowsCtrlEnter(event: KeyboardEvent): boolean {
@@ -159,7 +168,7 @@ export class EditorComponent {
         this.editor.setValue(sampleCode);
     }
 
-    getUniqueIdList(): Set<string> {
+    private getUniqueIdList(): Set<string> {
         const ids = Object.keys(this.clientState.army)
             .map(index => this.charactersList.get(this.clientState.army[index]))
             .filter(({id}) => id !== 'NULL')

@@ -9,6 +9,7 @@ import {EnemyState} from "./EnemyState";
 import {RightArmy} from "../../right/RightArmy";
 import {ISessionResult} from "../battle/BattleSession";
 import {IState} from '../state.model';
+import {distinctUntilChanged} from 'rxjs/internal/operators';
 
 export class ClientApp {
 
@@ -47,12 +48,19 @@ export class ClientApp {
             }
         });
 
-        this.editorComponent.pushCode$.subscribe(code => {
+        this.editorComponent.pushCode$.subscribe(() => {
+            const newState = <IState>{
+                left: {},
+                right: {}
+            };
+
             if (side === BattleSide.left) {
-                this.connection.pushLeftCode(code);
+                newState.left.isReady = true;
             } else {
-                this.connection.pushRightCode(code);
+                newState.right.isReady = true;
             }
+
+            this.connection.sendState(newState);
         });
 
         this.editorComponent.change$.subscribe(code => {
@@ -87,20 +95,24 @@ export class ClientApp {
             this.connection.sendState(newState);
         });
 
-        this.clientState.change$.subscribe(clientState=> {
-            const newState = <IState>{
-                left: {},
-                right: {}
-            };
+        this.clientState.change$
+            .pipe(
+                distinctUntilChanged((prev, current) => JSON.stringify(prev) === JSON.stringify(current))
+            )
+            .subscribe(clientState=> {
+                const newState = <IState>{
+                    left: {},
+                    right: {}
+                };
 
-            if (side === BattleSide.left) {
-                Object.assign(newState.left, clientState);
-            } else {
-                Object.assign(newState.right, clientState);
-            }
+                if (side === BattleSide.left) {
+                    Object.assign(newState.left, clientState);
+                } else {
+                    Object.assign(newState.right, clientState);
+                }
 
-            this.connection.sendState(newState);
-        });
+                this.connection.sendState(newState);
+            });
 
         this.connection.onMessage$.subscribe(message => {
             if (message.type === 'state') {
@@ -130,7 +142,11 @@ export class ClientApp {
 
         this.connection.onState$(enemySide).subscribe(state => {
             this.enemyState.set(state);
-        })
+        });
+
+        this.connection.onState$(side).subscribe(state => {
+            this.clientState.set(state || {});
+        });
 
     }
 

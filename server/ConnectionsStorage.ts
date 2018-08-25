@@ -14,7 +14,7 @@ export class ConnectionsStorage {
     leftPlayer = new Player(null);
     rightPlayer = new Player(null);
 
-    private state: Partial<IState> = {};
+    state: Partial<IState> = {};
 
     isRegistered(connection) {
         return this.connections.has(connection);
@@ -61,42 +61,6 @@ export class ConnectionsStorage {
 
             console.log(`connection with ${role} lost`);
         }
-    }
-
-    setLeftCode(code) {
-        this.leftPlayer.setCode(code);
-        this.master.dispatchLeftCode(code);
-    }
-
-    setRightCode(code) {
-        this.rightPlayer.setCode(code);
-        this.master.dispatchRightCode(code);
-    }
-
-    setLeftState(state) {
-        this.leftPlayer.state = Object.assign(this.leftPlayer.state, state);
-        this.rightPlayer.setEnemyState(state);
-        this.leftPlayer.setEnemyState(this.rightPlayer.state);
-        this.master.dispatchLeftState(state);
-        this.master.dispatchRightState(this.rightPlayer.state);
-    }
-
-    setRightState(state) {
-        this.rightPlayer.state = Object.assign(this.rightPlayer.state, state);
-        this.leftPlayer.setEnemyState(state);
-        this.rightPlayer.setEnemyState(this.leftPlayer.state);
-        this.master.dispatchRightState(state);
-        this.master.dispatchLeftState(this.leftPlayer.state);
-    }
-
-    pushLeftCode(code) {
-        this.master.dispatchLeftState(this.leftPlayer.state);
-        this.master.pushLeftCode(code);
-    }
-
-    pushRightCode(code) {
-        this.master.dispatchRightState(this.rightPlayer.state);
-        this.master.pushRightCode(code);
     }
 
     endSession(sessionResult) {

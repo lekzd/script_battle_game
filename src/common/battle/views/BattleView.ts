@@ -237,7 +237,7 @@ export class BattleView extends Phaser.Scene {
         });
     }
 
-    private updateUnitsFromState(units: BattleUnit[], state: Partial<IPlayerState>) {
+    private updateUnitsFromState(units: BattleUnit[], state: Partial<IPlayerState> = {}) {
         if (!state.army) {
             return;
         }

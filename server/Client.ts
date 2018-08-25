@@ -13,6 +13,11 @@ export abstract class Client {
     setConnection(connection: connection) {
         this.connection = connection;
 
+        this.send({
+            type: 'setState',
+            data: this.clientState
+        });
+
         this.messagesToSend.forEach(message => {
             this.send(message);
         });

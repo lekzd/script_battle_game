@@ -198,6 +198,7 @@ export class Toolbar {
             });
 
         this.clientState.change$
+            .pipe(filter(state => state.army))
             .subscribe(state => {
                 this.buttons.forEach((button, index) => {
                     const type = state.army[index];
