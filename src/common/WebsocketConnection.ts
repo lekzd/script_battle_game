@@ -58,7 +58,7 @@ export class WebsocketConnection {
             .pipe(
                 filter(message => message.type === 'setState'),
                 pluck<IMessage, T>('data', ...path),
-                filter(data => data !== null || data !== undefined)
+                filter(data => data !== null && data !== undefined)
             )
     }
 

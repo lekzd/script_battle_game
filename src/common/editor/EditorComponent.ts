@@ -9,7 +9,7 @@ import {fromEvent, merge, Observable, Subject} from 'rxjs/index';
 import {auditTime, filter} from "rxjs/operators";
 import {SandboxAutocomplete} from './SandboxAutocomplete';
 import {Editor} from 'brace';
-import {debounceTime, map, switchMap, tap} from 'rxjs/internal/operators';
+import {debounceTime, first, map, switchMap, tap} from 'rxjs/internal/operators';
 import {Toolbar} from "./Toolbar";
 import {Inject} from '../InjectDectorator';
 import {WebsocketConnection} from '../WebsocketConnection';
@@ -115,6 +115,7 @@ export class EditorComponent {
             });
 
         this.connection.onState$<IPlayerState>(this.clientState.side)
+            .pipe(first())
             .subscribe(state => {
                 this.nameInput.value = state.name || '';
 
