@@ -117,6 +117,10 @@ export class EditorComponent {
         this.connection.onState$<IPlayerState>(this.clientState.side)
             .subscribe(state => {
                 this.nameInput.value = state.name || '';
+
+                if (state.editor && state.editor.code) {
+                    this.editor.setValue(state.editor.code);
+                }
             })
 
     }
