@@ -3,6 +3,7 @@ import {Subject} from 'rxjs/index';
 import {Inject} from '../InjectDectorator';
 import {WebsocketConnection} from '../WebsocketConnection';
 import {EMPTY_ARMY} from "./EMPTY_ARMY";
+import {IPlayerState} from '../state.model';
 
 export class ClientState {
 
@@ -15,18 +16,10 @@ export class ClientState {
 
     change$ = new Subject<any>();
 
-    set(newState: any) {
+    set(newState: Partial<IPlayerState>) {
         Object.assign(this, {}, newState);
 
         this.change$.next(newState);
-
-        if (this.side === BattleSide.left) {
-            this.connection.sendLeftState(newState);
-        }
-
-        if (this.side === BattleSide.right) {
-            this.connection.sendRightState(newState);
-        }
     }
 
     clear() {

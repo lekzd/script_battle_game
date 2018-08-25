@@ -88,34 +88,6 @@ export class WebsocketConnection {
         }));
     }
 
-    sendLeftCode(code: string) {
-        this.send(JSON.stringify({
-            type: 'leftCode',
-            code
-        }));
-    }
-
-    sendRightCode(code: string) {
-        this.send(JSON.stringify({
-            type: 'rightCode',
-            code
-        }));
-    }
-
-    sendLeftState(state: any) {
-        this.send(JSON.stringify({
-            type: 'leftState',
-            state
-        }));
-    }
-
-    sendRightState(state: any) {
-        this.send(JSON.stringify({
-            type: 'rightState',
-            state
-        }));
-    }
-
     pushLeftCode(code: any) {
         this.send(JSON.stringify({
             type: 'pushLeftCode',

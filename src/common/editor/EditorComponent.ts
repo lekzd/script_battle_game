@@ -16,6 +16,7 @@ import {WebsocketConnection} from '../WebsocketConnection';
 import {ClientState} from '../client/ClientState';
 import {BattleSide} from '../battle/BattleSide';
 import {CharactersList} from '../characters/CharactersList';
+import {IState} from '../state.model';
 
 interface IPointer {
     x: number;
@@ -90,11 +91,18 @@ export class EditorComponent {
 
         this.loginInput$
             .subscribe(value => {
+                const newState = <IState>{
+                    left: {},
+                    right: {}
+                };
+
                 if (this.clientState.side === BattleSide.left) {
-                    this.connection.sendLeftState({name: value});
+                    newState.left.name = value;
                 } else {
-                    this.connection.sendRightState({name: value});
+                    newState.right.name = value;
                 }
+
+                this.connection.sendState(newState);
             });
 
         this.sampleClick$

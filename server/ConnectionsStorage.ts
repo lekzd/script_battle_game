@@ -106,6 +106,8 @@ export class ConnectionsStorage {
     }
 
     newSession() {
+        this.state = {};
+
         this.master.dispatchNewSession();
         this.leftPlayer.dispatchNewSession();
         this.rightPlayer.dispatchNewSession();

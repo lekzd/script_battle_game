@@ -12,6 +12,8 @@ export interface IEditorState {
 export interface IPlayerState {
     name: string;
     side: BattleSide;
+    isReady: boolean;
+    isConnected: boolean;
 
     army: {
         0: string;

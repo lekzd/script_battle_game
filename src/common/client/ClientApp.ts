@@ -56,11 +56,18 @@ export class ClientApp {
         });
 
         this.editorComponent.change$.subscribe(code => {
+            const newState = <IState>{
+                left: {editor: {}},
+                right: {editor: {}}
+            };
+
             if (side === BattleSide.left) {
-                this.connection.sendLeftCode(code);
+                newState.left.editor.code = code;
             } else {
-                this.connection.sendRightCode(code);
+                newState.right.editor.code = code;
             }
+
+            this.connection.sendState(newState);
         });
 
         this.editorComponent.editorScroll$.subscribe(pointer => {
@@ -75,6 +82,21 @@ export class ClientApp {
             } else {
                 newState.right.editor.scrollX = pointer.x;
                 newState.right.editor.scrollY = pointer.y;
+            }
+
+            this.connection.sendState(newState);
+        });
+
+        this.clientState.change$.subscribe(clientState=> {
+            const newState = <IState>{
+                left: {},
+                right: {}
+            };
+
+            if (side === BattleSide.left) {
+                Object.assign(newState.left, clientState);
+            } else {
+                Object.assign(newState.right, clientState);
             }
 
             this.connection.sendState(newState);
@@ -103,6 +125,12 @@ export class ClientApp {
         this.connection.onClose$.subscribe(() => {
             this.battleGame.setState(BattleState.connectionClosed);
         });
+
+        const enemySide = side === BattleSide.left ? 'right' : 'left';
+
+        this.connection.onState$(enemySide).subscribe(state => {
+            this.enemyState.set(state);
+        })
 
     }
 

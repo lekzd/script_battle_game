@@ -17,6 +17,7 @@ import {RightArmy} from "../../../right/RightArmy";
 import {timer} from "rxjs/internal/observable/timer";
 import {BattleStatistics} from "../BattleStatistics";
 import {BulletDrawer, BulletType} from "../BulletDrawer";
+import {IPlayerState} from '../../state.model';
 
 export class BattleView extends Phaser.Scene {
 
@@ -59,32 +60,12 @@ export class BattleView extends Phaser.Scene {
                 this.createBullet(fromUnit, toUnit, type);
             });
 
-        this.enemyState.change$
-            .subscribe(state => {
-                if (this.clientState.side === BattleSide.left) {
-                    this.updateUnitsFromState(this.rightUnits, state);
-                } else {
-                    this.updateUnitsFromState(this.leftUnits, state);
-                }
-            });
+        this.connection.onState$('left').subscribe(state => {
+            this.updateUnitsFromState(this.leftUnits, state);
+        });
 
-        this.clientState.change$
-            .subscribe(state => {
-                if (this.clientState.side === BattleSide.right) {
-                    this.updateUnitsFromState(this.rightUnits, state);
-                } else {
-                    this.updateUnitsFromState(this.leftUnits, state);
-                }
-            });
-
-        this.connection.onMessage$.subscribe(message => {
-            if (message.type === 'leftState') {
-                this.updateUnitsFromState(this.leftUnits, message.data.state);
-            }
-
-            if (message.type === 'rightState') {
-                this.updateUnitsFromState(this.rightUnits, message.data.state);
-            }
+        this.connection.onState$('right').subscribe(state => {
+            this.updateUnitsFromState(this.rightUnits, state);
         });
 
         this.updateTimer$.subscribe(() => {
@@ -256,7 +237,7 @@ export class BattleView extends Phaser.Scene {
         });
     }
 
-    private updateUnitsFromState(units: BattleUnit[], state: any) {
+    private updateUnitsFromState(units: BattleUnit[], state: Partial<IPlayerState>) {
         if (!state.army) {
             return;
         }

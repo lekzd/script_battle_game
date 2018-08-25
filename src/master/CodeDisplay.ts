@@ -92,6 +92,10 @@ export class CodeDisplay {
 
         if (state.editor) {
             this.pre.scroll(state.editor.scrollX || 0, state.editor.scrollY || 0);
+
+            if (state.editor.code !== undefined) {
+                this.setCode(state.editor.code);
+            }
         }
     }
 

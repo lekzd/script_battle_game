@@ -59,14 +59,14 @@ export class MasterApp {
             this.connection.sendNewSession();
         });
 
-        this.connection.onState$('left')
-            .subscribe((state: IPlayerState) => {
-                this.leftCode.setState(state);
-            });
-
         this.connection.onState$('right')
             .subscribe((state: IPlayerState) => {
                 this.rightCode.setState(state);
+            });
+
+        this.connection.onState$('left')
+            .subscribe((state: IPlayerState) => {
+                this.leftCode.setState(state);
             });
 
         // setTimeout(() => {
@@ -96,14 +96,6 @@ export class MasterApp {
     private onMessage(message: IMessage) {
         if (message.type === 'state') {
             this.setState(message.data);
-        }
-
-        if (message.type === 'leftCode') {
-            this.leftCode.setCode(message.data.code);
-        }
-
-        if (message.type === 'rightCode') {
-            this.rightCode.setCode(message.data.code);
         }
 
         if (message.type === 'runCode') {
