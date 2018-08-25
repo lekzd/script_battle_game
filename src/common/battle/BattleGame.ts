@@ -6,6 +6,7 @@ import {ISessionResult} from "./BattleSession";
 import {ResultsView} from "./views/ResultsView";
 import {WinView} from "./views/WinView";
 import {LostView} from "./views/LostView";
+import {AttentionView} from './views/AttentionView';
 
 export enum BattleState {
     wait = 'waiting',
@@ -13,6 +14,7 @@ export enum BattleState {
     results = 'results',
     win = 'win',
     lost = 'lost',
+    attention = 'attention',
     connectionClosed = 'connectionClosed'
 }
 
@@ -29,7 +31,7 @@ export class BattleGame {
             width: 400,
             height: 300,
             parent: 'display',
-            scene: [WaitingView, BattleView, ConnectionClosedView, ResultsView, WinView, LostView]
+            scene: [WaitingView, BattleView, ConnectionClosedView, ResultsView, WinView, LostView, AttentionView]
         };
 
         this.game = new Phaser.Game(config);

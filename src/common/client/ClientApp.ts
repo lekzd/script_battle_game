@@ -9,8 +9,10 @@ import {EnemyState} from "./EnemyState";
 import {RightArmy} from "../../right/RightArmy";
 import {ISessionResult} from "../battle/BattleSession";
 import {IPlayerState, IState} from '../state.model';
-import {distinctUntilChanged} from 'rxjs/internal/operators';
+import {distinctUntilChanged, filter} from 'rxjs/internal/operators';
+import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {ClientComponent} from './ClientComponent';
+import {Observable} from 'rxjs/index';
 
 export class ClientApp {
 
@@ -18,6 +20,16 @@ export class ClientApp {
     @Inject(EnemyState) private enemyState: EnemyState;
     @Inject(ClientState) private clientState: ClientState;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
+
+    get leftIsReady$(): Observable<boolean> {
+        return this.connection.onState$<boolean>('left', 'isReady')
+            .pipe(filter(isReady => isReady === true));
+    }
+
+    get rightIsReady$(): Observable<boolean> {
+        return this.connection.onState$<boolean>('right', 'isReady')
+            .pipe(filter(isReady => isReady === true));
+    }
 
     private editorComponent: EditorComponent;
 
@@ -167,6 +179,11 @@ export class ClientApp {
                 setInject(RightArmy, state.army)
             }
         });
+
+        combineLatest(this.leftIsReady$, this.rightIsReady$)
+            .subscribe(() => {
+                this.battleGame.setState(BattleState.attention);
+            });
 
     }
 
