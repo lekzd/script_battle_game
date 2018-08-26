@@ -23,11 +23,17 @@ export class ClientComponent {
     }
 
     render(state: Partial<IPlayerState>): string {
+        let status = 'оффлайн';
+
+        if (state.isConnected) {
+            status = state.isReady ? 'готов' : 'пишет код';
+        }
+
         return `
             <div class="client ${this.side}">
                 <div class="client-connection ${state.isConnected ? 'active' : ''}"></div>
                 <div class="client-status ${state.isReady ? 'ready' : 'wait'}">
-                    ${state.isReady ? 'готов' : 'пишет код'}
+                    ${status}
                 </div>
                 <div class="client-name">
                     ${state.name || EMPTY_NAME}

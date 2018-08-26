@@ -20,12 +20,10 @@
     "diff": "^3.5.0",
     "phaser": "^3.11.0",
     "rxjs": "^6.2.2",
-    "spel2js": "^0.2.5",
     "ts-node": "^7.0.1",
     "websocket": "^1.0.26"
   },
   "devDependencies": {
-    "@develephant/types-phaser": "^1.0.1",
     "@types/websocket": "0.0.39",
     "@types/node": "^10.9.1",
     "html-webpack-plugin": "^3.2.0",

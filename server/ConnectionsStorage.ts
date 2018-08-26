@@ -1,6 +1,6 @@
 import {Master} from "./Master";
 import {Player} from "./Player";
-import {IState} from '../src/common/state.model';
+import {IPlayerState, IState} from '../src/common/state.model';
 import {mergeDeep} from '../src/common/helpers/mergeDeep';
 
 type Partial<T> = {
@@ -35,6 +35,13 @@ export class ConnectionsStorage {
 
     tryRegisterEntity(connection, name) {
         if (this[name].connection === null) {
+            if (name === 'leftPlayer') {
+                this.setState({left: <IPlayerState>{isConnected: true}});
+            }
+            if (name === 'rightPlayer') {
+                this.setState({right: <IPlayerState>{isConnected: true}});
+            }
+
             this[name].setConnection(connection);
 
             this.connections.set(connection, name);
@@ -53,13 +60,20 @@ export class ConnectionsStorage {
 
     onConnectionLost(connection) {
         if (this.isRegistered(connection)) {
-            const role = this.connections.get(connection);
+            const name = this.connections.get(connection);
 
             this.connections.delete(connection);
 
-            this[role].connection = null;
+            this[name].connection = null;
 
-            console.log(`connection with ${role} lost`);
+            if (name === 'leftPlayer') {
+                this.setState({left: <IPlayerState>{isConnected: false}});
+            }
+            if (name === 'rightPlayer') {
+                this.setState({right: <IPlayerState>{isConnected: false}});
+            }
+
+            console.log(`connection with ${name} lost`);
         }
     }
 

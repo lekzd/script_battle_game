@@ -28,6 +28,10 @@ export abstract class Client {
     setState(newState: Partial<IState>) {
         this.clientState = mergeDeep(this.clientState, newState);
 
+        if (!this.connection) {
+            return;
+        }
+
         this.send({
             type: 'setState',
             data: this.clientState

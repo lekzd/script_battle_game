@@ -79,6 +79,8 @@ body {
   position: relative;
   height: 100%;
   width: 800px;
+  display: flex;
+  flex-direction: column;
   max-width: 800px;
   box-sizing: border-box;
   flex-grow: 1;
@@ -126,10 +128,10 @@ canvas {
 .codeDisplay {
   position: absolute;
   top: 47px;
+  bottom: 0;
   flex-direction: column;
   box-sizing: border-box;
   color: #79dc24;
-  height: 100%;
   width: 50%;
   font-size: 18px;
   display: none;
@@ -577,8 +579,12 @@ canvas {
   height: 10px;
   margin: 0 10px;
   border-radius: 50%;
-  background: greenyellow;
+  background: #861815;
   position: relative;
+}
+
+.client-connection.active {
+  background: greenyellow;
 }
 
 .clients-display {

@@ -16,6 +16,10 @@ export class ClientState {
 
     change$ = new Subject<any>();
 
+    setFromServer(newState: Partial<IPlayerState>) {
+        Object.assign(this, {}, newState);
+    }
+
     set(newState: Partial<IPlayerState>) {
         Object.assign(this, {}, newState);
 

@@ -169,7 +169,7 @@ export class ClientApp {
         });
 
         this.connection.onState$<IPlayerState>(side).subscribe(state => {
-            this.clientState.set(state || {});
+            this.clientState.setFromServer(state || {});
 
             if (side === BattleSide.left && state.army) {
                 setInject(LeftArmy, state.army)
