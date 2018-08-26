@@ -10,6 +10,7 @@ import {Observable, fromEvent} from 'rxjs/index';
 import {IPlayerState} from '../common/state.model';
 import {filter} from 'rxjs/internal/operators';
 import {BattleSide} from '../common/battle/BattleSide';
+import {ClientComponent} from '../common/client/ClientComponent';
 
 export class MasterApp {
 
@@ -39,6 +40,9 @@ export class MasterApp {
 
     constructor() {
         this.connection.registerAsMaster();
+
+        new ClientComponent(this.container.querySelector('#leftClient'), BattleSide.left);
+        new ClientComponent(this.container.querySelector('#rightClient'), BattleSide.right);
 
         setInject(LeftArmy, Object.assign({}, EMPTY_ARMY));
         setInject(RightArmy, Object.assign({}, EMPTY_ARMY));

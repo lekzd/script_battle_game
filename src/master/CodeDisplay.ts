@@ -20,9 +20,6 @@ export class CodeDisplay {
 
     constructor(private container: HTMLElement, side: BattleSide) {
         this.container.innerHTML = `
-            <div class="name">
-                --без имени--
-            </div>
             <div class="code-container">
                 <div class="army-display">
                     <div id="select-1" class="toolbar-button select-button">
@@ -43,8 +40,6 @@ export class CodeDisplay {
         `;
 
         this.pre = this.container.querySelector('pre');
-
-        new ClientComponent(this.container.querySelector('.name'), side);
     }
 
     setCode(code: string) {

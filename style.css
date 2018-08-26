@@ -13,6 +13,7 @@ body {
 .master {
   position: relative;
   display: flex;
+  flex-direction: column;
   width: 100vw;
   height: 100vh;
 }
@@ -124,7 +125,7 @@ canvas {
 
 .codeDisplay {
   position: absolute;
-  top: 0;
+  top: 47px;
   flex-direction: column;
   box-sizing: border-box;
   color: #79dc24;
