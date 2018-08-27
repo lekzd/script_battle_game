@@ -3,6 +3,7 @@ import {Inject} from "../../InjectDectorator";
 import {CharactersList} from "../../characters/CharactersList";
 import {WebsocketConnection} from "../../WebsocketConnection";
 import {Environment} from '../../Environment';
+import {font} from '../../helpers/font';
 
 export class WaitingView extends Phaser.Scene {
 
@@ -27,7 +28,7 @@ export class WaitingView extends Phaser.Scene {
         this.charactersList.load(this.load);
 
         const text = this.add.text(200, 150, 'Соединение с сервером...', {
-            font: '16px Courier',
+            font: font(16),
             align: 'right',
             fill: '#00ff00'
         });

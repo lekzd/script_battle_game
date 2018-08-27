@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import {font} from '../../helpers/font';
 
 export class WinView extends Phaser.Scene {
 
@@ -18,7 +19,7 @@ export class WinView extends Phaser.Scene {
         graphics.fillRect(0, 0, 400, 300);
 
         const text = this.add.text(200, 150, 'Победа!', {
-            font: '26px Courier',
+            font: font(26),
             fill: '#00cc00'
         });
 

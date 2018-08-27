@@ -4,6 +4,7 @@ import {BattleFieldModel} from '../BattleFieldModel';
 import {Inject} from '../../InjectDectorator';
 import {BattleSide} from '../BattleSide';
 import {BattleUnit} from '../BattleUnit';
+import {font} from '../../helpers/font';
 
 export class ResultsView extends Phaser.Scene {
 
@@ -27,7 +28,7 @@ export class ResultsView extends Phaser.Scene {
         graphics.fillRect(0, 0, 400, 300);
 
         this.text = this.add.text(200, 150, 'Результаты', {
-            font: '16px Courier',
+            font: font(16),
             align: 'right',
             fill: '#00ff00'
         });

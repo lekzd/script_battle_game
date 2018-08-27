@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import {font} from '../../helpers/font';
 
 export class LostView extends Phaser.Scene {
 
@@ -18,7 +19,7 @@ export class LostView extends Phaser.Scene {
         graphics.fillRect(0, 0, 400, 300);
 
         const text = this.add.text(200, 150, 'Поражение', {
-            font: '26px Courier',
+            font: font(26),
             fill: '#cc0000'
         });
 

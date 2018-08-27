@@ -1,4 +1,7 @@
 import Phaser from 'phaser';
+import {interval, Observable} from 'rxjs/index';
+import {map, take} from 'rxjs/internal/operators';
+import {font} from '../../helpers/font';
 
 export class AttentionView extends Phaser.Scene {
 
@@ -6,6 +9,16 @@ export class AttentionView extends Phaser.Scene {
         super({
             key: 'attention'
         });
+    }
+
+    get timer$(): Observable<number> {
+        let time = 3;
+
+        return interval(1000)
+            .pipe(
+                take(4),
+                map(() => time--)
+            )
     }
 
     create() {
@@ -17,11 +30,20 @@ export class AttentionView extends Phaser.Scene {
         graphics.setAlpha(0.6);
         graphics.fillRect(0, 0, 400, 300);
 
-        const text = this.add.text(200, 150, 'Внимание на главный экран!', {
-            font: '26px Courier',
+        this.add.text(200, 110, 'Внимание на главный экран!', {
+            font: font(16),
+            fill: '#ccc349'
+        }).setOrigin(.5);
+
+        const timeText = this.add.text(200, 160, '3', {
+            font: font(26),
             fill: '#ccc349'
         });
 
-        text.setOrigin(.5);
+        timeText.setOrigin(.5);
+
+        this.timer$.subscribe(seconds => {
+            timeText.setText(seconds.toString());
+        })
     }
 }

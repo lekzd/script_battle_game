@@ -1,5 +1,6 @@
 import {BattleSide} from "./BattleSide";
 import {color} from "../helpers/color";
+import {font} from '../helpers/font';
 
 const MAX_DAMAGE = 500;
 
@@ -33,8 +34,8 @@ export class BattleStatistics {
     }
 
     private generateDamageText(): Phaser.GameObjects.Text {
-        return this.scene.add.text(0, 0, '0', {
-            font: '16px Courier',
+        return this.scene.add.text(0, -3, '0', {
+            font: font(16),
             fill: '#faff39'
         });
     }

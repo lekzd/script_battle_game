@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import {font} from '../../helpers/font';
 
 export class ConnectionClosedView extends Phaser.Scene {
 
@@ -10,7 +11,7 @@ export class ConnectionClosedView extends Phaser.Scene {
 
     create() {
         const text = this.add.text(200, 150, 'Соединение потеряно', {
-            font: '16px Courier',
+            font: font(16),
             fill: '#cc0000'
         });
 
