@@ -44,7 +44,7 @@ export class CodeSandbox {
                 const unit = message.data;
                 
                 const unitApi = (${getUnitApi.toString()})(unit, actions);
-                const apis = {console, Math, parseInt, parseFloat};
+                const apis = {console, Math, parseInt, parseFloat, Object, JSON};
                 const nativePostMessage = this.postMessage;
                 
                 const sandboxProxy = new Proxy(Object.assign(unitApi, apis), {has, get});
