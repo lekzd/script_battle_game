@@ -13,6 +13,7 @@ import {distinctUntilChanged, filter} from 'rxjs/internal/operators';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {ClientComponent} from './ClientComponent';
 import {Observable} from 'rxjs/index';
+import "../console/BattleConsole";
 
 export class ClientApp {
 

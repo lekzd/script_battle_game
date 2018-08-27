@@ -29,7 +29,7 @@ export class BattleGame {
         const config = {
             type: Phaser.AUTO,
             width: 400,
-            height: 300,
+            height: 275,
             parent: 'display',
             scene: [WaitingView, BattleView, ConnectionClosedView, ResultsView, WinView, LostView, AttentionView]
         };

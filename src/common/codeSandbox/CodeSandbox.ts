@@ -1,5 +1,12 @@
 import {BattleUnit} from "../battle/BattleUnit";
 import {getUnitApi} from './getUnitApi';
+import {ConsoleService} from "../console/ConsoleService";
+import {Inject} from "../InjectDectorator";
+import {fromEvent} from "rxjs/internal/observable/fromEvent";
+import {timer} from "rxjs/internal/observable/timer";
+import {catchError, filter, finalize, map, switchMap, takeUntil} from "rxjs/operators";
+import {merge} from "rxjs/internal/observable/merge";
+import {throwError} from "rxjs/internal/observable/throwError";
 
 export interface IAction {
     action: string;
@@ -9,28 +16,48 @@ export interface IAction {
     text?: any;
 }
 
+interface IWorkerResponse {
+    type: 'log' | 'error' | 'success';
+    data: any;
+}
+
 const MAX_EVAL_TIMEOUT = 1000;
 
 export class CodeSandbox {
 
+    @Inject(ConsoleService) private consoleService: ConsoleService;
+
     eval(code: string, unit: BattleUnit): Promise<IAction[]> {
         const worker = new Worker(this.getJSBlob(code));
 
-        let resolved = false;
+        const message$ = fromEvent<MessageEvent>(worker, 'message')
+            .pipe(map(e => <IWorkerResponse>JSON.parse(e.data)));
+
+        const successMessage$ = message$
+            .pipe(filter(({type}) => type === 'success'));
+
+        const timeoutClose$ = timer(MAX_EVAL_TIMEOUT).pipe(
+            takeUntil(successMessage$),
+            switchMap(() => throwError(`Скрипт исполнялся более 1 секунды и был остановлен!`))
+        );
 
         return new Promise<IAction[]>((resolve, reject) => {
-            worker.onmessage = (e) => {
-                resolved = true;
-                resolve(JSON.parse(e.data));
-                worker.terminate();
-            };
 
-            setTimeout(() => {
-                if (!resolved) {
-                    reject(`Max evaluation timeout ${MAX_EVAL_TIMEOUT}ms exceeded`);
+            merge(timeoutClose$, message$)
+                .pipe(
+                    map(e => e.data),
+                    catchError(message => {
+                        this.consoleService.vmLog(message);
+                        reject(message);
+                        worker.terminate();
+
+                        return [];
+                    })
+                )
+                .subscribe(data => {
+                    resolve(data);
                     worker.terminate();
-                }
-            }, MAX_EVAL_TIMEOUT);
+                });
 
             worker.postMessage(unit.api); // Start the worker.
         });
@@ -74,7 +101,7 @@ export class CodeSandbox {
                     return target[key];
                 }
             
-                nativePostMessage(JSON.stringify(actions));
+                nativePostMessage(JSON.stringify({type: 'success', data: actions}));
             }`;
     }
 

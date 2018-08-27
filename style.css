@@ -23,16 +23,13 @@ body {
 .display canvas,
 .playerDisplay canvas {
   width: 800px;
-  height: 600px;
+  height: 550px;
+  min-height: 550px;
 }
 
 .display {
   margin: auto;
   border: 3px solid gold;
-}
-
-.playerDisplay {
-  height: 100%;
 }
 
 .editor {
@@ -603,4 +600,39 @@ canvas {
 .clients-display > .left,
 .clients-display > .right {
   width: 50%;
+}
+
+battle-console {
+  position: relative;
+  display: block;
+  border-top: 1px solid #297e88;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+battle-console .console-lines {
+
+}
+
+battle-console .line {
+  display: flex;
+  flex-direction: row;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, .5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+battle-console .line.service {
+  background: #0d0d1a;
+}
+
+battle-console .line.runtime {
+  background: #3a090e;
+}
+
+battle-console .source {
+  width: 100px;
+  text-align: right;
+  padding-right: 5px;
+  opacity: .5;
 }

@@ -10,6 +10,7 @@ import {Subject} from "rxjs/internal/Subject";
 import {ClientState} from "../client/ClientState";
 import {CharacterType} from "../characters/CharactersList";
 import {BulletType} from "./BulletDrawer";
+import {ConsoleService} from "../console/ConsoleService";
 
 const FIELD_WIDTH = 12;
 const FIELD_HEIGHT = 9;
@@ -20,6 +21,7 @@ export class BattleFieldModel {
 
     @Inject(Astar) private astar: Astar;
     @Inject(ClientState) private clientState: ClientState;
+    @Inject(ConsoleService) private consoleService: ConsoleService;
     @Inject(BattleFieldDrawer) private battleFieldDrawer: BattleFieldDrawer;
 
     private grid = new Grid<BattleUnit>(FIELD_WIDTH);
@@ -316,6 +318,9 @@ export class BattleFieldModel {
     }
 
     private dispatchError(errorText: string) {
+
+        this.consoleService.runtimeLog(errorText);
+
         throw new Error(errorText);
     }
 }
