@@ -1,10 +1,10 @@
 import {BattleUnit} from "../battle/BattleUnit";
 import {getUnitApi} from './getUnitApi';
-import {ConsoleService} from "../console/ConsoleService";
+import {ConsoleService, MessageType} from "../console/ConsoleService";
 import {Inject} from "../InjectDectorator";
 import {fromEvent} from "rxjs/internal/observable/fromEvent";
 import {timer} from "rxjs/internal/observable/timer";
-import {catchError, filter, finalize, map, switchMap, takeUntil} from "rxjs/operators";
+import {catchError, filter, map, switchMap, takeUntil} from "rxjs/operators";
 import {merge} from "rxjs/internal/observable/merge";
 import {throwError} from "rxjs/internal/observable/throwError";
 
@@ -17,7 +17,7 @@ export interface IAction {
 }
 
 interface IWorkerResponse {
-    type: 'log' | 'error' | 'success';
+    type: MessageType;
     data: any;
 }
 
@@ -34,7 +34,7 @@ export class CodeSandbox {
             .pipe(map(e => <IWorkerResponse>JSON.parse(e.data)));
 
         const successMessage$ = message$
-            .pipe(filter(({type}) => type === 'success'));
+            .pipe(filter(({type}) => type === MessageType.Success));
 
         const timeoutClose$ = timer(MAX_EVAL_TIMEOUT).pipe(
             takeUntil(successMessage$),
@@ -43,7 +43,19 @@ export class CodeSandbox {
 
         return new Promise<IAction[]>((resolve, reject) => {
 
-            merge(timeoutClose$, message$)
+            message$
+                .pipe(
+                    takeUntil(successMessage$),
+                    takeUntil(timeoutClose$)
+                )
+                .subscribe(message => {
+                   this.consoleService.next({
+                       source: message.type,
+                       text: message.data.join()
+                   })
+                });
+
+            merge(timeoutClose$, successMessage$)
                 .pipe(
                     map(e => e.data),
                     catchError(message => {
@@ -74,6 +86,8 @@ export class CodeSandbox {
                 const apis = {console, Math, parseInt, parseFloat, Object, JSON};
                 const nativePostMessage = this.postMessage;
                 
+                ['log', 'info', 'warn', 'error'].forEach(patchConsoleMethod);
+                
                 const sandboxProxy = new Proxy(Object.assign(unitApi, apis), {has, get});
                 
                 Object.keys(this).forEach(key => {
@@ -99,6 +113,16 @@ export class CodeSandbox {
                 function get (target, key) {
                     if (key === Symbol.unscopables) return undefined;
                     return target[key];
+                }
+                
+                function patchConsoleMethod(name) {
+                    const nativeMethod = console[name].bind(console);
+                    
+                    console[name] = (...attributes) => {
+                        nativePostMessage(JSON.stringify({type: name, data: attributes}));
+                        
+                        nativeMethod(...attributes);
+                    }
                 }
             
                 nativePostMessage(JSON.stringify({type: 'success', data: actions}));

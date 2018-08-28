@@ -1,14 +1,19 @@
 import {BehaviorSubject} from "rxjs/internal/BehaviorSubject";
 
-export enum MessageSource {
+export enum MessageType {
     VM = 'vm',
     Runtime = 'runtime',
     Unexpected = 'unexpected',
-    Service = 'service'
+    Service = 'service',
+    Log = 'log',
+    Info = 'info',
+    Warn = 'warn',
+    Error = 'error',
+    Success = 'success'
 }
 
 export interface IConsoleLine {
-    source: MessageSource;
+    source: MessageType;
     text: string;
 }
 
@@ -16,21 +21,21 @@ export class ConsoleService extends BehaviorSubject<IConsoleLine> {
 
     constructor() {
         super({
-            source: MessageSource.Service,
+            source: MessageType.Service,
             text: 'hello!'
         })
     }
 
     vmLog(...attributes) {
         this.next({
-            source: MessageSource.VM,
+            source: MessageType.VM,
             text: attributes.join()
         })
     }
 
     runtimeLog(...attributes) {
         this.next({
-            source: MessageSource.Runtime,
+            source: MessageType.Runtime,
             text: attributes.join()
         })
     }
