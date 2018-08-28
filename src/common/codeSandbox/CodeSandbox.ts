@@ -119,6 +119,18 @@ export class CodeSandbox {
                     const nativeMethod = console[name].bind(console);
                     
                     console[name] = (...attributes) => {
+                        attributes = attributes.map(attr => {
+                            if (attr instanceof Error) {
+                                return attr.constructor.name + ': ' + attr.message;
+                            }
+                            
+                            if (attr instanceof Object) {
+                                return JSON.stringify(attr);
+                            }
+                            
+                            return attr;
+                        })
+                    
                         nativePostMessage(JSON.stringify({type: name, data: attributes}));
                         
                         nativeMethod(...attributes);

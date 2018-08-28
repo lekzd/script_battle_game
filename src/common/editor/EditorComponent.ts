@@ -17,6 +17,7 @@ import {ClientState} from '../client/ClientState';
 import {BattleSide} from '../battle/BattleSide';
 import {CharactersList} from '../characters/CharactersList';
 import {IPlayerState, IState} from '../state.model';
+import {ConsoleService} from "../console/ConsoleService";
 
 interface IPointer {
     x: number;
@@ -31,6 +32,7 @@ export class EditorComponent {
     toolbar: Toolbar;
 
     @Inject(ClientState) private clientState: ClientState;
+    @Inject(ConsoleService) private consoleService: ConsoleService;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
     @Inject(CharactersList) private charactersList: CharactersList;
 
@@ -94,11 +96,12 @@ export class EditorComponent {
                     return of(response);
                 }
 
-                alert('Не забудьте вписать имя');
+                this.consoleService.serviceLog('Не забудьте вписать имя!');
 
                 return NEVER;
             }))
             .subscribe(() => {
+                this.consoleService.infoLog('Кажется, вы готовы к битве! Но код еще можно редактировать =)');
                 this.pushCode$.next(this.editor.getValue());
             });
 

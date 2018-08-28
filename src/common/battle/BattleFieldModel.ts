@@ -122,7 +122,7 @@ export class BattleFieldModel {
 
         if (action.action === 'say') {
             if (!action.text) {
-                this.dispatchError(`Не задан обязательный параметр text`);
+                this.dispatchError(`say(text) Не задан обязательный параметр text`);
             }
 
             return unit.sayAction(action.text.toString());

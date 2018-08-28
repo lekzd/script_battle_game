@@ -31,7 +31,7 @@ export class BattleGame {
             width: 400,
             height: 275,
             parent: 'display',
-            scene: [WaitingView, BattleView, ConnectionClosedView, ResultsView, WinView, LostView, AttentionView]
+            scene: [WaitingView, BattleView, AttentionView, ResultsView, WinView, LostView, ConnectionClosedView]
         };
 
         this.game = new Phaser.Game(config);

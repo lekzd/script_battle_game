@@ -18,6 +18,7 @@ import {timer} from "rxjs/internal/observable/timer";
 import {BattleStatistics} from "../BattleStatistics";
 import {BulletDrawer, BulletType} from "../BulletDrawer";
 import {IPlayerState} from '../../state.model';
+import {ConsoleService} from "../../console/ConsoleService";
 
 export class BattleView extends Phaser.Scene {
 
@@ -30,6 +31,7 @@ export class BattleView extends Phaser.Scene {
     @Inject(CodeSandbox) private codeSandbox: CodeSandbox;
     @Inject(BattleSession) private battleSession: BattleSession;
     @Inject(CharactersList) private charactersList: CharactersList;
+    @Inject(ConsoleService) private consoleService: ConsoleService;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
     @Inject(BattleFieldModel) private battleFieldModel: BattleFieldModel;
     @Inject(BattleFieldDrawer) private battleFieldDrawer: BattleFieldDrawer;
@@ -202,6 +204,8 @@ export class BattleView extends Phaser.Scene {
                 return this.battleSession.start([...this.leftUnits, ...this.rightUnits]);
             })
             .then((sessionResult: ISessionResult) => {
+                this.consoleService.infoLog('Код успешно выполнен!');
+
                 if (sessionResult && this.connection.isMaster) {
                     this.dispatchWinner(sessionResult);
                 }

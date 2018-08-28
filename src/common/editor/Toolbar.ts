@@ -5,6 +5,7 @@ import {filter, map, tap} from 'rxjs/internal/operators';
 import {ClientState} from '../client/ClientState';
 import {Documentation} from './Documentation';
 import {elementHasParent} from '../helpers/elementHasParent';
+import {WebsocketConnection} from "../WebsocketConnection";
 
 export class Toolbar {
     private documentation: Documentation;
@@ -102,6 +103,7 @@ export class Toolbar {
 
     @Inject(ClientState) private clientState: ClientState;
     @Inject(CharactersList) private charactersList: CharactersList;
+    @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
     private _selectedItem: number;
 
@@ -197,7 +199,10 @@ export class Toolbar {
                 this.isSelectorOpen = false;
             });
 
-        this.clientState.change$
+        merge(
+            this.connection.onState$(this.clientState.side),
+            this.clientState.change$
+        )
             .pipe(filter(state => state.army))
             .subscribe(state => {
                 this.buttons.forEach((button, index) => {

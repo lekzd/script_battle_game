@@ -4,9 +4,9 @@ export enum MessageType {
     VM = 'vm',
     Runtime = 'runtime',
     Unexpected = 'unexpected',
-    Service = 'service',
+    Service = '😸',
     Log = 'log',
-    Info = 'info',
+    Info = '👍',
     Warn = 'warn',
     Error = 'error',
     Success = 'success'
@@ -22,13 +22,27 @@ export class ConsoleService extends BehaviorSubject<IConsoleLine> {
     constructor() {
         super({
             source: MessageType.Service,
-            text: 'hello!'
+            text: 'Привет! Это консоль, здесь будет отладочная информация, ошибки и важные сообщения'
         })
     }
 
     vmLog(...attributes) {
         this.next({
             source: MessageType.VM,
+            text: attributes.join()
+        })
+    }
+
+    serviceLog(...attributes) {
+        this.next({
+            source: MessageType.Service,
+            text: attributes.join()
+        })
+    }
+
+    infoLog(...attributes) {
+        this.next({
+            source: MessageType.Info,
             text: attributes.join()
         })
     }

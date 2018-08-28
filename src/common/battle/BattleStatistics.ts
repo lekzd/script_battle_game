@@ -34,7 +34,7 @@ export class BattleStatistics {
     }
 
     private generateDamageText(): Phaser.GameObjects.Text {
-        return this.scene.add.text(0, -3, '0', {
+        return this.scene.add.text(0, -1, '0', {
             font: font(16),
             fill: '#faff39'
         });
