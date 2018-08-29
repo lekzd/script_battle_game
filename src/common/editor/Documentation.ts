@@ -2,6 +2,7 @@
 import template from './documentation.template.html';
 import {fromEvent, merge, Observable} from 'rxjs/index';
 import {filter} from 'rxjs/internal/operators';
+import "./AccordionSectionComponent";
 
 export class Documentation {
 
