@@ -480,11 +480,13 @@ canvas {
 .documentation .exclamation:before {
   content: '!';
   font-style: normal;
+  font-weight: bold;
   background: rgba(86, 9, 9, 0.45);
-  padding: 0 4px;
+  padding: 0 7px;
   border-radius: 50%;
   color: #fff;
   margin-right: 6px;
+  width: 5px;
 }
 
 .help-icon {
