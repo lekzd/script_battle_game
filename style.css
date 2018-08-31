@@ -189,7 +189,7 @@ canvas {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 100px;
+  left: 99px;
   right: 0;
   overflow: auto;
 }
@@ -425,10 +425,12 @@ canvas {
 }
 
 .documentation h2 {
-  font-size: 30px;
+  font-size: 20px;
   font-weight: normal;
-  text-align: center;
+  text-align: left;
   margin: 0 0 15px;
+  padding: 3px 20px;
+  color: #fff;
 }
 
 .documentation .attr {
@@ -528,27 +530,31 @@ canvas {
     color: #69909f;
     border: none;
     padding: 0 8px;
-    outline: none;
+    outline: 1px solid #384863;
 }
 
 .name input:focus {
-  outline: 1px solid #384863;
+  outline: 1px solid #43517b;
   outline-offset: 0;
 }
 
 .sample-button {
-  border: 1px solid #3d4958;
-  background: #2a2e3c;
+  border: 1px solid #0088cc;
+  background-color: #0072ab;
   height: 28px;
-  color: #618eb5;
+  color: #fff;
+  text-shadow: 1px 1px 0 #00000057;
   margin-left: 20px;
   padding: 0 20px;
   font-size: 16px;
   cursor: pointer;
+  box-sizing: border-box;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
+  transition: background-color .3s;
 }
 
 .sample-button:hover {
-  background: #343e4b;
+  background: #006293;
 }
 
 .client {
@@ -663,4 +669,14 @@ battle-console .source {
   text-align: right;
   padding-right: 10px;
   opacity: .35;
+}
+
+accordion-section {
+  display: block;
+  background: #2a2e3c;
+  border-left: 3px solid;
+}
+
+accordion-section + accordion-section {
+  margin-top: 20px;
 }
