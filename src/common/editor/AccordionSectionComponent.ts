@@ -1,3 +1,5 @@
+import {Observable} from "rxjs/internal/Observable";
+import {fromEvent} from "rxjs/internal/observable/fromEvent";
 
 interface ISectionState {
     isOpen: boolean;
@@ -5,6 +7,8 @@ interface ISectionState {
 }
 
 export class AccordionSectionComponent extends HTMLElement {
+
+    private state = <ISectionState>{};
 
     get headerText(): string {
         return this.getAttribute('header');
@@ -14,14 +18,24 @@ export class AccordionSectionComponent extends HTMLElement {
         return !!this.getAttribute('opened');
     }
 
+    get headerClick$(): Observable<MouseEvent> {
+        return fromEvent<MouseEvent>(this.querySelector('.accordion-header'), 'click');
+    }
+
     constructor() {
         super();
 
         const content = this.innerHTML;
 
-        this.innerHTML = this.render({
+        this.state = {
             isOpen: this.isOpen,
             content
+        };
+
+        this.innerHTML = this.render(this.state);
+
+        this.headerClick$.subscribe(() => {
+            this.setState({isOpen: !this.state.isOpen});
         });
     }
 
@@ -36,6 +50,12 @@ export class AccordionSectionComponent extends HTMLElement {
                 
             </div>
         `;
+    }
+
+    setState(newState: Partial<ISectionState>) {
+        this.state = Object.assign(this.state, newState);
+
+        this.classList.toggle('opened', this.state.isOpen);
     }
 }
 

@@ -424,15 +424,6 @@ canvas {
   color: #fff;
 }
 
-.documentation h2 {
-  font-size: 20px;
-  font-weight: normal;
-  text-align: left;
-  margin: 0 0 15px;
-  padding: 3px 20px;
-  color: #fff;
-}
-
 .documentation .attr {
   background: rgba(0, 0, 0, .3);
   padding: 0 4px;
@@ -678,5 +669,27 @@ accordion-section {
 }
 
 accordion-section + accordion-section {
-  margin-top: 20px;
+  margin-top: 10px;
+}
+
+accordion-section .accordion-content {
+  display: none;
+}
+
+accordion-section.opened .accordion-content {
+  display: block;
+}
+
+accordion-section .accordion-header {
+  font-size: 20px;
+  font-weight: normal;
+  text-align: left;
+  margin: 0 0 5px;
+  padding: 3px 20px;
+  color: #fff;
+  cursor: pointer;
+}
+
+accordion-section .accordion-header:hover {
+  background: #1b1e27;
 }

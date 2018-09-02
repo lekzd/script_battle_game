@@ -4,23 +4,31 @@ import {ConnectionsStorage} from "./ConnectionsStorage";
 import {LeaderBoard} from "./LeaderBoard";
 
 const leaderBoard = new LeaderBoard();
+const WebSocketServer = websocket.server;
+const connectionsStorage = new ConnectionsStorage();
 
 const server = http.createServer((request, response) => {
-    // process HTTP request. Since we're writing just WebSockets
-    // server we don't have to implement anything.
 
-    response.end(leaderBoard.toHTML());
+    if (/^\/leaderboard$/.test(request.url)) {
+        response.end(JSON.stringify(leaderBoard.data));
+
+        return;
+    }
+
+    if (/^\/state$/.test(request.url)) {
+        response.end(JSON.stringify(connectionsStorage.state));
+
+        return;
+    }
+
+    response.end('OK');
 });
-server.listen(1337, () => {});
-
-const WebSocketServer = websocket.server;
+server.listen(1337);
 
 // create the server
 const wsServer = new WebSocketServer({
     httpServer: server
 });
-
-const connectionsStorage = new ConnectionsStorage();
 
 // WebSocket server
 wsServer.on('request', (request) => {

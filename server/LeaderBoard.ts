@@ -1,14 +1,17 @@
 import * as fs from 'fs';
+import * as mkdirp from 'mkdirp';
+import * as path from 'path';
 
-const path = './leaderboard.json';
+const leaderBoardPath = './public/leaderboard.json';
 
 export class LeaderBoard {
 
     data = [];
 
     constructor() {
+        this.createFileIfNotExists(leaderBoardPath);
 
-        const contents = fs.readFileSync(path, 'utf8');
+        const contents = fs.readFileSync(leaderBoardPath, 'utf8');
 
         try {
             this.data = JSON.parse(contents.toString());
@@ -24,7 +27,7 @@ export class LeaderBoard {
 
         this.data.push(item);
 
-        this._writeToFile(path, item)
+        this.writeToFile(leaderBoardPath, item)
     }
 
     toHTML() {
@@ -43,8 +46,10 @@ export class LeaderBoard {
         `;
     }
 
-    _writeToFile(path, item) {
-        const contents = fs.readFileSync(path, 'utf8');
+    private writeToFile(filePath: string, item) {
+        this.createFileIfNotExists(filePath);
+
+        const contents = fs.readFileSync(filePath, 'utf8');
         let data = [];
 
         try {
@@ -55,7 +60,7 @@ export class LeaderBoard {
 
         data.push(item);
 
-        fs.writeFile(path, JSON.stringify(data), (err) => {
+        fs.writeFile(filePath, JSON.stringify(data), (err) => {
             if(err) {
                 return console.log(err);
             }
@@ -64,4 +69,13 @@ export class LeaderBoard {
         });
     }
 
+    private createFileIfNotExists(filePath: string) {
+        if (fs.existsSync(filePath)) {
+            return;
+        }
+
+        mkdirp.sync(path.dirname(filePath));
+
+        fs.writeFileSync(filePath, '[]');
+    }
 }
