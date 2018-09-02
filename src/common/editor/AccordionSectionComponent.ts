@@ -43,7 +43,7 @@ export class AccordionSectionComponent extends HTMLElement {
         this.classList.toggle('opened', state.isOpen);
 
         return `
-            <h2 class="accordion-header">${this.headerText}</h2>
+            <h2 class="accordion-header"><span>${this.headerText}</span> <span>↕</span></h2>
             <div class="accordion-content">
                 
                 ${state.content}

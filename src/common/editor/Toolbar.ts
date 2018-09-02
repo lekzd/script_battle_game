@@ -109,10 +109,12 @@ export class Toolbar {
 
     constructor(private container: HTMLElement) {
 
+        const isMac = navigator.platform.toUpperCase().includes('MAC');
+
         this.container.innerHTML = `
             <button id="run" class="runButton toolbar-button" type="button">
               <div class="run-icon"></div>
-              <small>(Ctrl + Enter)</small>
+              <small>(${isMac ? 'Cmd⌘' : 'Ctrl'} + Enter)</small>
             </button>
             <div class="select-window">
                 <button id="select-1" class="toolbar-button select-button" type="button">

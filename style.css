@@ -53,19 +53,21 @@ body {
   height: 90px;
   margin: 5px;
   box-sizing: border-box;
-  background: #1b1e27;
-  color: #005c80;
   cursor: pointer;
-  border: none;
   padding: 1px 6px;
+  border: 1px solid #42575f;
+  background: #282c38;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
+  color: #fff;
+  text-shadow: 1px 1px 0 #00000057;
 }
 
 .toolbar-button:hover {
-  background: #111;
+  background: #1b1e27;
 }
 
 .runButton {
-  height: 60px;
+  height: 70px;
 }
 
 .ace_editor {
@@ -181,6 +183,7 @@ canvas {
 .select-window.opened {
   width: 600px;
   border: 1px solid #007b9c;
+  box-shadow: 0 0 20px #000;
 }
 
 .select-view {
@@ -200,11 +203,11 @@ canvas {
 }
 
 .select-button.selected {
-  background: #2b2f3e;
+  background: #394f5a;
 }
 
 .select-button + .select-button {
-  margin-top: 18px;
+  margin-top: 10px;
 }
 
 .select-button .unit-img {
@@ -432,9 +435,11 @@ canvas {
 }
 
 .documentation .code {
+  text-align: left;
   background: rgba(0, 0, 0, .3);
   padding: 15px;
   border-radius: 2px;
+  font-size: 16px;
   color: #fff;
 }
 
@@ -493,7 +498,7 @@ canvas {
 }
 
 .documentation .main .header {
-  color: #fff;
+  color: #ffffaa;
   font-size: 22px;
   text-shadow: 1px 1px 0 rgba(0, 0, 0, .8);
 }
@@ -693,7 +698,13 @@ battle-console .source {
 accordion-section {
   display: block;
   background: #2a2e3c;
-  border-left: 3px solid;
+  border-left: 3px solid #1f4a63;
+}
+
+accordion-section.opened {
+  display: block;
+  background: #2a2e3c;
+  border-left: 3px solid #409acf;
 }
 
 accordion-section + accordion-section {
@@ -713,11 +724,30 @@ accordion-section .accordion-header {
   font-weight: normal;
   text-align: left;
   margin: 0 0 5px;
-  padding: 3px 20px;
-  color: #fff;
+  padding: 3px 20px 9px;
+  color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+}
+
+accordion-section.opened .accordion-header {
+  color: #fff;
 }
 
 accordion-section .accordion-header:hover {
+  background: #383d50;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.container-footer {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding: 0 15px;
+  justify-content: space-between;
   background: #1b1e27;
 }

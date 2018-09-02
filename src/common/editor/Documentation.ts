@@ -20,6 +20,10 @@ export class Documentation {
             .pipe(filter(event => event.keyCode === 27))
     }
 
+    get onCloseClick(): Observable<KeyboardEvent> {
+        return fromEvent<KeyboardEvent>(this.container.querySelector('#close'), 'click')
+    }
+
     constructor(private container: HTMLElement) {
 
         this.container.innerHTML = template;
@@ -28,7 +32,8 @@ export class Documentation {
 
         merge(
             this.onEscape$,
-            this.backdropClick$
+            this.backdropClick$,
+            this.onCloseClick
         )
             .subscribe(() => {
                 this.opened = false;
