@@ -459,7 +459,10 @@ canvas {
 .documentation .main {
   text-align: center;
   color: #5f99b2;
-  font-size: 20px;
+  font-size: 16px;
+  counter-reset: item;
+  padding-left: 0;
+  list-style-type: none;
 }
 
 .documentation .main div + div {
@@ -467,7 +470,32 @@ canvas {
 }
 
 .documentation .main li {
+  position: relative;
   margin-bottom: 30px;
+  border: 1px solid rgba(255, 255, 255, .3);
+  padding: 5px 30px 10px;
+}
+
+.documentation .main li::before {
+  content: counter(item);
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: block;
+  counter-increment: item;
+  width: 30px;
+  height: 30px;
+  background: rgba(255, 255, 255, .3);
+  color: #fff;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, .8);
+  line-height: 27px;
+  font-weight: 500
+}
+
+.documentation .main .header {
+  color: #fff;
+  font-size: 22px;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, .8);
 }
 
 .documentation .exclamation:before {
