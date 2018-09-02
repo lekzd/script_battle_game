@@ -421,9 +421,9 @@ canvas {
 .documentation .signature {
   background: rgba(0, 0, 0, .3);
   border-left: 4px solid rgba(0, 0, 0, .3);
-  padding: 3px;
-  padding-left: 6px;
+  padding: 5px 10px;
   margin-bottom: 10px;
+  line-height: 1.5;
   color: #fff;
 }
 
@@ -500,6 +500,7 @@ canvas {
 .documentation .main .header {
   color: #ffffaa;
   font-size: 22px;
+  margin-bottom: 10px;
   text-shadow: 1px 1px 0 rgba(0, 0, 0, .8);
 }
 
@@ -750,4 +751,8 @@ accordion-section .accordion-header:hover {
   padding: 0 15px;
   justify-content: space-between;
   background: #1b1e27;
+}
+
+.documentation p {
+  margin-top: 0;
 }

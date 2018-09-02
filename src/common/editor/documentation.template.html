@@ -251,15 +251,66 @@
         </section>
     </accordion-section>
 
-    <accordion-section header="Примеры кода">
+    <accordion-section header="Первые шаги">
         <section>
-            <p>
-                Так как код исполняется последовательно для каждого юнита, требуется разделять поведение юнитов:
-            </p>
+            <section>
+                <p>
+                    Дано:
+                </p>
+                <ul>
+                    <li>У нас сть 2 юнита: <span class="attr">CSS</span> и <span class="attr">PWA</span></li>
+                    <li>У противника: <span class="attr">CSS</span> и <span class="attr">$</span></li>
+                </ul>
+            </section>
 
-            <p>
-                сделать это можно по классу персонажа
-            </p>
+            <section class="signature">
+                <p>
+                    <span class="attr">id</span> юнита написан в фиолетовом прямоугольнике у его ног
+                </p>
+                <p>
+                    <img src="/img/tuttorial_id.png" width="100">
+                </p>
+            </section>
+
+            <section>
+                <p>Если заглянуть в характеристики персонажей:</p>
+                <ul>
+                    <li>Стрелковые атаки будуи менее эффективны против стрелков (<span class="attr">$</span>)</li>
+                    <li>Чтобы нанести больше урона стрелкам надо подойти ближе к цели</li>
+                    <li>У нас есть один пехотинец (<span class="attr">CSS</span>) с ближней атакой</li>
+                </ul>
+            </section>
+
+            <section class="signature">
+                <video src="/img/scripting_guide.mov" width="600" controls></video>
+            </section>
+
+            <section>
+                <p>Как написать более-менее эффективный скрипт:</p>
+                <ul>
+                    <li>Нажать "Сгенерировать пример кода", чтобы сразу получить стартовый код для нашей армии</li>
+                    <li>Подвести <span class="attr">PWA</span> ближе к противнику, чтобы наносить больше урона</li>
+                    <li>Ближнюю атаку направить на <span class="attr">$</span> а стрелковую на &mdash; <span class="attr">CSS</span></li>
+                </ul>
+            </section>
+
+            <section class="signature">
+                Код выполняется всего один раз, за один ход юниты не могут
+                дойти до персоанажа или полностью убить его за один выстрел
+                потому накидывайте по-больше действий на юнитов
+            </section>
+
+        </section>
+    </accordion-section>
+
+    <accordion-section header="Полезные советы">
+        <section>
+            <ol class="main">
+                <li>
+                    <div class="header">Каждому свое</div>
+                    <p>
+                        Разделяйте логику юнитов по классу персонажа
+                    </p>
 <pre class="code">
     if (isShooter()) {
         shoot('ie')
@@ -272,21 +323,60 @@
     }
 </pre>
 
-            <p>или по <span class="attr">id</span></p>
+                    <p>или по <span class="attr">id</span></p>
 <pre class="code">
     if (is('eval')) {
         spell('ie')
     }
 </pre>
-            <p>
-                <span class="attr">id</span> юнита написан около него самого
-            </p>
-            <p>
-                <img src="/img/tuttorial_id.png" width="100">
-            </p>
-            <p>
-                В случае, если на поле есть несколько юнитов с одинаковыми <span class="attr">id</span>, будет выбран случайный из них
-            </p>
+                </li>
+
+                <li>
+                    <div class="header">Стрелки – ближе, маги – дальше</div>
+                    <p>Чтобы достичь максимальной атаки:</p>
+<pre class="code">
+    // стрелки должны стоять максиум за 5 клеток от противника
+    if (isShooter()) {
+        relativeGoTo(5, 0)
+    }
+    // маги – минимум за 10
+    if (isMagician()) {
+        relativeGoTo(-2, -1)
+    }
+</pre>
+
+                </li>
+
+                <li>
+                    <div class="header">Слишком много действий</div>
+                    <p>Если юнит противника погиб, а действия на его атаку еще остались...</p>
+<pre class="code">
+    for (i = 0; i < 10; i++) {
+        goToEnemyAndHit('dart')
+    }
+    for (i = 0; i < 10; i++) {
+        goToEnemyAndHit('css')
+    }
+</pre>
+                    <p>...юнит будет пропускать ходы пока не дойдет до действий атаки еще живого противника, если они еще есть</p>
+                </li>
+
+                <li>
+                    <div class="header">Списки противников</div>
+                    <p>Бывает так, что противник все время меняет юнитов</p>
+<pre class="code">
+    ids = ['ie', '$', 'dart']
+
+    ids.forEach(id => {
+        shoot(id)
+        shoot(id)
+    })
+</pre>
+                    <p>потому их проще записать в массив и менять вместе с ним</p>
+                </li>
+
+            </ol>
+
         </section>
     </accordion-section>
 

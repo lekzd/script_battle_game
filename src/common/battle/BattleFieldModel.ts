@@ -11,6 +11,7 @@ import {ClientState} from "../client/ClientState";
 import {CharacterType} from "../characters/CharactersList";
 import {BulletType} from "./BulletDrawer";
 import {ConsoleService} from "../console/ConsoleService";
+import {getDistanceFactor} from '../helpers/getDistanceFactor';
 
 const FIELD_WIDTH = 12;
 const FIELD_HEIGHT = 9;
@@ -99,17 +100,11 @@ export class BattleFieldModel {
             return this.animateUnitByPath(unit, path)
                 .then(() => {
                     if (unit.character.type === CharacterType.magic) {
-                        return this.makeBulletAction(unit, enemy)
-                            .then(() => {
-                                enemy.hitHealth(10, unit);
-                            });
+                        return this.makeSpellAttack(unit, enemy);
                     }
 
                     if (unit.character.type === CharacterType.shooting) {
-                        return this.makeBulletAction(unit, enemy)
-                            .then(() => {
-                                enemy.hitHealth(10, unit);
-                            });
+                        return this.makeShootingAttack(unit, enemy);
                     }
 
                     if (canHitEnemy) {
@@ -139,10 +134,7 @@ export class BattleFieldModel {
                 return unit.sayAction('Эй, я не умею стрелять');
             }
 
-            return this.makeBulletAction(unit, enemy)
-                .then(() => {
-                    enemy.hitHealth(10, unit);
-                });
+            return this.makeShootingAttack(unit, enemy);
         }
 
         if (action.action === 'spell') {
@@ -156,10 +148,7 @@ export class BattleFieldModel {
                 return unit.sayAction('Я не знаю магии!');
             }
 
-            return this.makeBulletAction(unit, enemy)
-                .then(() => {
-                    enemy.hitHealth(10, unit);
-                });
+            return this.makeSpellAttack(unit, enemy);
         }
 
         if (action.action === 'heal') {
@@ -181,17 +170,11 @@ export class BattleFieldModel {
             }
 
             if (unit.character.type === CharacterType.magic) {
-                return this.makeBulletAction(unit, enemy)
-                    .then(() => {
-                        enemy.hitHealth(10, unit);
-                    });
+                return this.makeSpellAttack(unit, enemy);
             }
 
             if (unit.character.type === CharacterType.shooting) {
-                return this.makeBulletAction(unit, enemy)
-                    .then(() => {
-                        enemy.hitHealth(10, unit);
-                    });
+                return this.makeShootingAttack(unit, enemy);
             }
 
             const path = this.getPath(unit.x, unit.y, enemy.x, enemy.y).slice(0, -1);
@@ -315,6 +298,26 @@ export class BattleFieldModel {
                 resolve();
             }, 500);
         })
+    }
+
+    private makeSpellAttack(unit: BattleUnit, enemy: BattleUnit): Promise<void> {
+        const distanceFactor = getDistanceFactor(unit.x, unit.y, enemy.x, enemy.y);
+        const hitPower = Math.round(10 * distanceFactor);
+
+        return this.makeBulletAction(unit, enemy)
+            .then(() => {
+                enemy.hitHealth(hitPower, unit);
+            });
+    }
+
+    private makeShootingAttack(unit: BattleUnit, enemy: BattleUnit): Promise<void> {
+        const distanceFactor = 1.5 - getDistanceFactor(unit.x, unit.y, enemy.x, enemy.y);
+        const hitPower = Math.round(10 * distanceFactor);
+
+        return this.makeBulletAction(unit, enemy)
+            .then(() => {
+                enemy.hitHealth(hitPower, unit);
+            });
     }
 
     private dispatchError(errorText: string) {
