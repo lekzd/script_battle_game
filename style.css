@@ -265,6 +265,25 @@ canvas {
   height: 64px;
 }
 
+.unit-type {
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 12px;
+  padding: 2px 4px;
+  border-radius: 2px;
+}
+
+.unit-type.melee, .unit-mellee {
+  color: #e5ab4c;
+}
+
+.unit-type.shooting, .unit-shooting {
+  color: lightgreen;
+}
+
+.unit-type.magic, .unit-magic {
+  color: violet;
+}
+
 .unit-description {
     position: relative;
     display: flex;

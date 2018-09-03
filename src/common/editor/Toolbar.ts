@@ -1,5 +1,5 @@
 import {fromEvent, merge, Observable} from "rxjs/index";
-import {CharactersList, ICharacterConfig} from "../characters/CharactersList";
+import {CharactersList, CharacterType, ICharacterConfig} from "../characters/CharactersList";
 import {Inject} from "../InjectDectorator";
 import {filter, map, tap} from 'rxjs/internal/operators';
 import {ClientState} from '../client/ClientState';
@@ -136,7 +136,10 @@ export class Toolbar {
                             <section class="unit">
                                 <div class="unit-img ${characterConfig.key}"></div>
                                 <div class="unit-description">
-                                    <div class="unit-id">${characterConfig.id}
+                                    <div class="unit-id">
+                                        ${characterConfig.id}
+                                        <span class="unit-type ${characterConfig.type}">${this.getCharacterType(characterConfig)}</span>
+                                        <br>
                                         <span class="unit-grey">${characterConfig.title}</span>
                                     </div>
                                     <div class="unit-values">
@@ -144,7 +147,7 @@ export class Toolbar {
                                         <div class="unit-mellee"><span class="unit-grey">ближний</span> ${characterConfig.mellee.attack.max} / ${characterConfig.mellee.defence.max}</div>
                                         <div class="unit-shooting"><span class="unit-grey">стрельба</span> ${characterConfig.shoot.attack.max} / ${characterConfig.shoot.defence.max}</div>
                                         <div class="unit-magic"><span class="unit-grey">магия</span> ${characterConfig.magic.attack.max} / ${characterConfig.magic.defence.max}</div>
-                                        <div class="unit-magic"><span class="unit-grey">скорость</span> ${characterConfig.speed}</div>
+                                        <div class="unit-speed"><span class="unit-grey">скорость</span> ${characterConfig.speed}</div>
                                     </div>
                                   
                                 </div>
@@ -222,5 +225,16 @@ export class Toolbar {
 
         this.documentation = new Documentation(this.container.querySelector('#documentation'));
 
+    }
+
+    private getCharacterType(config: ICharacterConfig): string {
+        switch (config.type) {
+            case CharacterType.magic:
+                return 'Маг';
+            case CharacterType.shooting:
+                return 'Стрелок';
+            case CharacterType.melee:
+                return 'Пехотинец';
+        }
     }
 }

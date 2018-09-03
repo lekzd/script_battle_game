@@ -82,7 +82,7 @@ const NULL_CHARACTER: ICharacterConfig = Object.assign({
 const MAGIC_GIRL: ICharacterConfig = Object.assign({
     id: 'EVAL',
     key: 'character_magic',
-    title: 'Маг Eval, обладает самой сильной магией',
+    title: 'кидает файер-боллы, обладает самой сильной магией',
     type: CharacterType.magic,
     bulletType: BulletType.fire,
     attackAnimation: <IAnimationName>'spellcast',
@@ -102,7 +102,7 @@ const SKELETON: ICharacterConfig = Object.assign({
 const ORK: ICharacterConfig = Object.assign({
     id: '$',
     key: 'character_ork',
-    title: 'Стрелок. Старый добрый jQuery, кидает кирпичи',
+    title: 'Старый добрый jQuery, кидает кирпичи',
     type: CharacterType.shooting,
     bulletType: BulletType.stone,
     attackAnimation: <IAnimationName>'shoot',
@@ -132,7 +132,7 @@ const VARVAR: ICharacterConfig = Object.assign({
 const WINTER: ICharacterConfig = Object.assign({
     id: 'IE',
     key: 'character_winter',
-    title: 'Маг. Замораживает всех в округе, но погибает от точных выстрелов',
+    title: 'Замораживает всех в округе, но погибает от точных выстрелов',
     type: CharacterType.magic,
     bulletType: BulletType.snow,
     attackAnimation: <IAnimationName>'spellcast',
