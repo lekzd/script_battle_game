@@ -8,6 +8,8 @@ const WebSocketServer = websocket.server;
 const connectionsStorage = new ConnectionsStorage();
 
 const server = http.createServer((request, response) => {
+    response.setHeader('Access-Control-Allow-Origin', '*');
+    response.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 
     if (/^\/leaderboard$/.test(request.url)) {
         response.end(JSON.stringify(leaderBoard.data));
@@ -48,16 +50,7 @@ wsServer.on('request', (request) => {
         }
 
         if (data.type === 'sendWinner') {
-            const state = Object.assign({}, data.sessionResult, {
-                state: {
-                    left: connectionsStorage.state.left,
-                    right: connectionsStorage.state.right
-                },
-                code: {
-                    left: connectionsStorage.state.left.editor.code,
-                    right: connectionsStorage.state.right.editor.code
-                }
-            });
+            const state = Object.assign({}, data.sessionResult, connectionsStorage.state);
 
             leaderBoard.write(state);
             connectionsStorage.endSession(data.sessionResult);

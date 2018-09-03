@@ -24,7 +24,8 @@ module.exports = function(env = {}) {
         plugins: [
             new HtmlWebpackPlugin(getHtmlWebpackConfig('master')),
             new HtmlWebpackPlugin(getHtmlWebpackConfig('left')),
-            new HtmlWebpackPlugin(getHtmlWebpackConfig('right'))
+            new HtmlWebpackPlugin(getHtmlWebpackConfig('right')),
+            new HtmlWebpackPlugin(getHtmlWebpackConfig('leaders'))
         ],
         resolve: {
             extensions: ['.ts', '.js']

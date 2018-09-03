@@ -35,6 +35,7 @@ export class ClientApp {
     private editorComponent: EditorComponent;
 
     constructor(private side: BattleSide) {
+        this.battleGame.init();
 
         this.clientState.side = side;
 

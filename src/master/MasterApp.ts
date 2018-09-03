@@ -39,6 +39,7 @@ export class MasterApp {
     }
 
     constructor() {
+        this.battleGame.init();
         this.connection.registerAsMaster();
 
         new ClientComponent(this.container.querySelector('#leftClient'), BattleSide.left);

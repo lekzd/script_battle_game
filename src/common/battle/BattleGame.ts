@@ -25,7 +25,7 @@ export class BattleGame {
 
     private game: Phaser.Game;
 
-    constructor() {
+    init() {
         const config = {
             type: Phaser.AUTO,
             width: 400,
