@@ -5,13 +5,14 @@ import {mergeDeep} from '../src/common/helpers/mergeDeep';
 
 export abstract class Client {
 
-    abstract connection: connection;
+    protected maxConnections = 1;
 
+    private connectionsPool = new Set<connection>();
     private messagesToSend: IMessage[] = [];
     private clientState: Partial<IState> = {};
 
     setConnection(connection: connection) {
-        this.connection = connection;
+        this.connectionsPool.add(connection);
 
         this.send({
             type: 'setState',
@@ -28,7 +29,7 @@ export abstract class Client {
     setState(newState: Partial<IState>) {
         this.clientState = mergeDeep(this.clientState, newState);
 
-        if (!this.connection) {
+        if (this.isEmpty()) {
             return;
         }
 
@@ -48,14 +49,29 @@ export abstract class Client {
         });
     }
 
+    canConnect(connection: connection): boolean {
+        return this.connectionsPool.size < this.maxConnections
+            && !this.connectionsPool.has(connection);
+    }
+
+    disconnect(connection: connection) {
+        this.connectionsPool.delete(connection);
+    }
+
     protected send(data: IMessage) {
-        if (!this.connection) {
+        if (this.isEmpty()) {
             this.messagesToSend.push(data);
 
             return;
         }
 
-        this.connection.send(JSON.stringify(data));
+        this.connectionsPool.forEach(connection => {
+            connection.send(JSON.stringify(data));
+        });
+    }
+
+    protected isEmpty(): boolean {
+        return this.connectionsPool.size === 0;
     }
 
 }

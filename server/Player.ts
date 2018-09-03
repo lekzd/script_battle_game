@@ -5,7 +5,7 @@ export class Player extends Client {
     code = '';
     state = {};
 
-    constructor(public connection) {
+    constructor() {
         super();
 
         this.send({

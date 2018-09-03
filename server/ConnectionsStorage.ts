@@ -2,6 +2,9 @@ import {Master} from "./Master";
 import {Player} from "./Player";
 import {IPlayerState, IState} from '../src/common/state.model';
 import {mergeDeep} from '../src/common/helpers/mergeDeep';
+import {Client} from './Client';
+import {connection} from 'websocket';
+import {IMessage} from '../src/common/WebsocketConnection';
 
 type Partial<T> = {
     [P in keyof T]?: T[P];
@@ -9,18 +12,18 @@ type Partial<T> = {
 
 export class ConnectionsStorage {
 
-    connections = new Map();
-    master = new Master(null);
-    leftPlayer = new Player(null);
-    rightPlayer = new Player(null);
+    connections = new Map<connection, string>();
+    master = new Master();
+    leftPlayer = new Player();
+    rightPlayer = new Player();
 
     state: Partial<IState> = {};
 
-    isRegistered(connection) {
+    isRegistered(connection: connection): boolean {
         return this.connections.has(connection);
     }
 
-    registerConnection(data, connection) {
+    registerConnection(data: IMessage, connection: connection): boolean {
         switch (data.type) {
             case 'registerMaster':
                 return this.tryRegisterEntity(connection, 'master');
@@ -33,8 +36,10 @@ export class ConnectionsStorage {
         return false;
     }
 
-    tryRegisterEntity(connection, name) {
-        if (this[name].connection === null) {
+    tryRegisterEntity(connection: connection, name: string): boolean {
+        const client = this.getClient(name);
+
+        if (client.canConnect(connection)) {
             if (name === 'leftPlayer') {
                 this.setState({left: <IPlayerState>{isConnected: true}});
             }
@@ -42,7 +47,7 @@ export class ConnectionsStorage {
                 this.setState({right: <IPlayerState>{isConnected: true}});
             }
 
-            this[name].setConnection(connection);
+            client.setConnection(connection);
 
             this.connections.set(connection, name);
 
@@ -51,20 +56,16 @@ export class ConnectionsStorage {
             return true;
         }
 
-        if (this[name].connection !== null) {
-            console.warn(`${name} already registered!`);
-        }
-
         return false;
     }
 
-    onConnectionLost(connection) {
+    onConnectionLost(connection: connection) {
         if (this.isRegistered(connection)) {
             const name = this.connections.get(connection);
+            const client = this.getClient(name);
 
+            client.disconnect(connection);
             this.connections.delete(connection);
-
-            this[name].connection = null;
 
             if (name === 'leftPlayer') {
                 this.setState({left: <IPlayerState>{isConnected: false}});
@@ -97,6 +98,10 @@ export class ConnectionsStorage {
         this.master.setState(this.state);
         this.leftPlayer.setState(this.state);
         this.rightPlayer.setState(this.state);
+    }
+
+    private getClient(name: string): Client {
+        return this[name] as Client;
     }
 
 }

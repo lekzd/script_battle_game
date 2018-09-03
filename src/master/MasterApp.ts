@@ -55,7 +55,7 @@ export class MasterApp {
         });
 
         this.connection.onClose$.subscribe(() => {
-            this.battleGame.setState(BattleState.connectionClosed);
+            this.setState(BattleState.connectionClosed);
         });
 
         combineLatest(this.leftIsReady$, this.rightIsReady$)

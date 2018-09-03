@@ -2,8 +2,10 @@ import {Client} from './Client';
 
 export class Master extends Client {
 
-    constructor(public connection) {
+    constructor() {
         super();
+
+        this.maxConnections = 2;
 
         this.send({
             type: 'state',
