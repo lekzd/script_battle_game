@@ -17,7 +17,10 @@
   "license": "ISC",
   "dependencies": {
     "brace": "^0.11.1",
+    "cors": "^2.8.4",
     "diff": "^3.5.0",
+    "express": "^4.16.3",
+    "express-ws": "^4.0.0",
     "mkdirp": "^0.5.1",
     "phaser": "^3.11.0",
     "rxjs": "^6.2.2",
@@ -25,8 +28,10 @@
     "websocket": "^1.0.26"
   },
   "devDependencies": {
-    "@types/websocket": "0.0.39",
+    "@types/express": "^4.16.0",
+    "@types/express-ws": "^3.0.0",
     "@types/node": "^10.9.1",
+    "@types/websocket": "0.0.39",
     "html-webpack-plugin": "^3.2.0",
     "raw-loader": "^0.5.1",
     "ts-loader": "^4.4.2",

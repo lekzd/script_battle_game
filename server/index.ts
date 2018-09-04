@@ -1,86 +1,39 @@
-import * as websocket from 'websocket';
-import * as http from 'http';
+import * as express from 'express';
+import * as cors from 'cors';
+import * as expressWs from 'express-ws';
 import {ConnectionsStorage} from "./ConnectionsStorage";
 import {LeaderBoard} from "./LeaderBoard";
+import {inject} from '../src/common/InjectDectorator';
+import {SocketMiddleware} from './SocketMiddleware';
 
-const leaderBoard = new LeaderBoard();
-const WebSocketServer = websocket.server;
-const connectionsStorage = new ConnectionsStorage();
+const {app} = expressWs(express());
 
-const server = http.createServer((request, response) => {
-    response.setHeader('Access-Control-Allow-Origin', '*');
-    response.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+expressWs(app);
 
-    if (/^\/leaderboard$/.test(request.url)) {
-        response.end(JSON.stringify(leaderBoard.data));
+app.use(express.static('public'));
 
-        return;
-    }
+app.use(cors());
 
-    if (/^\/state$/.test(request.url)) {
-        response.end(JSON.stringify(connectionsStorage.state));
+app.get('/leaderboard', (request, response) => {
+    const leaderBoard = inject<LeaderBoard>(LeaderBoard);
 
-        return;
-    }
-
-    response.end('OK');
-});
-server.listen(1337);
-
-// create the server
-const wsServer = new WebSocketServer({
-    httpServer: server
+    response.json(leaderBoard.data);
 });
 
-// WebSocket server
-wsServer.on('request', (request) => {
-    const connection = request.accept(null, request.origin);
+app.get('/state$', (request, response) => {
+    const connectionsStorage = inject<ConnectionsStorage>(ConnectionsStorage);
 
-    function onMessage(data) {
-        if (!connectionsStorage.isRegistered(connection)) {
-            connectionsStorage.registerConnection(data, connection);
-
-            if (!connectionsStorage.isRegistered(connection)) {
-                connection.close();
-
-                return;
-            }
-
-            return;
-        }
-
-        if (data.type === 'sendWinner') {
-            const state = Object.assign({}, data.sessionResult, connectionsStorage.state);
-
-            leaderBoard.write(state);
-            connectionsStorage.endSession(data.sessionResult);
-        }
-
-        if (data.type === 'newSession') {
-            connectionsStorage.newSession();
-        }
-
-        if (data.type === 'state') {
-            connectionsStorage.setState(data.state);
-        }
-
-        console.log('message', data);
-    }
-
-    // This is the most important callback for us, we'll handle
-    // all messages from users here.
-    connection.on('message', (message) => {
-        if (message.type === 'utf8') {
-            try {
-                onMessage(JSON.parse(message.utf8Data));
-            } catch (e) {
-                console.error(e);
-            }
-            // process WebSocket message
-        }
-    });
-
-    connection.on('close', () => {
-        connectionsStorage.onConnectionLost(connection);
-    });
+    response.json(connectionsStorage.state);
 });
+
+app.ws('/', (ws, request) => {
+
+    new SocketMiddleware(ws);
+
+});
+
+app.use('*', (request, response) => {
+    response.send('OK');
+});
+
+app.listen(1337);

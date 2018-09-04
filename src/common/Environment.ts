@@ -12,8 +12,8 @@ const localConfig = {
 };
 
 const prodConfig = {
-    api: 'http://142.93.129.144:1337',
-    websocket: 'ws://142.93.129.144:1337',
+    api: 'http://142.93.129.144',
+    websocket: 'ws://142.93.129.144',
     staticHost: 'http://142.93.129.144'
 };
 
