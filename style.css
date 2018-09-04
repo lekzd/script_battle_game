@@ -830,3 +830,31 @@ leaders-grid .looser.left {
 leaders-grid .looser.right {
   background-image: linear-gradient(90deg, #850606, transparent);
 }
+
+rooms-list {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background: #2a2e3c;
+  color: #69909f;
+  border: 1px solid #007a9c;
+}
+
+rooms-list .header {
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+rooms-list .rooms {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+rooms-list room-item + room-item {
+  margin-top: 10px;
+}
+
+room-item a {
+  color: #3c9b9f;
+}
