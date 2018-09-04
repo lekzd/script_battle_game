@@ -5,7 +5,7 @@ export class Master extends Client {
     constructor() {
         super();
 
-        this.maxConnections = 2;
+        this.maxConnections = 4;
 
         this.send({
             type: 'state',
