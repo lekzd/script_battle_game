@@ -6,13 +6,13 @@ interface IEnvConfig {
 }
 
 const localConfig = {
-    api: 'http://localhost:1337',
+    api: 'http://localhost:1337/api',
     websocket: 'ws://localhost:1337',
     staticHost: 'http://localhost:8080'
 };
 
 const prodConfig = {
-    api: 'http://142.93.129.144',
+    api: 'http://142.93.129.144/api',
     websocket: 'ws://142.93.129.144',
     staticHost: 'http://142.93.129.144'
 };

@@ -1,10 +1,8 @@
 import * as express from 'express';
 import * as cors from 'cors';
 import * as expressWs from 'express-ws';
-import {ConnectionsStorage} from "./ConnectionsStorage";
-import {LeaderBoard} from "./LeaderBoard";
-import {inject} from '../src/common/InjectDectorator';
 import {SocketMiddleware} from './SocketMiddleware';
+import {ApiController} from "./ApiController";
 
 const {app} = expressWs(express());
 
@@ -14,17 +12,9 @@ app.use(express.static('public'));
 
 app.use(cors());
 
-app.get('/leaderboard', (request, response) => {
-    const leaderBoard = inject<LeaderBoard>(LeaderBoard);
+const {router} = new ApiController(express.Router());
 
-    response.json(leaderBoard.data);
-});
-
-app.get('/state$', (request, response) => {
-    const connectionsStorage = inject<ConnectionsStorage>(ConnectionsStorage);
-
-    response.json(connectionsStorage.state);
-});
+app.use('/api', router);
 
 app.ws('/', (ws, request) => {
 
