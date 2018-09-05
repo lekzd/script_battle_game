@@ -6,11 +6,15 @@ import {switchMap} from "rxjs/operators";
 import "./RoomItemComponent";
 import {RoomItemComponent} from "./RoomItemComponent";
 import {RoomModel} from "../../server/models/RoomModel";
+import {Component} from '@stencil/core';
 
 interface IComponentState {
     items: {[key: string]: RoomModel}
 }
 
+@Component({
+    tag: 'rooms-list'
+})
 class RoomListComponent extends WebComponent<IComponentState> {
     @Inject(ApiService) private apiService: ApiService;
 
@@ -20,23 +24,43 @@ class RoomListComponent extends WebComponent<IComponentState> {
         this.updateRooms();
     }
 
-    render(state: Partial<IComponentState>): string {
-        return `
-            <div class="header">Комнаты:</div>
-            
-            <div class="rooms">
-                ${this.renderList(Object.keys(state.items), name => {
-                    const room = state.items[name];
-                    
-                    return `
-                        <room-item name="${name}"></room-item>
-                    `;
-                })}
+    render() {
+        return (
+            <div>
+                <div class="header">Комнаты:</div>
+
+                <div class="rooms">
+                    ${this.renderList(Object.keys(this.state.items), name => {
+                        const room = this.state.items[name];
+
+                        return (
+                            <room-item name={name}></room-item>
+                        )
+                    })}
+                </div>
+
+                <button class="sample-button" id="addRoom">Новая комната</button>
             </div>
-            
-            <button class="sample-button" id="addRoom">Новая комната</button>
-        `;
+        )
     }
+
+    // render(state: Partial<IComponentState>): string {
+    //     return `
+    //         <div class="header">Комнаты:</div>
+    //
+    //         <div class="rooms">
+    //             ${this.renderList(Object.keys(state.items), name => {
+    //                 const room = state.items[name];
+    //
+    //                 return `
+    //                     <room-item name="${name}"></room-item>
+    //                 `;
+    //             })}
+    //         </div>
+    //
+    //         <button class="sample-button" id="addRoom">Новая комната</button>
+    //     `;
+    // }
 
     afterRender() {
         fromEvent(this.querySelector('#addRoom'), 'click')
@@ -63,4 +87,4 @@ class RoomListComponent extends WebComponent<IComponentState> {
     }
 }
 
-customElements.define('rooms-list', RoomListComponent);
+// customElements.define('rooms-list', RoomListComponent);
