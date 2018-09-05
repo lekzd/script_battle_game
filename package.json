@@ -24,6 +24,7 @@
     "express-ws": "^4.0.0",
     "mkdirp": "^0.5.1",
     "phaser": "^3.11.0",
+    "preact": "^8.3.1",
     "rxjs": "^6.2.2",
     "ts-node": "^7.0.1",
     "websocket": "^1.0.26"

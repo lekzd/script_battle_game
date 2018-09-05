@@ -28,12 +28,12 @@ module.exports = function(env = {}) {
             new HtmlWebpackPlugin(getHtmlWebpackConfig('leaders'))
         ],
         resolve: {
-            extensions: ['.ts', '.js']
+            extensions: ['.ts', '.tsx', '.js']
         },
         module: {
             rules: [
                 {
-                    test: /\.ts?$/,
+                    test: /\.tsx?$/,
                     use: [
                         {loader: 'ts-loader'}
                     ]
