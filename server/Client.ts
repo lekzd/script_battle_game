@@ -10,9 +10,14 @@ export abstract class Client {
     private connectionsPool = new Set<connection>();
     private messagesToSend: IMessage[] = [];
     private clientState: Partial<IState> = {};
+    private mainConnection: connection;
 
     setConnection(connection: connection) {
         this.connectionsPool.add(connection);
+
+        if (this.connectionsPool.size === 1) {
+            this.mainConnection = connection;
+        }
 
         this.send({
             type: 'setState',
@@ -56,6 +61,16 @@ export abstract class Client {
 
     disconnect(connection: connection) {
         this.connectionsPool.delete(connection);
+
+        if (this.isMain(connection) && this.connectionsPool.size > 0) {
+            const [firstConnection] = [...this.connectionsPool.values()];
+
+            this.mainConnection = firstConnection;
+        }
+    }
+
+    isMain(connection: connection): boolean {
+        return connection === this.mainConnection;
     }
 
     protected send(data: IMessage) {

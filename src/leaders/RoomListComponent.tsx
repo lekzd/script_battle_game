@@ -1,20 +1,22 @@
 import {Inject} from "../common/InjectDectorator";
 import {ApiService} from "../common/ApiService";
-import {fromEvent, merge, Subject} from "rxjs";
-import {switchMap} from "rxjs/operators";
+import {BehaviorSubject, Subject} from "rxjs";
 import "./RoomItemComponent";
 import {RoomItemComponent} from "./RoomItemComponent";
 import {RoomModel} from "../../server/models/RoomModel";
 import {Component, h} from "preact";
+import {takeUntil} from 'rxjs/internal/operators';
 
 interface IComponentState {
     items: {[key: string]: RoomModel}
 }
 
 export class RoomListComponent extends Component<any, IComponentState> {
+    update$ = new BehaviorSubject([]);
+
     @Inject(ApiService) private apiService: ApiService;
 
-    update$ = new Subject();
+    private unmount$ = new Subject();
 
     constructor() {
         super();
@@ -23,11 +25,11 @@ export class RoomListComponent extends Component<any, IComponentState> {
             items: {}
         });
 
-        this.updateRooms();
-
-        this.update$.subscribe(() => {
-            this.updateRooms();
-        });
+        this.update$
+            .pipe(takeUntil(this.unmount$))
+            .subscribe(() => {
+                this.updateRooms();
+            });
     }
 
     render(props, state: IComponentState) {
@@ -50,6 +52,10 @@ export class RoomListComponent extends Component<any, IComponentState> {
         )
     }
 
+    componentWillUnmount() {
+        this.unmount$.next();
+    }
+
     createRoom = () => {
         this.apiService.createRoom(Math.random().toString(36).substring(3))
             .subscribe(() => {
@@ -64,5 +70,3 @@ export class RoomListComponent extends Component<any, IComponentState> {
             });
     }
 }
-
-// customElements.define('rooms-list', RoomListComponent);

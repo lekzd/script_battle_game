@@ -8,7 +8,7 @@ import {EMPTY_ARMY} from "../common/client/EMPTY_ARMY";
 import {RightArmy} from "../right/RightArmy";
 import {Observable, fromEvent} from 'rxjs/index';
 import {IPlayerState} from '../common/state.model';
-import {filter} from 'rxjs/internal/operators';
+import {filter, first} from 'rxjs/internal/operators';
 import {BattleSide} from '../common/battle/BattleSide';
 import {ClientComponent} from '../common/client/ClientComponent';
 
@@ -30,12 +30,18 @@ export class MasterApp {
 
     get leftIsReady$(): Observable<boolean> {
         return this.connection.onState$<boolean>('left', 'isReady')
-            .pipe(filter(isReady => isReady === true));
+            .pipe(
+                filter(isReady => isReady === true),
+                first()
+            )
     }
 
     get rightIsReady$(): Observable<boolean> {
         return this.connection.onState$<boolean>('right', 'isReady')
-            .pipe(filter(isReady => isReady === true));
+            .pipe(
+                filter(isReady => isReady === true),
+                first()
+            );
     }
 
     constructor() {

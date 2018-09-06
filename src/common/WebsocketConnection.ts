@@ -62,12 +62,6 @@ export class WebsocketConnection {
             )
     }
 
-    send(message: string) {
-        this.readyPromise.then(() => {
-            this.connection.send(message);
-        });
-    }
-
     registerAsMaster() {
         this.send(JSON.stringify({
             type: 'registerMaster'
@@ -106,5 +100,11 @@ export class WebsocketConnection {
             type: 'state',
             state
         }));
+    }
+
+    private send(message: string) {
+        this.readyPromise.then(() => {
+            this.connection.send(message);
+        });
     }
 }

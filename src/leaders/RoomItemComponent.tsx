@@ -1,43 +1,51 @@
 import {Inject} from "../common/InjectDectorator";
 import {ApiService} from "../common/ApiService";
-import {fromEvent, Subject} from "rxjs";
-import {switchMap} from "rxjs/operators";
 import {Environment} from "../common/Environment";
 import {Component, h} from "preact";
+import {RoomModel} from '../../server/models/RoomModel';
+import {BehaviorSubject} from 'rxjs/index';
 
 interface IComponentState {
-    name: string
+    name: string;
 }
 
-export class RoomItemComponent extends Component<any, IComponentState> {
+interface IComponentProps {
+    name: string;
+    room: RoomModel;
+    update$: BehaviorSubject<any>;
+}
+
+export class RoomItemComponent extends Component<IComponentProps, IComponentState> {
     @Inject(ApiService) private apiService: ApiService;
     @Inject(Environment) private environment: Environment;
 
-    removed$ = new Subject();
+    render(props: IComponentProps, state) {
+        // const leftIsAvailable = props.room.state.left.isReady
 
-    get leftLink(): string {
-        return `${this.environment.config.baseUrl}/left#room=${this.state.name}`;
-    }
-
-    get rightLink(): string {
-        return `${this.environment.config.baseUrl}/right#room=${this.state.name}`;
-    }
-
-    get masterLink(): string {
-        return `${this.environment.config.baseUrl}/master#room=${this.state.name}`;
-    }
-
-    constructor() {
-        super();
-    }
-
-    render(props, state: Partial<IComponentState>) {
         return (
             <div class="room-item">
-                <div>Имя: {props.name}</div>
-                <div><a href={this.leftLink} target="_blank">Левый</a></div>
-                <div><a href={this.rightLink} target="_blank">Правый</a></div>
-                <div><a href={this.masterLink} target="_blank">Мастер</a></div>
+                <div class="title">Имя: {props.name}</div>
+
+                <div class="title">Игроки:</div>
+
+                <div class="players">
+                    <div class="players-item left">
+                        <div><a href={this.generateLInk('left')} target="_blank">В бой!</a></div>
+                    </div>
+
+                    <div class="players-item-versus">vs</div>
+
+                    <div class="players-item right">
+                        <div><a href={this.generateLInk('right')} target="_blank">В бой!</a></div>
+                    </div>
+                </div>
+
+                <div class="title">Зрители:</div>
+
+                <div class="watchers">
+                    <div className="watchers-count">10</div>
+                    <a href={this.generateLInk('master')} target="_blank">Присоединиться</a>
+                </div>
 
                 <button class="sample-button" onClick={this.removeRoom}>Удалить</button>
             </div>
@@ -47,19 +55,11 @@ export class RoomItemComponent extends Component<any, IComponentState> {
     removeRoom = () => {
         this.apiService.deleteRoom(this.props.name)
             .subscribe(() => {
-                this.props.update$.next();
+                this.props.update$.next(this.props.room);
             });
+    };
+
+    private generateLInk(role: string): string {
+        return `${this.environment.config.baseUrl}/${role}#room=${this.props.name}`;
     }
-
-    // afterRender() {
-    //     fromEvent(this.querySelector('#remove'), 'click')
-    //         .pipe(
-    //             switchMap(() => this.apiService.deleteRoom(this.state.name))
-    //         )
-    //         .subscribe(() => {
-    //             this.removed$.next();
-    //         });
-    // }
 }
-
-customElements.define('room-item', RoomItemComponent);
