@@ -18,6 +18,7 @@ import {BattleSide} from '../battle/BattleSide';
 import {CharactersList} from '../characters/CharactersList';
 import {IPlayerState, IState} from '../state.model';
 import {ConsoleService} from "../console/ConsoleService";
+import {RoomService} from "../RoomService";
 
 interface IPointer {
     x: number;
@@ -32,6 +33,7 @@ export class EditorComponent {
     toolbar: Toolbar;
 
     @Inject(ClientState) private clientState: ClientState;
+    @Inject(RoomService) private roomService: RoomService;
     @Inject(ConsoleService) private consoleService: ConsoleService;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
     @Inject(CharactersList) private charactersList: CharactersList;
@@ -118,7 +120,7 @@ export class EditorComponent {
                     newState.right.name = value;
                 }
 
-                this.connection.sendState(newState);
+                this.connection.sendState(newState, this.roomService.roomId);
             });
 
         this.sampleClick$

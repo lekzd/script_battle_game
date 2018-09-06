@@ -62,43 +62,49 @@ export class WebsocketConnection {
             )
     }
 
-    registerAsMaster() {
+    registerAsMaster(roomId: string) {
         this.send(JSON.stringify({
-            type: 'registerMaster'
+            type: 'registerMaster',
+            roomId
         }));
 
         this.isMaster = true;
     }
 
-    registerAsLeftPlayer() {
+    registerAsLeftPlayer(roomId: string) {
         this.send(JSON.stringify({
-            type: 'registerLeftPlayer'
+            type: 'registerLeftPlayer',
+            roomId
         }));
     }
 
-    registerAsRightPlayer() {
+    registerAsRightPlayer(roomId: string) {
         this.send(JSON.stringify({
-            type: 'registerRightPlayer'
+            type: 'registerRightPlayer',
+            roomId
         }));
     }
 
-    sendWinner(sessionResult: ISessionResult) {
+    sendWinner(sessionResult: ISessionResult, roomId: string) {
         this.send(JSON.stringify({
             type: 'sendWinner',
-            sessionResult
+            sessionResult,
+            roomId
         }));
     }
 
-    sendNewSession() {
+    sendNewSession(roomId: string) {
         this.send(JSON.stringify({
-            type: 'newSession'
+            type: 'newSession',
+            roomId
         }));
     }
 
-    sendState(state: Partial<IState>) {
+    sendState(state: Partial<IState>, roomId: string) {
         this.send(JSON.stringify({
             type: 'state',
-            state
+            state,
+            roomId
         }));
     }
 

@@ -19,6 +19,7 @@ import {BattleStatistics} from "../BattleStatistics";
 import {BulletDrawer, BulletType} from "../BulletDrawer";
 import {IPlayerState} from '../../state.model';
 import {ConsoleService} from "../../console/ConsoleService";
+import {RoomService} from "../../RoomService";
 
 export class BattleView extends Phaser.Scene {
 
@@ -29,6 +30,7 @@ export class BattleView extends Phaser.Scene {
     @Inject(EnemyState) private enemyState: EnemyState;
     @Inject(ClientState) private clientState: ClientState;
     @Inject(CodeSandbox) private codeSandbox: CodeSandbox;
+    @Inject(RoomService) private roomService: RoomService;
     @Inject(BattleSession) private battleSession: BattleSession;
     @Inject(CharactersList) private charactersList: CharactersList;
     @Inject(ConsoleService) private consoleService: ConsoleService;
@@ -256,6 +258,6 @@ export class BattleView extends Phaser.Scene {
     }
 
     private dispatchWinner(sessionResult: ISessionResult) {
-        this.connection.sendWinner(sessionResult);
+        this.connection.sendWinner(sessionResult, this.roomService.roomId);
     }
 }

@@ -5,10 +5,18 @@ import {connection} from 'websocket';
 import {Inject} from '../src/common/InjectDectorator';
 import {LeaderBoard} from './LeaderBoard';
 import {ConnectionsStorage} from './ConnectionsStorage';
-import {IMessage} from '../src/common/WebsocketConnection';
+import {RoomStorage} from "./RoomStorage";
+
+export interface IClientRegisterMessage {
+    type: string;
+    roomId: string;
+}
 
 export class SocketMiddleware {
+    connection: connection;
+
     @Inject(LeaderBoard) private leaderBoard: LeaderBoard;
+    @Inject(RoomStorage) private roomStorage: RoomStorage;
     @Inject(ConnectionsStorage) private connectionsStorage: ConnectionsStorage;
 
     get onMessage$(): Observable<any> {
@@ -16,7 +24,14 @@ export class SocketMiddleware {
             .pipe(
                 filter(message => message.type === 'message'),
                 map(message => JSON.parse(message.data)),
-                tap(message => this.tryRegisterConnection(message)),
+                tap(message => {
+                    const {roomId} = message;
+                    const room = this.roomStorage.get(roomId);
+
+                    this.roomStorage.addConnection(this.connection, room);
+
+                    return room.tryRegisterConnection(message, this.connection);
+                }),
                 catchError(error => {
                     console.log(error);
 
@@ -29,14 +44,16 @@ export class SocketMiddleware {
         return fromEvent(this.ws, 'close');
     }
 
-    connection: connection;
-
     constructor(private ws: ws) {
 
         this.connection = <any>ws;
 
         this.onClose$.subscribe(() => {
-            this.connectionsStorage.onConnectionLost(this.connection);
+            const room = this.roomStorage.getRoomByConnection(this.connection);
+
+            if (room) {
+                room.onConnectionLost(this.connection);
+            }
         });
 
         this.on$('sendWinner').subscribe(data => {
@@ -61,7 +78,7 @@ export class SocketMiddleware {
             .pipe(filter(message => message.type === event));
     }
 
-    private tryRegisterConnection(data: IMessage) {
+    private tryRegisterConnection(data: IClientRegisterMessage) {
         if (!this.connectionsStorage.isRegistered(this.connection)) {
             this.connectionsStorage.registerConnection(data, this.connection);
 

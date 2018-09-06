@@ -4,14 +4,13 @@ import {IPlayerState, IState} from '../src/common/state.model';
 import {mergeDeep} from '../src/common/helpers/mergeDeep';
 import {Client} from './Client';
 import {connection} from 'websocket';
-import {IMessage} from '../src/common/WebsocketConnection';
+import {IClientRegisterMessage} from "./SocketMiddleware";
 
 type Partial<T> = {
     [P in keyof T]?: T[P];
 }
 
 export class ConnectionsStorage {
-
     connections = new Map<connection, string>();
     master = new Master();
     leftPlayer = new Player();
@@ -23,7 +22,7 @@ export class ConnectionsStorage {
         return this.connections.has(connection);
     }
 
-    registerConnection(data: IMessage, connection: connection): boolean {
+    registerConnection(data: IClientRegisterMessage, connection: connection): boolean {
         switch (data.type) {
             case 'registerMaster':
                 return this.tryRegisterEntity(connection, 'master');

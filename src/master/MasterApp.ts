@@ -11,10 +11,12 @@ import {IPlayerState} from '../common/state.model';
 import {filter, first} from 'rxjs/internal/operators';
 import {BattleSide} from '../common/battle/BattleSide';
 import {ClientComponent} from '../common/client/ClientComponent';
+import {RoomService} from "../common/RoomService";
 
 export class MasterApp {
 
     @Inject(BattleGame) private battleGame: BattleGame;
+    @Inject(RoomService) private roomService: RoomService;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
     private leftCode: CodeDisplay;
@@ -46,7 +48,7 @@ export class MasterApp {
 
     constructor() {
         this.battleGame.init();
-        this.connection.registerAsMaster();
+        this.connection.registerAsMaster(this.roomService.roomId);
 
         new ClientComponent(this.container.querySelector('#leftClient'), BattleSide.left);
         new ClientComponent(this.container.querySelector('#rightClient'), BattleSide.right);
@@ -75,7 +77,7 @@ export class MasterApp {
             });
 
         this.newSessionClick$.subscribe(() => {
-            this.connection.sendNewSession();
+            this.connection.sendNewSession(this.roomService.roomId);
         });
 
         this.connection.onState$('right')

@@ -4,6 +4,7 @@ import {Environment} from "../common/Environment";
 import {Component, h} from "preact";
 import {RoomModel} from '../../server/models/RoomModel';
 import {BehaviorSubject} from 'rxjs/index';
+import {Maybe} from "../common/helpers/Maybe";
 
 interface IComponentState {
     name: string;
@@ -20,7 +21,6 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
     @Inject(Environment) private environment: Environment;
 
     render(props: IComponentProps, state) {
-        // const leftIsAvailable = props.room.state.left.isReady
 
         return (
             <div class="room-item">
@@ -30,20 +30,20 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
 
                 <div class="players">
                     <div class="players-item left">
-                        <div><a href={this.generateLInk('left')} target="_blank">В бой!</a></div>
+                        {this.renderClientStatus(props.room, 'left')}
                     </div>
 
                     <div class="players-item-versus">vs</div>
 
                     <div class="players-item right">
-                        <div><a href={this.generateLInk('right')} target="_blank">В бой!</a></div>
+                        {this.renderClientStatus(props.room, 'right')}
                     </div>
                 </div>
 
                 <div class="title">Зрители:</div>
 
                 <div class="watchers">
-                    <div className="watchers-count">10</div>
+                    <div className="watchers-count">{props.room.watchersCount}</div>
                     <a href={this.generateLInk('master')} target="_blank">Присоединиться</a>
                 </div>
 
@@ -61,5 +61,23 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
 
     private generateLInk(role: string): string {
         return `${this.environment.config.baseUrl}/${role}#room=${this.props.name}`;
+    }
+
+    private renderClientStatus(room: RoomModel, side: string) {
+        const isAvailable = Maybe(room).pluck(`state.${side}.isConnected`).getOrElse(false);
+
+        if (isAvailable) {
+            return (
+                <div>
+                    В бою
+                </div>
+            );
+        }
+
+        return (
+            <div>
+                <a href={this.generateLInk(side)} target="_blank">В бой!</a>
+            </div>
+        );
     }
 }

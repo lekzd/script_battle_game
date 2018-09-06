@@ -14,12 +14,14 @@ import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {ClientComponent} from './ClientComponent';
 import {Observable} from 'rxjs/index';
 import "../console/BattleConsole";
+import {RoomService} from "../RoomService";
 
 export class ClientApp {
 
     @Inject(BattleGame) private battleGame: BattleGame;
     @Inject(EnemyState) private enemyState: EnemyState;
     @Inject(ClientState) private clientState: ClientState;
+    @Inject(RoomService) private roomService: RoomService;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
     get leftIsReady$(): Observable<boolean> {
@@ -40,12 +42,12 @@ export class ClientApp {
         this.clientState.side = side;
 
         if (side === BattleSide.left) {
-            this.connection.registerAsLeftPlayer();
+            this.connection.registerAsLeftPlayer(this.roomService.roomId);
 
             setInject(LeftArmy, this.clientState.army);
             setInject(RightArmy, this.enemyState.army);
         } else {
-            this.connection.registerAsRightPlayer();
+            this.connection.registerAsRightPlayer(this.roomService.roomId);
 
             setInject(LeftArmy, this.enemyState.army);
             setInject(RightArmy, this.clientState.army);
@@ -75,7 +77,7 @@ export class ClientApp {
                 newState.right.isReady = true;
             }
 
-            this.connection.sendState(newState);
+            this.connection.sendState(newState, this.roomService.roomId);
         });
 
         this.editorComponent.change$.subscribe(code => {
@@ -90,7 +92,7 @@ export class ClientApp {
                 newState.right.editor.code = code;
             }
 
-            this.connection.sendState(newState);
+            this.connection.sendState(newState, this.roomService.roomId);
         });
 
         this.editorComponent.editorScroll$.subscribe(pointer => {
@@ -107,7 +109,7 @@ export class ClientApp {
                 newState.right.editor.scrollY = pointer.y;
             }
 
-            this.connection.sendState(newState);
+            this.connection.sendState(newState, this.roomService.roomId);
         });
 
         this.clientState.change$
@@ -126,7 +128,7 @@ export class ClientApp {
                     Object.assign(newState.right, clientState);
                 }
 
-                this.connection.sendState(newState);
+                this.connection.sendState(newState, this.roomService.roomId);
             });
 
         this.connection.onMessage$.subscribe(message => {
