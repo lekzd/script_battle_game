@@ -1,6 +1,6 @@
-import {IMessage} from '../src/common/WebsocketConnection';
-import {IState} from '../src/common/state.model';
-import {mergeDeep} from '../src/common/helpers/mergeDeep';
+import {IMessage} from '../../src/common/WebsocketConnection';
+import {IState} from '../../src/common/state.model';
+import {mergeDeep} from '../../src/common/helpers/mergeDeep';
 import * as ws from 'ws';
 
 export abstract class Client {

@@ -13,6 +13,7 @@ export class Room {
     onMessage$ = new Subject<IMessage>();
 
     @Inject(LeaderBoard) private leaderBoard: LeaderBoard;
+    @Inject(ConnectionsStorage) private guestConnectionsStorage: ConnectionsStorage;
 
     private connectionsStorage = new ConnectionsStorage();
 
@@ -66,6 +67,8 @@ export class Room {
 
                 return;
             }
+
+            this.guestConnectionsStorage.guest.dispatchRoomsChanged();
 
             return;
         }

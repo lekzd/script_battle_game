@@ -18,6 +18,13 @@ export class WebsocketConnection {
     onClose$ = new Subject<IMessage>();
     isMaster = false;
 
+    get onRoomsChanged$() {
+        return this.onMessage$
+            .pipe(
+                filter(message => message.type === 'roomsChanged')
+            )
+    }
+
     private connection: WebSocket;
     private readyPromise: Promise<void>;
 
@@ -60,6 +67,12 @@ export class WebsocketConnection {
                 pluck<IMessage, T>('data', ...path),
                 filter(data => data !== null && data !== undefined)
             )
+    }
+
+    registerAsGuest() {
+        this.send(JSON.stringify({
+            type: 'registerGuest'
+        }));
     }
 
     registerAsMaster(roomId: string) {

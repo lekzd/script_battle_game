@@ -1,11 +1,12 @@
 import {Inject} from "../common/InjectDectorator";
 import {ApiService} from "../common/ApiService";
-import {BehaviorSubject, Subject} from "rxjs";
+import {BehaviorSubject, merge, Subject} from "rxjs";
 import "./RoomItemComponent";
 import {RoomItemComponent} from "./RoomItemComponent";
 import {RoomModel} from "../../server/models/RoomModel";
 import {Component, h} from "preact";
 import {takeUntil} from 'rxjs/internal/operators';
+import {WebsocketConnection} from '../common/WebsocketConnection';
 
 interface IComponentState {
     items: {[key: string]: RoomModel}
@@ -15,6 +16,7 @@ export class RoomListComponent extends Component<any, IComponentState> {
     update$ = new BehaviorSubject([]);
 
     @Inject(ApiService) private apiService: ApiService;
+    @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
     private unmount$ = new Subject();
 
@@ -25,7 +27,10 @@ export class RoomListComponent extends Component<any, IComponentState> {
             items: {}
         });
 
-        this.update$
+        merge(
+            this.update$,
+            this.connection.onRoomsChanged$
+        )
             .pipe(takeUntil(this.unmount$))
             .subscribe(() => {
                 this.updateRooms();

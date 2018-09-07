@@ -1,10 +1,11 @@
-import {Master} from "./Master";
-import {Player} from "./Player";
+import {Master} from "./clients/Master";
+import {Player} from "./clients/Player";
 import {IPlayerState, IState} from '../src/common/state.model';
 import {mergeDeep} from '../src/common/helpers/mergeDeep';
-import {Client} from './Client';
+import {Client} from './clients/Client';
 import {IClientRegisterMessage} from "./SocketMiddleware";
 import * as ws from 'ws';
+import {Guest} from './clients/Guest';
 
 type Partial<T> = {
     [P in keyof T]?: T[P];
@@ -12,6 +13,7 @@ type Partial<T> = {
 
 export class ConnectionsStorage {
     connections = new Map<ws, string>();
+    guest = new Guest();
     master = new Master();
     leftPlayer = new Player();
     rightPlayer = new Player();
@@ -24,6 +26,8 @@ export class ConnectionsStorage {
 
     registerConnection(data: IClientRegisterMessage, connection: ws): boolean {
         switch (data.type) {
+            case 'registerGuest':
+                return this.tryRegisterEntity(connection, 'guest');
             case 'registerMaster':
                 return this.tryRegisterEntity(connection, 'master');
             case 'registerLeftPlayer':

@@ -1,9 +1,10 @@
 import * as ws from 'ws';
 import {catchError, filter, map, tap} from 'rxjs/operators';
-import {Observable, fromEvent} from 'rxjs/index';
+import {Observable, fromEvent, throwError} from 'rxjs/index';
 import {Inject} from '../src/common/InjectDectorator';
 import {LeaderBoard} from './LeaderBoard';
 import {RoomStorage} from "./RoomStorage";
+import {ConnectionsStorage} from './ConnectionsStorage';
 
 export interface IClientRegisterMessage {
     type: string;
@@ -15,6 +16,7 @@ export class SocketMiddleware {
 
     @Inject(LeaderBoard) private leaderBoard: LeaderBoard;
     @Inject(RoomStorage) private roomStorage: RoomStorage;
+    @Inject(ConnectionsStorage) private guestConnectionsStorage: ConnectionsStorage;
 
     get onMessage$(): Observable<any> {
         return fromEvent<MessageEvent>(this.ws, 'message')
@@ -24,6 +26,17 @@ export class SocketMiddleware {
                 tap(message => {
                     const {roomId} = message;
                     const room = this.roomStorage.get(roomId);
+
+                    // todo: temporary
+                    if (message.type === 'registerGuest') {
+                        return this.tryRegisterGuestConnection(message, this.connection);
+                    }
+
+                    if (!room) {
+                        this.connection.close();
+
+                        return throwError(`room id ${roomId} is not found`);
+                    }
 
                     this.roomStorage.addConnection(this.connection, room);
 
@@ -50,6 +63,7 @@ export class SocketMiddleware {
 
             if (room) {
                 room.onConnectionLost(this.connection);
+                this.guestConnectionsStorage.guest.dispatchRoomsChanged();
             }
         });
 
@@ -63,7 +77,20 @@ export class SocketMiddleware {
                 console.error(`room id ${roomId} is not found`);
             }
         });
+    }
 
+    private tryRegisterGuestConnection(data: IClientRegisterMessage, connection: ws) {
+        if (!this.guestConnectionsStorage.isRegistered(connection)) {
+            this.guestConnectionsStorage.registerConnection(data, connection);
+
+            if (!this.guestConnectionsStorage.isRegistered(connection)) {
+                connection.close();
+
+                return;
+            }
+
+            return;
+        }
     }
 
 }

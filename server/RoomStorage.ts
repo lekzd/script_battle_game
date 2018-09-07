@@ -1,13 +1,19 @@
 import {Room} from "./Room";
 import * as ws from 'ws';
+import {ConnectionsStorage} from './ConnectionsStorage';
+import {Inject} from '../src/common/InjectDectorator';
 
 export class RoomStorage {
 
     private rooms = new Map<string, Room>();
     private connections = new WeakMap<ws, Room>();
 
+    @Inject(ConnectionsStorage) private guestConnectionsStorage: ConnectionsStorage;
+
     createNew(name: string) {
         this.rooms.set(name, new Room());
+
+        this.guestConnectionsStorage.guest.dispatchRoomsChanged();
     }
 
     delete(name: string) {
@@ -16,6 +22,8 @@ export class RoomStorage {
         if (room) {
             room.closeConnections();
             this.rooms.delete(name);
+
+            this.guestConnectionsStorage.guest.dispatchRoomsChanged();
         }
     }
 
