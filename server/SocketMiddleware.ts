@@ -1,10 +1,8 @@
 import * as ws from 'ws';
 import {catchError, filter, map, tap} from 'rxjs/operators';
 import {Observable, fromEvent} from 'rxjs/index';
-import {connection} from 'websocket';
 import {Inject} from '../src/common/InjectDectorator';
 import {LeaderBoard} from './LeaderBoard';
-import {ConnectionsStorage} from './ConnectionsStorage';
 import {RoomStorage} from "./RoomStorage";
 
 export interface IClientRegisterMessage {
@@ -13,11 +11,10 @@ export interface IClientRegisterMessage {
 }
 
 export class SocketMiddleware {
-    connection: connection;
+    connection: ws;
 
     @Inject(LeaderBoard) private leaderBoard: LeaderBoard;
     @Inject(RoomStorage) private roomStorage: RoomStorage;
-    @Inject(ConnectionsStorage) private connectionsStorage: ConnectionsStorage;
 
     get onMessage$(): Observable<any> {
         return fromEvent<MessageEvent>(this.ws, 'message')
@@ -56,40 +53,17 @@ export class SocketMiddleware {
             }
         });
 
-        this.on$('sendWinner').subscribe(data => {
-            const state = Object.assign({}, data.sessionResult, this.connectionsStorage.state);
+        this.onMessage$.subscribe(message => {
+            const {roomId} = message;
+            const room = this.roomStorage.get(roomId);
 
-            this.leaderBoard.write(state);
-            this.connectionsStorage.endSession(data.sessionResult);
-        });
-
-        this.on$('newSession').subscribe(data => {
-            this.connectionsStorage.newSession();
-        });
-
-        this.on$('state').subscribe(data => {
-            this.connectionsStorage.setState(data.state);
-        });
-
-    }
-
-    private on$(event: string): Observable<any> {
-        return this.onMessage$
-            .pipe(filter(message => message.type === event));
-    }
-
-    private tryRegisterConnection(data: IClientRegisterMessage) {
-        if (!this.connectionsStorage.isRegistered(this.connection)) {
-            this.connectionsStorage.registerConnection(data, this.connection);
-
-            if (!this.connectionsStorage.isRegistered(this.connection)) {
-                this.connection.close();
-
-                return;
+            if (room) {
+                room.onMessage$.next(message);
+            } else {
+                console.error(`room id ${roomId} is not found`);
             }
+        });
 
-            return;
-        }
     }
 
 }

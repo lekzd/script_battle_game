@@ -1,18 +1,18 @@
-import {connection} from 'websocket';
 import {IMessage} from '../src/common/WebsocketConnection';
 import {IState} from '../src/common/state.model';
 import {mergeDeep} from '../src/common/helpers/mergeDeep';
+import * as ws from 'ws';
 
 export abstract class Client {
 
     protected maxConnections = 1;
 
-    private connectionsPool = new Set<connection>();
+    private connectionsPool = new Set<ws>();
     private messagesToSend: IMessage[] = [];
     private clientState: Partial<IState> = {};
-    private mainConnection: connection;
+    private mainConnection: ws;
 
-    setConnection(connection: connection) {
+    setConnection(connection: ws) {
         this.connectionsPool.add(connection);
 
         if (this.connectionsPool.size === 1) {
@@ -54,12 +54,12 @@ export abstract class Client {
         });
     }
 
-    canConnect(connection: connection): boolean {
+    canConnect(connection: ws): boolean {
         return this.connectionsPool.size < this.maxConnections
             && !this.connectionsPool.has(connection);
     }
 
-    disconnect(connection: connection) {
+    disconnect(connection: ws) {
         this.connectionsPool.delete(connection);
 
         if (this.isMain(connection) && this.connectionsPool.size > 0) {
@@ -69,7 +69,7 @@ export abstract class Client {
         }
     }
 
-    isMain(connection: connection): boolean {
+    isMain(connection: ws): boolean {
         return connection === this.mainConnection;
     }
 
@@ -81,7 +81,9 @@ export abstract class Client {
         }
 
         this.connectionsPool.forEach(connection => {
-            connection.send(JSON.stringify(data));
+            if (connection.readyState === ws.OPEN) {
+                connection.send(JSON.stringify(data));
+            }
         });
     }
 

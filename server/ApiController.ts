@@ -1,23 +1,17 @@
 import {Router} from "express";
 import {Inject} from "../src/common/InjectDectorator";
 import {LeaderBoard} from "./LeaderBoard";
-import {ConnectionsStorage} from "./ConnectionsStorage";
 import {RoomStorage} from "./RoomStorage";
 import {RoomModel} from "./models/RoomModel";
 
 export class ApiController {
     @Inject(LeaderBoard) private leaderBoard: LeaderBoard;
     @Inject(RoomStorage) private roomStorage: RoomStorage;
-    @Inject(ConnectionsStorage) private connectionsStorage: ConnectionsStorage;
 
     constructor(public router: Router) {
 
         router.get('/leaderboard', (request, response) => {
             response.json(this.leaderBoard.data);
-        });
-
-        router.get('/state', (request, response) => {
-            response.json(this.connectionsStorage.state);
         });
 
         router.get('/rooms', (request, response) => {

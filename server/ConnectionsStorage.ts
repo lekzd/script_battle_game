@@ -3,26 +3,26 @@ import {Player} from "./Player";
 import {IPlayerState, IState} from '../src/common/state.model';
 import {mergeDeep} from '../src/common/helpers/mergeDeep';
 import {Client} from './Client';
-import {connection} from 'websocket';
 import {IClientRegisterMessage} from "./SocketMiddleware";
+import * as ws from 'ws';
 
 type Partial<T> = {
     [P in keyof T]?: T[P];
 }
 
 export class ConnectionsStorage {
-    connections = new Map<connection, string>();
+    connections = new Map<ws, string>();
     master = new Master();
     leftPlayer = new Player();
     rightPlayer = new Player();
 
     state: Partial<IState> = {};
 
-    isRegistered(connection: connection): boolean {
+    isRegistered(connection: ws): boolean {
         return this.connections.has(connection);
     }
 
-    registerConnection(data: IClientRegisterMessage, connection: connection): boolean {
+    registerConnection(data: IClientRegisterMessage, connection: ws): boolean {
         switch (data.type) {
             case 'registerMaster':
                 return this.tryRegisterEntity(connection, 'master');
@@ -35,7 +35,7 @@ export class ConnectionsStorage {
         return false;
     }
 
-    tryRegisterEntity(connection: connection, name: string): boolean {
+    tryRegisterEntity(connection: ws, name: string): boolean {
         const client = this.getClient(name);
 
         if (client.canConnect(connection)) {
@@ -58,7 +58,7 @@ export class ConnectionsStorage {
         return false;
     }
 
-    onConnectionLost(connection: connection) {
+    onConnectionLost(connection: ws) {
         if (this.isRegistered(connection)) {
             const name = this.connections.get(connection);
             const client = this.getClient(name);
@@ -97,6 +97,14 @@ export class ConnectionsStorage {
         this.master.setState(this.state);
         this.leftPlayer.setState(this.state);
         this.rightPlayer.setState(this.state);
+    }
+
+    close() {
+        this.connections.forEach((name, connection) => {
+            if (connection.readyState === ws.OPEN) {
+                connection.close();
+            }
+        });
     }
 
     private getClient(name: string): Client {

@@ -1,17 +1,22 @@
 import {Room} from "./Room";
-import {connection} from "websocket";
+import * as ws from 'ws';
 
 export class RoomStorage {
 
     private rooms = new Map<string, Room>();
-    private connections = new WeakMap<connection, Room>();
+    private connections = new WeakMap<ws, Room>();
 
     createNew(name: string) {
         this.rooms.set(name, new Room());
     }
 
     delete(name: string) {
-        this.rooms.delete(name);
+        const room = this.get(name);
+
+        if (room) {
+            room.closeConnections();
+            this.rooms.delete(name);
+        }
     }
 
     get(name: string): Room {
@@ -28,11 +33,11 @@ export class RoomStorage {
         return result;
     }
 
-    addConnection(connection: connection, room: Room) {
+    addConnection(connection: ws, room: Room) {
         this.connections.set(connection, room);
     }
 
-    getRoomByConnection(connection: connection): Room {
+    getRoomByConnection(connection: ws): Room {
         return this.connections.get(connection);
     }
 

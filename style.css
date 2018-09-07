@@ -861,6 +861,7 @@ accordion-section .accordion-header:hover {
 }
 
 .room-item {
+  width: 800px;
   border: 1px solid #007a9c;
   padding: 10px;
 }
@@ -880,7 +881,7 @@ accordion-section .accordion-header:hover {
 .room-item .players {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 10px;
 }
 

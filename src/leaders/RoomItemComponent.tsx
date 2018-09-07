@@ -65,18 +65,38 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
 
     private renderClientStatus(room: RoomModel, side: string) {
         const isAvailable = Maybe(room).pluck(`state.${side}.isConnected`).getOrElse(false);
+        const userName = Maybe(room).pluck(`state.${side}.name`).getOrElse('--Без имени--');
 
         if (isAvailable) {
             return (
                 <div>
-                    В бою
+                    <div class={`client ${side}`}>
+                        <div class="client-connection active" />
+                        <div class="client-status wait">
+                            Пишет код
+                        </div>
+                        <div class="client-name">
+                            {userName}
+                        </div>
+                    </div>
                 </div>
             );
         }
 
         return (
             <div>
-                <a href={this.generateLInk(side)} target="_blank">В бой!</a>
+                <div class={`client ${side}`}>
+                    <div class="client-connection " />
+                    <div class="client-status wait">
+                        Оффлайн
+                    </div>
+                    <div class="client-name">
+                        {userName}
+                    </div>
+                </div>
+                <div>
+                    <a href={this.generateLInk(side)} target="_blank">В бой!</a>
+                </div>
             </div>
         );
     }
