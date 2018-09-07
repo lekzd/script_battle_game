@@ -783,7 +783,7 @@ accordion-section .accordion-header:hover {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 900px;
+  max-width: 750px;
   margin: 20px auto;
 }
 
@@ -823,19 +823,19 @@ accordion-section .accordion-header:hover {
 }
 
 .leaders-grid .winner.left {
-  background-image: linear-gradient(90deg, transparent, #004100);
+  background-image: linear-gradient(90deg, transparent, rgba(0, 65, 0, 0.5));
 }
 
 .leaders-grid .winner.right {
-  background-image: linear-gradient(90deg, #004100, transparent);
+  background-image: linear-gradient(90deg, rgba(0, 65, 0, 0.5), transparent);
 }
 
 .leaders-grid .looser.left {
-  background-image: linear-gradient(90deg, transparent, #850606);
+  background-image: linear-gradient(90deg, transparent, rgba(133, 6, 6, 0.5));
 }
 
 .leaders-grid .looser.right {
-  background-image: linear-gradient(90deg, #850606, transparent);
+  background-image: linear-gradient(90deg, rgba(133, 6, 6, 0.5), transparent);
 }
 
 .rooms-list {
@@ -866,7 +866,7 @@ accordion-section .accordion-header:hover {
 }
 
 .rooms-list .room-item {
-  margin: 10px;
+  margin: 10px 0;
 }
 
 .room-item a {
@@ -896,6 +896,10 @@ accordion-section .accordion-header:hover {
   margin-bottom: 10px;
 }
 
+.room-item-client {
+  margin-bottom: 15px;
+}
+
 .room-item .players-item {
   width: 40%;
 }
@@ -903,7 +907,9 @@ accordion-section .accordion-header:hover {
 
 .room-item .players-item-versus {
   color: orange;
-  font-weight: bold;
+  font-weight: 100;
+  font-size: 25px;
+  align-self: center;
 }
 
 .room-item .players-item.left {
@@ -934,10 +940,12 @@ accordion-section .accordion-header:hover {
 
 .modal-dialog {
   padding: 0;
+  top: 40%;
+  box-shadow: 0 0 20px #000;
 }
 
 .modal-dialog::backdrop {
-  background: rgba(0, 0, 0, .4);
+  background-image: radial-gradient(transparent, #000);
 }
 
 .modal-dialog-content {
@@ -965,4 +973,20 @@ accordion-section .accordion-header:hover {
   border: none;
   padding: 0 8px;
   outline: 1px solid #384863;
+}
+
+.leaders-main {
+  color: #e0e087;
+  font-weight: 400;
+  font-size: 20px;
+  letter-spacing: 0.1em;
+  text-shadow: 1px 1px 1px #000;
+}
+
+.leaders-points {
+  color: #fff;
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 0.1em;
+  text-shadow: 1px 1px 1px #000;
 }

@@ -7,6 +7,7 @@ import {filter} from 'rxjs/operators';
 import {IMessage} from '../src/common/WebsocketConnection';
 import {LeaderBoard} from './LeaderBoard';
 import {Inject} from '../src/common/InjectDectorator';
+import {Maybe} from "../src/common/helpers/Maybe";
 
 export class Room {
 
@@ -34,6 +35,8 @@ export class Room {
     }
 
     constructor(public title: string) {
+        this.connectionsStorage.setState({roomTitle: title});
+
         this.on$('sendWinner').subscribe(data => {
             const state = Object.assign({}, data.sessionResult, this.state);
 
@@ -47,6 +50,13 @@ export class Room {
 
         this.on$('state').subscribe(data => {
             this.connectionsStorage.setState(data.state);
+
+            const name = Maybe(data.state).pluck('left.name') || Maybe(data.state).pluck('right.name');
+            const isReady = Maybe(data.state).pluck('left.isReady') || Maybe(data.state).pluck('right.isReady');
+
+            if (name && isReady) {
+                this.guestConnectionsStorage.guest.dispatchRoomsChanged();
+            }
         });
     }
 

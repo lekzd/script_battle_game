@@ -5,7 +5,7 @@ import "./RoomItemComponent";
 import {RoomItemComponent} from "./RoomItemComponent";
 import {RoomModel} from "../../server/models/RoomModel";
 import {Component, h} from "preact";
-import {switchMap, takeUntil} from 'rxjs/internal/operators';
+import {debounceTime, switchMap, takeUntil} from 'rxjs/internal/operators';
 import {WebsocketConnection} from '../common/WebsocketConnection';
 import {PromptService} from './PromptService';
 
@@ -32,6 +32,7 @@ export class RoomListComponent extends Component<any, IComponentState> {
         merge(
             this.update$,
             this.connection.onRoomsChanged$
+                .pipe(debounceTime(100))
         )
             .pipe(takeUntil(this.unmount$))
             .subscribe(() => {

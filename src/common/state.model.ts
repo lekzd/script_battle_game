@@ -26,6 +26,8 @@ export interface IPlayerState {
 }
 
 export interface IState {
+    roomId: string;
+    roomTitle: string;
     left: IPlayerState;
     right: IPlayerState;
     damage: {

@@ -7,7 +7,7 @@
                         Соберите отряд
                     </div>
                     <div>
-                        <video src="/img/select_unit.mov" width="300" autoplay loop controls></video>
+                        <video src="/img/select_unit.mov" width="600" autoplay loop controls></video>
                     </div>
                     <div>
                         Есть три класса юнитов: маги, стрелки и пехотинцы
@@ -18,7 +18,7 @@
                         Напишите скрипт для своей армии
                     </div>
                     <div>
-                      <video src="/img/run_code.mov" width="300" autoplay loop controls></video>
+                      <video src="/img/run_code.mov" width="600" autoplay loop controls></video>
                     </div>
                     <div>
                         Код – чистый JS, исполняется последовательно для каждого юнита
@@ -43,6 +43,101 @@
                 <li>Очередность хода зависит от скорости юнита, быстрые ходят первыми</li>
                 <li>Победитель определяется либо после полной победы одной из сторон, либо по очкам после окончания выполнения кода</li>
             </ul>
+        </section>
+    </accordion-section>
+
+    <accordion-section header="Основы JavaScript">
+        <section>
+            <ol class="main">
+                <li>
+                    <div class="header">Переменные</div>
+                    <div>
+<pre class="code">
+    stepsCount = 10
+    enemyIds = ['ie', '$', 'eval', 'dart']
+</pre>
+                    </div>
+                </li>
+                <li>
+                    <div class="header">Цикл</div>
+                    <div>
+<pre class="code">
+    for (i = 0; i < 10; i++) {
+        shoot('ie')
+    }
+</pre>
+                    </div>
+                </li>
+                <li>
+                    <div class="header">Функция</div>
+                    <div>
+<pre class="code">
+    function attack(id) {
+        if (isShooter()) {
+            shoot(id)
+        }
+        if (isInfantry()) {
+            goToEnemyAndHit(id)
+        }
+    }
+
+    attack('ie')
+</pre>
+                    </div>
+                </li>
+            </ol>
+        </section>
+    </accordion-section>
+
+    <accordion-section header="Первые шаги">
+        <section>
+            <section>
+                <p>
+                    Дано:
+                </p>
+                <ul>
+                    <li>У нас сть 2 юнита: <span class="attr">CSS</span> и <span class="attr">PWA</span></li>
+                    <li>У противника: <span class="attr">CSS</span> и <span class="attr">$</span></li>
+                </ul>
+            </section>
+
+            <section class="signature">
+                <p>
+                    <span class="attr">id</span> юнита написан в фиолетовом прямоугольнике у его ног
+                </p>
+                <p>
+                    <img src="/img/tuttorial_id.png" width="100">
+                </p>
+            </section>
+
+            <section>
+                <p>Если заглянуть в характеристики персонажей:</p>
+                <ul>
+                    <li>Стрелковые атаки будут менее эффективны против стрелков (<span class="attr">$</span>)</li>
+                    <li>Чтобы нанести больше урона стрелкам надо подойти ближе к цели</li>
+                    <li>У нас есть один пехотинец (<span class="attr">CSS</span>) с ближней атакой</li>
+                </ul>
+            </section>
+
+            <section class="signature">
+                <video src="/img/scripting_guide.mov" width="600" controls></video>
+            </section>
+
+            <section>
+                <p>Как написать более-менее эффективный скрипт:</p>
+                <ul>
+                    <li>Нажать "Сгенерировать пример кода", чтобы сразу получить стартовый код для нашей армии</li>
+                    <li>Подвести <span class="attr">PWA</span> ближе к противнику, чтобы наносить больше урона</li>
+                    <li>Ближнюю атаку направить на <span class="attr">$</span> а стрелковую на &mdash; <span class="attr">CSS</span></li>
+                </ul>
+            </section>
+
+            <section class="signature">
+                Код выполняется всего один раз, за один ход юниты не могут
+                дойти до персоанажа или полностью убить его за один выстрел
+                потому накидывайте по-больше действий на юнитов
+            </section>
+
         </section>
     </accordion-section>
 
@@ -206,101 +301,6 @@
             </section>
         </section>
 
-    </accordion-section>
-
-    <accordion-section header="Основы JavaScript">
-        <section>
-            <ol class="main">
-              <li>
-                <div class="header">Переменные</div>
-                <div>
-<pre class="code">
-    stepsCount = 10
-    enemyIds = ['ie', '$', 'eval', 'dart']
-</pre>
-                </div>
-              </li>
-              <li>
-                <div class="header">Цикл</div>
-                <div>
-<pre class="code">
-    for (i = 0; i < 10; i++) {
-        shoot('ie')
-    }
-</pre>
-                </div>
-              </li>
-              <li>
-                <div class="header">Функция</div>
-                <div>
-<pre class="code">
-    function attack(id) {
-        if (isShooter()) {
-            shoot(id)
-        }
-        if (isInfantry()) {
-            goToEnemyAndHit(id)
-        }
-    }
-
-    attack('ie')
-</pre>
-                </div>
-              </li>
-            </ol>
-        </section>
-    </accordion-section>
-
-    <accordion-section header="Первые шаги">
-        <section>
-            <section>
-                <p>
-                    Дано:
-                </p>
-                <ul>
-                    <li>У нас сть 2 юнита: <span class="attr">CSS</span> и <span class="attr">PWA</span></li>
-                    <li>У противника: <span class="attr">CSS</span> и <span class="attr">$</span></li>
-                </ul>
-            </section>
-
-            <section class="signature">
-                <p>
-                    <span class="attr">id</span> юнита написан в фиолетовом прямоугольнике у его ног
-                </p>
-                <p>
-                    <img src="/img/tuttorial_id.png" width="100">
-                </p>
-            </section>
-
-            <section>
-                <p>Если заглянуть в характеристики персонажей:</p>
-                <ul>
-                    <li>Стрелковые атаки будут менее эффективны против стрелков (<span class="attr">$</span>)</li>
-                    <li>Чтобы нанести больше урона стрелкам надо подойти ближе к цели</li>
-                    <li>У нас есть один пехотинец (<span class="attr">CSS</span>) с ближней атакой</li>
-                </ul>
-            </section>
-
-            <section class="signature">
-                <video src="/img/scripting_guide.mov" width="600" controls></video>
-            </section>
-
-            <section>
-                <p>Как написать более-менее эффективный скрипт:</p>
-                <ul>
-                    <li>Нажать "Сгенерировать пример кода", чтобы сразу получить стартовый код для нашей армии</li>
-                    <li>Подвести <span class="attr">PWA</span> ближе к противнику, чтобы наносить больше урона</li>
-                    <li>Ближнюю атаку направить на <span class="attr">$</span> а стрелковую на &mdash; <span class="attr">CSS</span></li>
-                </ul>
-            </section>
-
-            <section class="signature">
-                Код выполняется всего один раз, за один ход юниты не могут
-                дойти до персоанажа или полностью убить его за один выстрел
-                потому накидывайте по-больше действий на юнитов
-            </section>
-
-        </section>
     </accordion-section>
 
     <accordion-section header="Полезные советы">

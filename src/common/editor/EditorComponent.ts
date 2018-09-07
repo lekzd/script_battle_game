@@ -19,6 +19,7 @@ import {CharactersList} from '../characters/CharactersList';
 import {IPlayerState, IState} from '../state.model';
 import {ConsoleService} from "../console/ConsoleService";
 import {RoomService} from "../RoomService";
+import {PromptService} from "../../leaders/PromptService";
 
 interface IPointer {
     x: number;
@@ -34,9 +35,10 @@ export class EditorComponent {
 
     @Inject(ClientState) private clientState: ClientState;
     @Inject(RoomService) private roomService: RoomService;
+    @Inject(PromptService) private promptService: PromptService;
     @Inject(ConsoleService) private consoleService: ConsoleService;
-    @Inject(WebsocketConnection) private connection: WebsocketConnection;
     @Inject(CharactersList) private charactersList: CharactersList;
+    @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
     private editor: Editor;
 
@@ -98,9 +100,8 @@ export class EditorComponent {
                     return of(response);
                 }
 
-                this.consoleService.serviceLog('Не забудьте вписать имя!');
-
-                return NEVER;
+                return this.promptService.show('Впишите свое имя')
+                    .pipe(tap(name => this.clientState.set({name})))
             }))
             .subscribe(() => {
                 this.consoleService.infoLog('Кажется, вы готовы к битве! Но код еще можно редактировать =)');
@@ -176,7 +177,7 @@ export class EditorComponent {
                 sampleCode += `// проверка юнита по ID\n` +
                               `if (is('${id}')) {\n` +
                               `    // действие\n` +
-                              `   say('Привет, я ${id}!')\n` +
+                              `    say('Привет, я ${id}!')\n` +
                               `}\n`
         });
 

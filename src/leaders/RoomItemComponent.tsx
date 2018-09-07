@@ -69,7 +69,7 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
 
         if (isAvailable) {
             return (
-                <div>
+                <div class="room-item-client">
                     <div class={`client ${side}`}>
                         <div class="client-connection active" />
                         <div class="client-status wait">
@@ -84,7 +84,7 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
         }
 
         return (
-            <div>
+            <div class="room-item-client">
                 <div class={`client ${side}`}>
                     <div class="client-connection " />
                     <div class="client-status wait">
