@@ -33,7 +33,7 @@ export class Room {
         return this.connectionsStorage.state;
     }
 
-    constructor() {
+    constructor(public title: string) {
         this.on$('sendWinner').subscribe(data => {
             const state = Object.assign({}, data.sessionResult, this.state);
 

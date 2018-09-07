@@ -22,6 +22,17 @@ export class LeadersGridComponent extends Component<any, IGridState> {
     }
 
     render(props, state: Partial<IGridState>) {
+        const items = state.items.sort((a, b) => {
+            const first = Math.max(a.damage.left, a.damage.right);
+            const second = Math.max(b.damage.left, b.damage.right);
+
+            if (first > second) {
+                return -1;
+            }
+
+            return 1;
+        });
+
         return (
             <div class="leaders-grid">
                 <table class="grid">
@@ -35,7 +46,7 @@ export class LeadersGridComponent extends Component<any, IGridState> {
                     </thead>
 
                     <tbody>
-                    {state.items.map(item => (
+                    {items.map(item => (
                         <tr>
                             <td>{this.renderUnits(item.left.army)}</td>
                             <td class={`left ${item.winner === 'left' ? 'winner' : 'looser'}`}>

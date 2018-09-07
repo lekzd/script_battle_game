@@ -27,8 +27,8 @@ export class ApiController {
             response.json({result});
         });
 
-        router.post('/rooms/:name', (request, response) => {
-            this.roomStorage.createNew(request.params.name);
+        router.post('/rooms/:id', (request, response) => {
+            this.roomStorage.createNew(request.params.id, request.body.title);
 
             response.json({result: 'OK'});
         });

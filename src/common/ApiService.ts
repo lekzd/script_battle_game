@@ -15,8 +15,8 @@ export class ApiService {
         return this.get<IState[]>('/leaderboard');
     }
 
-    createRoom(name: string): Observable<void> {
-        return this.post<void>(`/rooms/${name}`).pipe(pluck('result'));
+    createRoom(id: string, title: string): Observable<void> {
+        return this.post<void>(`/rooms/${id}`, {title}).pipe(pluck('result'));
     }
 
     getRoom(name: string): Observable<RoomModel> {
@@ -36,11 +36,11 @@ export class ApiService {
     }
 
     private post<T>(url: string, body?: any): Observable<T> {
-        return this.makeRequest<T>('POST', url, body);
+        return this.makeRequest<T>('POST', url, JSON.stringify(body));
     }
 
     private put<T>(url: string, body?: any): Observable<T> {
-        return this.makeRequest<T>('PUT', url, body);
+        return this.makeRequest<T>('PUT', url, JSON.stringify(body));
     }
 
     private delete<T>(url: string): Observable<T> {
@@ -48,7 +48,11 @@ export class ApiService {
     }
 
     private makeRequest<T>(method: string, url: string, body?: any): Observable<T> {
-        const fetchPromise = fetch(`${this.environment.config.api}${url}`, {method, body});
+        const headers = new Headers({
+            'content-type': 'application/json'
+        });
+
+        const fetchPromise = fetch(`${this.environment.config.api}${url}`, {method, body, headers});
 
         return fromPromise<Response>(fetchPromise)
             .pipe(

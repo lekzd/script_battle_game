@@ -10,8 +10,8 @@ export class RoomStorage {
 
     @Inject(ConnectionsStorage) private guestConnectionsStorage: ConnectionsStorage;
 
-    createNew(name: string) {
-        this.rooms.set(name, new Room());
+    createNew(id: string, title: string) {
+        this.rooms.set(id, new Room(title));
 
         this.guestConnectionsStorage.guest.dispatchRoomsChanged();
     }

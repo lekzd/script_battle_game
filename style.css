@@ -806,6 +806,7 @@ accordion-section .accordion-header:hover {
 
 .leaders-grid .grid tbody td {
   border-top: 1px solid #007a9c;
+  vertical-align: top;
 }
 
 .leaders-grid .unit-img {
@@ -840,10 +841,6 @@ accordion-section .accordion-header:hover {
 .rooms-list {
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  background: #2a2e3c;
-  color: #69909f;
-  border: 1px solid #007a9c;
   margin-bottom: 20px;
 }
 
@@ -863,6 +860,8 @@ accordion-section .accordion-header:hover {
 .room-item {
   width: 800px;
   border: 1px solid #007a9c;
+  background: #2a2e3c;
+  color: #69909f;
   padding: 10px;
 }
 
@@ -878,10 +877,22 @@ accordion-section .accordion-header:hover {
   margin-bottom: 10px;
 }
 
+.room-item-name {
+  color: #fff;
+  text-align: center;
+  font-size: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #005269;
+  margin-bottom: 10px;
+}
+
 .room-item .players {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+
+  padding-bottom: 10px;
+  border-bottom: 1px solid #005269;
   margin-bottom: 10px;
 }
 
@@ -919,4 +930,39 @@ accordion-section .accordion-header:hover {
   text-align: center;
   background: #3c9b9f;
   color: #000;
+}
+
+.modal-dialog {
+  padding: 0;
+}
+
+.modal-dialog::backdrop {
+  background: rgba(0, 0, 0, .4);
+}
+
+.modal-dialog-content {
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px;
+  background: #2a2e3c;
+  color: #69909f;
+  border: 1px solid #007a9c;
+}
+
+.modal-dialog-row {
+  margin: 15px 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-dialog-row input{
+  flex-grow: 1;
+  height: 28px;
+  font-size: 14px;
+  box-sizing: border-box;
+  background: #171921;
+  color: #69909f;
+  border: none;
+  padding: 0 8px;
+  outline: 1px solid #384863;
 }

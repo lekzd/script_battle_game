@@ -24,18 +24,18 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
 
         return (
             <div class="room-item">
-                <div class="title">Имя: {props.name}</div>
-
-                <div class="title">Игроки:</div>
+                <div class="room-item-name">{props.room.title}</div>
 
                 <div class="players">
                     <div class="players-item left">
+                        <div class="title">Левый игрок:</div>
                         {this.renderClientStatus(props.room, 'left')}
                     </div>
 
                     <div class="players-item-versus">vs</div>
 
                     <div class="players-item right">
+                        <div class="title">Правый игрок:</div>
                         {this.renderClientStatus(props.room, 'right')}
                     </div>
                 </div>

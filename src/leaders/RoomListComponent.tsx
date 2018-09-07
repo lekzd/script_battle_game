@@ -5,8 +5,9 @@ import "./RoomItemComponent";
 import {RoomItemComponent} from "./RoomItemComponent";
 import {RoomModel} from "../../server/models/RoomModel";
 import {Component, h} from "preact";
-import {takeUntil} from 'rxjs/internal/operators';
+import {switchMap, takeUntil} from 'rxjs/internal/operators';
 import {WebsocketConnection} from '../common/WebsocketConnection';
+import {PromptService} from './PromptService';
 
 interface IComponentState {
     items: {[key: string]: RoomModel}
@@ -16,6 +17,7 @@ export class RoomListComponent extends Component<any, IComponentState> {
     update$ = new BehaviorSubject([]);
 
     @Inject(ApiService) private apiService: ApiService;
+    @Inject(PromptService) private promptService: PromptService;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
     private unmount$ = new Subject();
@@ -62,7 +64,10 @@ export class RoomListComponent extends Component<any, IComponentState> {
     }
 
     createRoom = () => {
-        this.apiService.createRoom(Math.random().toString(36).substring(3))
+        const id = Math.random().toString(36).substring(3);
+
+        this.promptService.show('Введите название комнаты')
+            .pipe(switchMap(title => this.apiService.createRoom(id, title)))
             .subscribe(() => {
                 this.updateRooms();
             })
