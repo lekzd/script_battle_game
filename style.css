@@ -828,6 +828,7 @@ accordion-section .accordion-header:hover {
 }
 
 .index-page {
+  min-height: 100vh;
   background-image: linear-gradient(#2a2e3c 0, transparent 400px);
 }
 
@@ -926,8 +927,13 @@ accordion-section .accordion-header:hover {
 }
 
 .room-item-waiting {
-  background-image: linear-gradient(135deg, rgba(0, 128, 0, 0.15), transparent 300px);
+  background-image: linear-gradient(135deg, rgba(0, 158, 0, 0.15), transparent 300px);
   border-top-color: green;
+}
+
+.room-item-results {
+  background-image: linear-gradient(135deg, rgba(35, 122, 127, 0.27), transparent 300px);
+  border-top-color: #1e7980;
 }
 
 .room-item-status {

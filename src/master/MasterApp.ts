@@ -71,7 +71,7 @@ export class MasterApp {
         this.connection.onMessage$
             .pipe(
                 pluck<any, IState>('data'),
-                filter(state => state.mode === BattleState.ready),
+                filter(state => state.mode === BattleState.ready || state.mode === BattleState.results),
                 switchMap(state =>
                     timer(2000).pipe(map(() => state))
                 ),

@@ -1,17 +1,17 @@
 import {Grid} from "../helpers/Grid";
-import {BattleUnit, IAnimationName} from "./BattleUnit";
+import {BattleUnit} from "./BattleUnit";
 import {Inject} from "../InjectDectorator";
-import {BattleFieldDrawer} from "./BattleFieldDrawer";
 import {HexagonalGraph} from "../helpers/HexagonalGraph";
 import {IAction} from "../codeSandbox/CodeSandbox";
 import {Astar, IPathItem} from "../helpers/Astar";
 import {AsyncSequence} from "../helpers/AsyncSequence";
 import {Subject} from "rxjs/internal/Subject";
-import {ClientState} from "../client/ClientState";
 import {CharacterType} from "../characters/CharactersList";
 import {BulletType} from "./BulletDrawer";
 import {ConsoleService} from "../console/ConsoleService";
 import {getDistanceFactor} from '../helpers/getDistanceFactor';
+import {RoomService} from '../RoomService';
+import {random, setRandomSeed} from '../helpers/random';
 
 const FIELD_WIDTH = 12;
 const FIELD_HEIGHT = 9;
@@ -21,9 +21,8 @@ export class BattleFieldModel {
     bullet$ = new Subject<[BattleUnit, BattleUnit, BulletType]>();
 
     @Inject(Astar) private astar: Astar;
-    @Inject(ClientState) private clientState: ClientState;
+    @Inject(RoomService) private roomService: RoomService;
     @Inject(ConsoleService) private consoleService: ConsoleService;
-    @Inject(BattleFieldDrawer) private battleFieldDrawer: BattleFieldDrawer;
 
     private grid = new Grid<BattleUnit>(FIELD_WIDTH);
     private graph = new HexagonalGraph(FIELD_WIDTH, FIELD_HEIGHT);
@@ -220,7 +219,7 @@ export class BattleFieldModel {
             return null;
         }
 
-        const randomIndex = Math.floor(Math.random() * units.length);
+        const randomIndex = Math.floor(this.getRandom(toUnit) * units.length);
 
         return units[randomIndex];
     }
@@ -234,7 +233,7 @@ export class BattleFieldModel {
             return null;
         }
 
-        return enemies[Math.floor(Math.random() * enemies.length)];
+        return enemies[Math.floor(this.getRandom(toUnit) * enemies.length)];
     }
 
     private getFriend(id: string, toUnit: BattleUnit): BattleUnit {
@@ -325,5 +324,13 @@ export class BattleFieldModel {
         this.consoleService.runtimeLog(errorText);
 
         throw new Error(errorText);
+    }
+
+    private getRandom(toUnit: BattleUnit): number {
+        const seedSource = JSON.stringify(toUnit.actions);
+
+        setRandomSeed(seedSource);
+
+        return random();
     }
 }

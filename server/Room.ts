@@ -1,5 +1,5 @@
 import {ConnectionsStorage} from "./ConnectionsStorage";
-import {IState} from "../src/common/state.model";
+import {IPlayerState, IState} from "../src/common/state.model";
 import {IClientRegisterMessage} from "./SocketMiddleware";
 import * as ws from 'ws';
 import {Observable, Subject} from 'rxjs/index';
@@ -10,6 +10,7 @@ import {Inject} from '../src/common/InjectDectorator';
 import {Maybe} from "../src/common/helpers/Maybe";
 import {BattleState} from '../src/common/battle/BattleState.model';
 import {first} from 'rxjs/internal/operators';
+import {mergeDeep} from '../src/common/helpers/mergeDeep';
 
 export class Room {
 
@@ -56,11 +57,10 @@ export class Room {
         });
 
         this.on$('state').subscribe(data => {
-            const leftIsReady = Maybe(data.state).pluck('left.isReady');
-            const rightIsReady = Maybe(data.state).pluck('right.isReady');
+            const isAllReady = this.isAllPlayersReady(data.state);
             let modeIsChanged = false;
 
-            if (leftIsReady && rightIsReady && data.state.mode !== BattleState.ready) {
+            if (isAllReady && this.state.mode !== BattleState.ready) {
                 data.state.mode = BattleState.ready;
 
                 modeIsChanged = true;
@@ -68,10 +68,10 @@ export class Room {
 
             this.connectionsStorage.setState(data.state);
 
-            const name = Maybe(data.state).pluck('left.name') || Maybe(data.state).pluck('right.name');
-            const isReady = leftIsReady || rightIsReady;
+            const leftUpdated = this.isNeedToUpdateRooms(data.state.left);
+            const rightUpdated = this.isNeedToUpdateRooms(data.state.right);
 
-            if (name || isReady || modeIsChanged) {
+            if (leftUpdated || rightUpdated || modeIsChanged) {
                 this.guestConnectionsStorage.guest.dispatchRoomsChanged();
             }
         });
@@ -104,5 +104,20 @@ export class Room {
     private on$(event: string): Observable<any> {
         return this.onMessage$
             .pipe(filter(message => message.type === event));
+    }
+
+    private isAllPlayersReady(newState: Partial<IState>): boolean {
+        const mergedState = mergeDeep({}, this.state, newState);
+
+        const leftIsReady = Maybe(mergedState).pluck('left.isReady').getOrElse(false);
+        const rightIsReady = Maybe(mergedState).pluck('right.isReady').getOrElse(false);
+
+        return leftIsReady && rightIsReady;
+    }
+
+    private isNeedToUpdateRooms(playerState: Partial<IPlayerState> = {}): boolean {
+        const fields = ['name', 'isReady'];
+
+        return fields.some(key => key in playerState);
     }
 }

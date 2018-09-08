@@ -3,11 +3,16 @@ import {Subject} from 'rxjs/index';
 import {Inject} from '../InjectDectorator';
 import {WebsocketConnection} from '../WebsocketConnection';
 import {EMPTY_ARMY} from "./EMPTY_ARMY";
-import {IPlayerState} from '../state.model';
+import {IEditorState, IPlayerState} from '../state.model';
 
 export class ClientState {
 
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
+
+    roomId: string;
+    roomTitle: string;
+
+    editor: IEditorState;
 
     name = '';
     side: BattleSide;
