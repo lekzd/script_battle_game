@@ -17,6 +17,7 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 
 app.use(cors());
+app.options('*', cors());
 
 const {router} = new ApiController(express.Router());
 

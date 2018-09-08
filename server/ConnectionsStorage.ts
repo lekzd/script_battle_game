@@ -6,6 +6,7 @@ import {Client} from './clients/Client';
 import {IClientRegisterMessage} from "./SocketMiddleware";
 import * as ws from 'ws';
 import {Guest} from './clients/Guest';
+import {BattleState} from '../src/common/battle/BattleState.model';
 
 type Partial<T> = {
     [P in keyof T]?: T[P];
@@ -18,7 +19,9 @@ export class ConnectionsStorage {
     leftPlayer = new Player();
     rightPlayer = new Player();
 
-    state: Partial<IState> = {};
+    state: Partial<IState> = {
+        mode: BattleState.wait
+    };
 
     isRegistered(connection: ws): boolean {
         return this.connections.has(connection);

@@ -13,7 +13,11 @@ interface IComponentState {
     items: {[key: string]: RoomModel}
 }
 
-export class RoomListComponent extends Component<any, IComponentState> {
+interface IProps {
+    isAdmin: boolean;
+}
+
+export class RoomListComponent extends Component<IProps, IComponentState> {
     update$ = new BehaviorSubject([]);
 
     @Inject(ApiService) private apiService: ApiService;
@@ -40,24 +44,37 @@ export class RoomListComponent extends Component<any, IComponentState> {
             });
     }
 
-    render(props, state: IComponentState) {
+    render(props: IProps, state: IComponentState) {
         return (
             <div class="rooms-list">
-                <div class="header">Комнаты:</div>
-
                 <div class="rooms">
-                    {
-                        Object.keys(state.items).map(name => {
-                            const room = state.items[name];
-
-                            return (<RoomItemComponent {...{name, room, update$: this.update$}} />)
-                        })
-                    }
+                    {this.renderRoomsList()}
                 </div>
 
-                <button class="sample-button" onClick={this.createRoom}>Новая комната</button>
+                {this.renderNewRoomButton()}
             </div>
         )
+    }
+
+    renderNewRoomButton() {
+        if (this.props.isAdmin === false) {
+            return;
+        }
+
+        return (
+            <button class="sample-button" onClick={this.createRoom}>Новая комната</button>
+        )
+    }
+
+    renderRoomsList() {
+        const {items} = this.state;
+        const {isAdmin} = this.props;
+
+        return Object.keys(items).map(name => {
+            const room = items[name];
+
+            return (<RoomItemComponent {...{name, room, isAdmin, update$: this.update$}} />)
+        })
     }
 
     componentWillUnmount() {

@@ -583,11 +583,15 @@ canvas {
 }
 
 .sample-button {
+  vertical-align: middle;
+  line-height: 25px;
+  text-decoration: none;
+  display: inline-block;
   border: 1px solid #0088cc;
   background-color: #0072ab;
   height: 28px;
-  color: #fff;
-  text-shadow: 1px 1px 0 #00000057;
+  color: #fff!important;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.35);
   padding: 0 20px;
   font-size: 16px;
   cursor: pointer;
@@ -596,12 +600,56 @@ canvas {
   transition: background-color .3s;
 }
 
-.player .editor .sample-button {
-  margin-left: 20px;
-}
-
 .sample-button:hover {
   background: #006293;
+}
+
+.green-button {
+  vertical-align: middle;
+  line-height: 25px;
+  text-decoration: none;
+  display: inline-block;
+  border: 1px solid #388220;
+  background-color: #446a3e;
+  height: 28px;
+  color: #fff!important;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.35);
+  padding: 0 20px;
+  font-size: 16px;
+  cursor: pointer;
+  box-sizing: border-box;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
+  transition: background-color .3s;
+}
+
+.green-button:hover {
+  background: #355331;
+}
+
+.red-button {
+  vertical-align: middle;
+  line-height: 25px;
+  text-decoration: none;
+  display: inline-block;
+  border: 1px solid #822628;
+  background-color: #6a1f21;
+  height: 28px;
+  color: #fff!important;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.35);
+  padding: 0 20px;
+  font-size: 16px;
+  cursor: pointer;
+  box-sizing: border-box;
+  box-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
+  transition: background-color .3s;
+}
+
+.red-button:hover {
+  background: #5a1a1c;
+}
+
+.player .editor .sample-button {
+  margin-left: 20px;
 }
 
 .client {
@@ -779,11 +827,15 @@ accordion-section .accordion-header:hover {
   margin-top: 0;
 }
 
+.index-page {
+  background-image: linear-gradient(#2a2e3c 0, transparent 400px);
+}
+
 .leaders {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 750px;
+  max-width: 1200px;
   margin: 20px auto;
 }
 
@@ -841,6 +893,7 @@ accordion-section .accordion-header:hover {
 .rooms-list {
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
   margin-bottom: 20px;
 }
 
@@ -853,20 +906,49 @@ accordion-section .accordion-header:hover {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
   margin-bottom: 10px;
+  margin-left: -20px;
+  margin-right: -20px;
 }
 
 .room-item {
-  width: 800px;
-  border: 1px solid #007a9c;
-  background: #2a2e3c;
+  width: 580px;
+  border-top: 1px solid #007a9c;
+  border-bottom: 1px solid #007a9c;
+  box-sizing: border-box;
   color: #69909f;
   padding: 10px;
 }
 
+.room-item-ready {
+  background-image: linear-gradient(135deg, rgba(255, 165, 0, 0.15), transparent 300px);
+  border-top-color: orange;
+}
+
+.room-item-waiting {
+  background-image: linear-gradient(135deg, rgba(0, 128, 0, 0.15), transparent 300px);
+  border-top-color: green;
+}
+
+.room-item-status {
+  width: 120px;
+  padding-top: 4px;
+}
+
+.room-item-ready .room-item-status-title {
+  color: orange;
+}
+
+.room-item-waiting .room-item-status-title {
+  color: #0eae0e;
+}
+
+.room-item-data {
+  flex-grow: 1;
+}
+
 .rooms-list .room-item {
-  margin: 10px 0;
+  margin: 0 auto 30px;
 }
 
 .room-item a {
@@ -879,7 +961,6 @@ accordion-section .accordion-header:hover {
 
 .room-item-name {
   color: #fff;
-  text-align: center;
   font-size: 20px;
   padding-bottom: 10px;
   border-bottom: 1px solid #005269;
@@ -890,10 +971,6 @@ accordion-section .accordion-header:hover {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-
-  padding-bottom: 10px;
-  border-bottom: 1px solid #005269;
-  margin-bottom: 10px;
 }
 
 .room-item-client {
@@ -989,4 +1066,38 @@ accordion-section .accordion-header:hover {
   font-size: 20px;
   letter-spacing: 0.1em;
   text-shadow: 1px 1px 1px #000;
+}
+
+.mt-auto {
+  margin-top: auto;
+}
+
+.ml-auto {
+  margin-left: auto;
+}
+
+.mr-auto {
+  margin-right: auto;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.mb-20 {
+  margin-bottom: 10px;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.color-white {
+  color: #fff;
 }

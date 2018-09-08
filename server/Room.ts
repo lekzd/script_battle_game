@@ -8,6 +8,8 @@ import {IMessage} from '../src/common/WebsocketConnection';
 import {LeaderBoard} from './LeaderBoard';
 import {Inject} from '../src/common/InjectDectorator';
 import {Maybe} from "../src/common/helpers/Maybe";
+import {BattleState} from '../src/common/battle/BattleState.model';
+import {first} from 'rxjs/internal/operators';
 
 export class Room {
 
@@ -37,24 +39,39 @@ export class Room {
     constructor(public title: string) {
         this.connectionsStorage.setState({roomTitle: title});
 
-        this.on$('sendWinner').subscribe(data => {
-            const state = Object.assign({}, data.sessionResult, this.state);
+        this.on$('sendWinner')
+            .pipe(first())
+            .subscribe(data => {
+                const state = Object.assign({}, data.sessionResult, this.state, {
+                    mode: BattleState.results
+                });
 
-            this.leaderBoard.write(state);
-            this.connectionsStorage.endSession(data.sessionResult);
-        });
+                this.connectionsStorage.setState(state);
+                this.leaderBoard.write(state);
+                this.connectionsStorage.endSession(data.sessionResult);
+            });
 
         this.on$('newSession').subscribe(data => {
             this.connectionsStorage.newSession();
         });
 
         this.on$('state').subscribe(data => {
+            const leftIsReady = Maybe(data.state).pluck('left.isReady');
+            const rightIsReady = Maybe(data.state).pluck('right.isReady');
+            let modeIsChanged = false;
+
+            if (leftIsReady && rightIsReady && data.state.mode !== BattleState.ready) {
+                data.state.mode = BattleState.ready;
+
+                modeIsChanged = true;
+            }
+
             this.connectionsStorage.setState(data.state);
 
             const name = Maybe(data.state).pluck('left.name') || Maybe(data.state).pluck('right.name');
-            const isReady = Maybe(data.state).pluck('left.isReady') || Maybe(data.state).pluck('right.isReady');
+            const isReady = leftIsReady || rightIsReady;
 
-            if (name && isReady) {
+            if (name || isReady || modeIsChanged) {
                 this.guestConnectionsStorage.guest.dispatchRoomsChanged();
             }
         });

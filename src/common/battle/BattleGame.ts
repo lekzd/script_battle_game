@@ -7,16 +7,7 @@ import {ResultsView} from "./views/ResultsView";
 import {WinView} from "./views/WinView";
 import {LostView} from "./views/LostView";
 import {AttentionView} from './views/AttentionView';
-
-export enum BattleState {
-    wait = 'waiting',
-    battle = 'battle',
-    results = 'results',
-    win = 'win',
-    lost = 'lost',
-    attention = 'attention',
-    connectionClosed = 'connectionClosed'
-}
+import {BattleState} from './BattleState.model';
 
 export class BattleGame {
 

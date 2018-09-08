@@ -1,6 +1,6 @@
 import {WebsocketConnection} from '../WebsocketConnection';
 import {Inject, setInject} from '../InjectDectorator';
-import {BattleGame, BattleState} from '../battle/BattleGame';
+import {BattleState} from '../battle/BattleState.model';
 import {EditorComponent} from '../editor/EditorComponent';
 import {BattleSide} from '../battle/BattleSide';
 import {ClientState} from "./ClientState";
@@ -15,6 +15,7 @@ import {ClientComponent} from './ClientComponent';
 import {Observable} from 'rxjs/index';
 import "../console/BattleConsole";
 import {RoomService} from "../RoomService";
+import {BattleGame} from '../battle/BattleGame';
 
 export class ClientApp {
 

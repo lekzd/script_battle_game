@@ -3,10 +3,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const isDevServer = process.argv.find(v => v.includes('webpack-dev-server'));
 
 function getHtmlWebpackConfig(directory) {
-    const outputPath = `public/${directory}/index.html`;
+    const outputPath = path.join('public', directory, 'index.html');
 
     return {
-        template: path.resolve(`src/${directory}`, 'index.html'),
+        template: path.resolve('src', directory, 'index.html'),
         templateParameters: {isDevServer},
         filename: isDevServer ? outputPath : path.join(__dirname, outputPath)
     }
@@ -25,7 +25,8 @@ module.exports = function(env = {}) {
             new HtmlWebpackPlugin(getHtmlWebpackConfig('master')),
             new HtmlWebpackPlugin(getHtmlWebpackConfig('left')),
             new HtmlWebpackPlugin(getHtmlWebpackConfig('right')),
-            new HtmlWebpackPlugin(getHtmlWebpackConfig('leaders'))
+            new HtmlWebpackPlugin(getHtmlWebpackConfig('leaders')),
+            new HtmlWebpackPlugin(getHtmlWebpackConfig(''))
         ],
         resolve: {
             extensions: ['.ts', '.tsx', '.js']

@@ -1,17 +1,18 @@
 import {IMessage, WebsocketConnection} from '../common/WebsocketConnection';
 import {Inject, setInject} from '../common/InjectDectorator';
-import {BattleGame, BattleState} from '../common/battle/BattleGame';
+import {BattleState} from '../common/battle/BattleState.model';
 import {combineLatest} from "rxjs/internal/observable/combineLatest";
 import {CodeDisplay} from './CodeDisplay';
 import {LeftArmy} from "../left/LeftArmy";
 import {EMPTY_ARMY} from "../common/client/EMPTY_ARMY";
 import {RightArmy} from "../right/RightArmy";
-import {Observable, fromEvent} from 'rxjs/index';
-import {IPlayerState} from '../common/state.model';
-import {filter, first} from 'rxjs/internal/operators';
+import {Observable, fromEvent, timer} from 'rxjs/index';
+import {IPlayerState, IState} from '../common/state.model';
+import {filter, first, map, pluck, switchMap, tap, timeInterval, timeout} from 'rxjs/internal/operators';
 import {BattleSide} from '../common/battle/BattleSide';
 import {ClientComponent} from '../common/client/ClientComponent';
 import {RoomService} from "../common/RoomService";
+import {BattleGame} from '../common/battle/BattleGame';
 
 export class MasterApp {
 
@@ -67,13 +68,25 @@ export class MasterApp {
             this.setState(BattleState.connectionClosed);
         });
 
-        combineLatest(this.leftIsReady$, this.rightIsReady$)
-            .subscribe(() => {
-                this.setState(BattleState.battle);
+        this.connection.onMessage$
+            .pipe(
+                pluck<any, IState>('data'),
+                filter(state => state.mode === BattleState.ready),
+                switchMap(state =>
+                    timer(2000).pipe(map(() => state))
+                ),
+                tap(state => {
+                    setInject(LeftArmy, state.left.army);
+                    setInject(RightArmy, state.right.army);
 
-                setTimeout(() => {
-                    this.battleGame.runCode(this.leftCode.value, this.rightCode.value);
-                }, 3000);
+                    this.setState(BattleState.battle);
+                }),
+                switchMap(state =>
+                    timer(1000).pipe(map(() => state))
+                ),
+            )
+            .subscribe(state => {
+                this.battleGame.runCode(state.left.editor.code, state.right.editor.code);
             });
 
         this.newSessionClick$.subscribe(() => {

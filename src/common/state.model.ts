@@ -1,5 +1,6 @@
 import {BattleSide} from './battle/BattleSide';
 import {WinnerSide} from './battle/BattleSession';
+import {BattleState} from './battle/BattleState.model';
 
 export interface IEditorState {
     code: string;
@@ -26,10 +27,13 @@ export interface IPlayerState {
 }
 
 export interface IState {
+    mode: BattleState;
     roomId: string;
     roomTitle: string;
+
     left: IPlayerState;
     right: IPlayerState;
+
     damage: {
         left: number;
         right: number;
