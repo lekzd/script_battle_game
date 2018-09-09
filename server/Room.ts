@@ -60,7 +60,7 @@ export class Room {
             const isAllReady = this.isAllPlayersReady(data.state);
             let modeIsChanged = false;
 
-            if (isAllReady && this.state.mode !== BattleState.ready) {
+            if (isAllReady && (this.state.mode !== BattleState.ready && this.state.mode !== BattleState.results)) {
                 data.state.mode = BattleState.ready;
 
                 modeIsChanged = true;

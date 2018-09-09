@@ -705,7 +705,7 @@ canvas {
   width: 50%;
 }
 
-battle-console {
+.battle-console {
   position: relative;
   display: block;
   border-top: 1px solid #297e88;
@@ -713,7 +713,7 @@ battle-console {
   flex-grow: 1;
 }
 
-battle-console .console-lines {
+.battle-console .console-lines {
 
 }
 
@@ -726,7 +726,7 @@ battle-console .console-lines {
   }
 }
 
-battle-console .line {
+.battle-console .line {
   display: flex;
   flex-direction: row;
   line-height: 1.5;
@@ -734,32 +734,32 @@ battle-console .line {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-battle-console .line:first-child {
+.battle-console .line:first-child {
   animation: shout .3s normal ease-in-out;
 }
 
-battle-console .line.😸 {
+.battle-console .line.😸 {
   background: #0d0d1a;
 }
 
-battle-console .line.👍 {
+.battle-console .line.👍 {
   background: #122710;
 }
 
-battle-console .line.info {
+.battle-console .line.info {
   background: #0e1a25;
 }
 
-battle-console .line.warn {
+.battle-console .line.warn {
   background: #22220c;
 }
 
-battle-console .line.runtime,
-battle-console .line.error {
+.battle-console .line.runtime,
+.battle-console .line.error {
   background: #3a090e;
 }
 
-battle-console .source {
+.battle-console .source {
   width: 100px;
   text-align: right;
   padding-right: 10px;

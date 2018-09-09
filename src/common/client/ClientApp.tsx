@@ -7,18 +7,18 @@ import {ClientState} from "./ClientState";
 import {LeftArmy} from "../../left/LeftArmy";
 import {EnemyState} from "./EnemyState";
 import {RightArmy} from "../../right/RightArmy";
-import {ISessionResult} from "../battle/BattleSession";
 import {IPlayerState, IState} from '../state.model';
 import {catchError, distinctUntilChanged, filter, map, switchMap, tap} from 'rxjs/internal/operators';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {ClientComponent} from './ClientComponent';
 import {Observable} from 'rxjs/index';
-import "../console/BattleConsole";
 import {RoomService} from "../RoomService";
 import {BattleGame} from '../battle/BattleGame';
 import {PromptService} from '../../leaders/PromptService';
 import {ApiService} from '../ApiService';
 import {Environment} from '../Environment';
+import {render, h} from 'preact';
+import {BattleConsole} from '../console/BattleConsole';
 
 export class ClientApp {
 
@@ -48,6 +48,8 @@ export class ClientApp {
 
         this.clientState.side = side;
 
+        render((<BattleConsole />), document.querySelector('.rightSide'));
+
         if (side === BattleSide.left) {
             this.connection.registerAsLeftPlayer(this.roomService.roomId);
 
@@ -73,10 +75,10 @@ export class ClientApp {
         });
 
         this.editorComponent.pushCode$.subscribe(() => {
-            const newState = <IState>{
+            const newState = {
                 left: {},
                 right: {}
-            };
+            } as IState;
 
             if (side === BattleSide.left) {
                 newState.left.isReady = true;
@@ -88,10 +90,10 @@ export class ClientApp {
         });
 
         this.editorComponent.change$.subscribe(code => {
-            const newState = <IState>{
+            const newState = {
                 left: {editor: {}},
                 right: {editor: {}}
-            };
+            } as IState;
 
             if (side === BattleSide.left) {
                 newState.left.editor.code = code;
@@ -103,10 +105,10 @@ export class ClientApp {
         });
 
         this.editorComponent.editorScroll$.subscribe(pointer => {
-            const newState = <IState>{
+            const newState = {
                 left: {editor: {}},
                 right: {editor: {}}
-            };
+            } as IState;
 
             if (side === BattleSide.left) {
                 newState.left.editor.scrollX = pointer.x;
@@ -124,10 +126,10 @@ export class ClientApp {
                 distinctUntilChanged((prev, current) => JSON.stringify(prev) === JSON.stringify(current))
             )
             .subscribe(clientState=> {
-                const newState = <IState>{
+                const newState = {
                     left: {},
                     right: {}
-                };
+                } as IState;
 
                 if (side === BattleSide.left) {
                     Object.assign(newState.left, clientState);
@@ -144,7 +146,7 @@ export class ClientApp {
             }
 
             if (message.type === 'endSession') {
-                const sessionResult = <ISessionResult>message.data.sessionResult;
+                const sessionResult = message.data.sessionResult;
 
                 if (sessionResult.winner.toString() === this.clientState.side) {
                     this.battleGame.showWinnerScreen(message.data.sessionResult);
