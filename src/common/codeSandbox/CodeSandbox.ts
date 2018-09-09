@@ -7,6 +7,7 @@ import {timer} from "rxjs/internal/observable/timer";
 import {catchError, filter, map, switchMap, takeUntil} from "rxjs/operators";
 import {merge} from "rxjs/internal/observable/merge";
 import {throwError} from "rxjs/internal/observable/throwError";
+import {getRandomSeed, LCG} from '../helpers/random';
 
 export interface IAction {
     action: string;
@@ -76,11 +77,15 @@ export class CodeSandbox {
     }
 
     private getWorkerCode(codeToInject: string): string {
+        const randomSeed = getRandomSeed(codeToInject);
+
         return `
             onmessage = (message) => {
                 
                 const actions = [];
                 const unit = message.data;
+                
+                Math.random = ${LCG.toString()}(${randomSeed});
                 
                 const unitApi = (${getUnitApi.toString()})(unit, actions);
                 const apis = {console, Math, parseInt, parseFloat, Object, JSON};
