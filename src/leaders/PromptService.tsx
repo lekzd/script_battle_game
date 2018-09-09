@@ -36,4 +36,21 @@ export class PromptService {
         return onSubmit$.asObservable();
     }
 
+    goToMaster(): Observable<{}> {
+        const onSubmit$ = new Subject<{title: string}>();
+        const modalContainer = document.querySelector('.modals');
+        const title = 'Понеслась!';
+        const template = 'Кажмите Ок, чтобы перейти к бою';
+
+        modalContainer.innerHTML = '';
+
+        render((
+            <div>
+                <PromptModal {...{title, template, onSubmit$}} />
+            </div>
+        ), modalContainer);
+
+        return onSubmit$.asObservable();
+    }
+
 }

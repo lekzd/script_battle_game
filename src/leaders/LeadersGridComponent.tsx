@@ -47,7 +47,7 @@ export class LeadersGridComponent extends Component<any, IGridState> {
                                     <div class="mr-20">
                                         <Wreath place={index + 1} />
                                     </div>
-                                    <div class="flex-grow">
+                                    <div class="flex-grow ml-20">
                                         <div class="leaders-main">
                                             <div>{item.left.name}</div>
                                         </div>
@@ -60,7 +60,7 @@ export class LeadersGridComponent extends Component<any, IGridState> {
                             </td>
                             <td width="40%" class={`right ${item.winner === 'right' ? 'winner' : 'looser'}`}>
                                 <div className="flex-row flex-align-center">
-                                    <div class="flex-grow">
+                                    <div class="flex-grow mr-20">
                                         <div class="leaders-main">
                                             <div>{item.right.name}</div>
                                         </div>

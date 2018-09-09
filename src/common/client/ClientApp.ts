@@ -9,7 +9,7 @@ import {EnemyState} from "./EnemyState";
 import {RightArmy} from "../../right/RightArmy";
 import {ISessionResult} from "../battle/BattleSession";
 import {IPlayerState, IState} from '../state.model';
-import {catchError, distinctUntilChanged, filter, map, switchMap} from 'rxjs/internal/operators';
+import {catchError, distinctUntilChanged, filter, map, switchMap, tap} from 'rxjs/internal/operators';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {ClientComponent} from './ClientComponent';
 import {Observable} from 'rxjs/index';
@@ -205,8 +205,15 @@ export class ClientApp {
         });
 
         combineLatest(this.leftIsReady$, this.rightIsReady$)
+            .pipe(
+                tap(() => this.battleGame.setState(BattleState.attention)),
+                switchMap(() => this.promptService.goToMaster())
+            )
             .subscribe(() => {
-                this.battleGame.setState(BattleState.attention);
+                const {roomId} = this.roomService;
+                const {baseUrl} = this.environment.config;
+
+                location.href = `${baseUrl}/master/#room=${roomId}`;
             });
 
     }
