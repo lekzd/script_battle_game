@@ -78,12 +78,22 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
         }
 
         return (
-            <button class="red-button" onClick={this.removeRoom}>Удалить комнату</button>
+            <div>
+                <button class="red-button" onClick={this.removeRoom}>Удалить комнату</button>
+                <button class="red-button ml-20" onClick={this.reloadRoom}>Перезагрузить сессию</button>
+            </div>
         )
     }
 
     removeRoom = () => {
         this.apiService.deleteRoom(this.props.name)
+            .subscribe(() => {
+                this.props.update$.next(this.props.room);
+            });
+    };
+
+    reloadRoom = () => {
+        this.apiService.reloadRoomSession(this.props.name)
             .subscribe(() => {
                 this.props.update$.next(this.props.room);
             });

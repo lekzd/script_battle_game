@@ -16,19 +16,23 @@ export class RoomStorage {
         this.guestConnectionsStorage.guest.dispatchRoomsChanged();
     }
 
-    delete(name: string) {
-        const room = this.get(name);
+    delete(roomId: string) {
+        const room = this.get(roomId);
 
-        if (room) {
-            room.closeConnections();
-            this.rooms.delete(name);
+        room.closeConnections();
+        this.rooms.delete(roomId);
 
-            this.guestConnectionsStorage.guest.dispatchRoomsChanged();
-        }
+        this.guestConnectionsStorage.guest.dispatchRoomsChanged();
     }
 
-    get(name: string): Room {
-        return this.rooms.get(name);
+    get(roomId: string): Room {
+        const room = this.rooms.get(roomId);
+
+        if (!room) {
+            throw Error(`No room with id ${roomId}`);
+        }
+
+        return room;
     }
 
     getAll(): {[key: string]: Room} {
@@ -47,6 +51,12 @@ export class RoomStorage {
 
     getRoomByConnection(connection: ws): Room {
         return this.connections.get(connection);
+    }
+
+    reloadRoomSession(roomId: string) {
+        const room = this.get(roomId);
+
+        room.reloadSession();
     }
 
 }

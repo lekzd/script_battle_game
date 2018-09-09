@@ -101,6 +101,10 @@ export class Room {
         }
     }
 
+    reloadSession() {
+        this.connectionsStorage.newSession();
+    }
+
     private on$(event: string): Observable<any> {
         return this.onMessage$
             .pipe(filter(message => message.type === event));

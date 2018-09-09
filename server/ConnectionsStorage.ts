@@ -91,7 +91,9 @@ export class ConnectionsStorage {
     }
 
     newSession() {
-        this.state = {};
+        this.state = {
+            mode: BattleState.wait
+        };
 
         this.master.dispatchNewSession();
         this.leftPlayer.dispatchNewSession();

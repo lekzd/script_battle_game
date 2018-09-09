@@ -833,7 +833,7 @@ accordion-section .accordion-header:hover {
     background-image: linear-gradient(transparent 0, #000 400px), url(img/game_pre.gif);
     background-repeat: no-repeat;
     background-position: center top;
-    padding-top: 150px;
+    padding-top: 112px;
 }
 
 .leaders {
@@ -846,9 +846,10 @@ accordion-section .accordion-header:hover {
 
 .leaders-grid {
   display: block;
-  background: #2a2e3c;
+  background: linear-gradient(#453a0b, #0b1622 200px);
   color: #69909f;
-  border: 1px solid #007a9c;
+  width: 800px;
+  margin: auto;
 }
 
 .leaders-grid .grid{
@@ -863,7 +864,6 @@ accordion-section .accordion-header:hover {
 
 .leaders-grid .grid tbody td {
   border-top: 1px solid #007a9c;
-  vertical-align: top;
 }
 
 .leaders-grid .unit-img {
@@ -1072,7 +1072,7 @@ accordion-section .accordion-header:hover {
 
 .leaders-points {
   color: #fff;
-  font-weight: 600;
+  font-weight: 200;
   font-size: 20px;
   letter-spacing: 0.1em;
   text-shadow: 1px 1px 1px #000;
@@ -1098,6 +1098,14 @@ accordion-section .accordion-header:hover {
   margin-bottom: 10px;
 }
 
+.ml-20 {
+  margin-left: 10px;
+}
+
+.mr-20 {
+  margin-right: 10px;
+}
+
 .flex-row {
   display: flex;
   flex-direction: row;
@@ -1108,10 +1116,92 @@ accordion-section .accordion-header:hover {
   flex-direction: column;
 }
 
+.flex-grow {
+    flex-grow: 1;
+}
+
+.flex-align-center {
+    align-items: center;
+    align-content: center;
+}
+
+.text-center {
+  text-align: center;
+}
+
 .color-white {
   color: #fff;
 }
 
 h1, h2, h3 {
   font-weight: 400;
+}
+
+.wreath {
+    position: relative;
+    width: 83px;
+    height: 80px;
+    background-image: radial-gradient(#edde1469 0px, transparent 34px);
+}
+
+.wreath-bg {
+    width: 100%;
+    height: 100%;
+    mask: url(/img/wreath.png) 0 0 no-repeat;
+    -webkit-mask: url(/img/wreath.png) 0 0 no-repeat;
+    mask-size: cover;
+    -webkit-mask-size: cover;
+}
+
+.wreath-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    text-shadow: 1px 1px #000;
+}
+
+.wreath-gold .wreath-bg {
+    background-image: radial-gradient(#f4ef38 30px, #ff8000 45px, #000000e8);
+}
+
+.wreath-gold .wreath-content {
+    color: #ffca00;
+}
+
+.wreath-silver .wreath-bg {
+    background-image: radial-gradient(#a5919f 30px, #c9e2d7 45px, #000000e8);
+}
+
+.wreath-silver .wreath-content {
+    color: #c9e2d7;
+}
+
+.wreath-bronze .wreath-bg {
+    background-image: radial-gradient(#fa8d2e 30px, #e14a04 45px, #000000e8);
+}
+
+.wreath-bronze .wreath-content {
+    color: #fa8d2e;
+}
+
+.wreath-other .wreath-bg {
+    background-image: radial-gradient(#cdd56b 30px, #57954f 45px, #000000e8);
+}
+
+.wreath-other .wreath-content {
+    color: #cdd56b;
+}
+
+.looser .wreath-bg {
+    opacity: .5;
+}
+
+.looser .wreath-content {
+    color: transparent;
+    text-shadow: none;
+    background: url(/img/pepe-sad.png) center center no-repeat;
 }

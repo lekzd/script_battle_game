@@ -12,7 +12,7 @@ export class ApiService {
     @Inject(Environment) private environment: Environment;
 
     getLeaderBoard(): Observable<IState[]> {
-        return this.get<IState[]>('/leaderboard');
+        return this.get<IState[]>('/leaderboard').pipe(pluck('result'));
     }
 
     createRoom(id: string, title: string): Observable<void> {
@@ -29,6 +29,10 @@ export class ApiService {
 
     getAllRooms(): Observable<{[key: string]: RoomModel}> {
         return this.get<{[key: string]: RoomModel}>(`/rooms`).pipe(pluck('result'));
+    }
+
+    reloadRoomSession(id: string): Observable<string> {
+        return this.post(`/rooms/${id}/reload`).pipe(pluck('result'));
     }
 
     private get<T>(url: string): Observable<T> {

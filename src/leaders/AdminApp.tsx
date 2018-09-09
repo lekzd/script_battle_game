@@ -14,7 +14,7 @@ export class AdminApp {
 
         render((
             <div>
-                <h2 className="color-white mb-20">Администрирование комнат</h2>
+                <h2 className="color-white mb-20 text-center">Администрирование комнат</h2>
                 <RoomListComponent isAdmin={true} />
             </div>
         ), document.querySelector('.leaders'));

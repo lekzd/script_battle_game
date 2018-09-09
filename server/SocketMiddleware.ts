@@ -24,13 +24,13 @@ export class SocketMiddleware {
                 filter(message => message.type === 'message'),
                 map(message => JSON.parse(message.data)),
                 tap(message => {
-                    const {roomId} = message;
-                    const room = this.roomStorage.get(roomId);
-
                     // todo: temporary
                     if (message.type === 'registerGuest') {
                         return this.tryRegisterGuestConnection(message, this.connection);
                     }
+
+                    const {roomId} = message;
+                    const room = this.roomStorage.get(roomId);
 
                     if (!room) {
                         this.connection.close();
@@ -69,7 +69,7 @@ export class SocketMiddleware {
 
         this.onMessage$.subscribe(message => {
             const {roomId} = message;
-            const room = this.roomStorage.get(roomId);
+            const room = roomId ? this.roomStorage.get(roomId) : null;
 
             if (room) {
                 room.onMessage$.next(message);
