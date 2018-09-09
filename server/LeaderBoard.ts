@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as mkdirp from 'mkdirp';
 import * as path from 'path';
 
-const leaderBoardPath = './public/leaderboard.json';
+const leaderBoardPath = './.data/leaderboard.json';
 
 export class LeaderBoard {
 

@@ -1,4 +1,5 @@
 .idea
+.data
 node_modules
 public
 package-lock.json
