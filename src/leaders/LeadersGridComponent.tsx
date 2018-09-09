@@ -49,7 +49,7 @@ export class LeadersGridComponent extends Component<any, IGridState> {
                     {items.map(item => (
                         <tr>
                             <td width="64">{this.renderUnits(item.left.army)}</td>
-                            <td class={`left ${item.winner === 'left' ? 'winner' : 'looser'}`}>
+                            <td width="40%" class={`left ${item.winner === 'left' ? 'winner' : 'looser'}`}>
                                 <div class="leaders-main">
                                     <div>{item.left.name}</div>
                                 </div>
@@ -57,7 +57,7 @@ export class LeadersGridComponent extends Component<any, IGridState> {
                                     <div>{item.damage.left}</div>
                                 </div>
                             </td>
-                            <td class={`right ${item.winner === 'right' ? 'winner' : 'looser'}`}>
+                            <td width="40%" class={`right ${item.winner === 'right' ? 'winner' : 'looser'}`}>
                                 <div class="leaders-main">
                                     <div>{item.right.name}</div>
                                 </div>

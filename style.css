@@ -828,8 +828,12 @@ accordion-section .accordion-header:hover {
 }
 
 .index-page {
-  min-height: 100vh;
-  background-image: linear-gradient(#2a2e3c 0, transparent 400px);
+    min-height: 100vh;
+    background-color: #2a2e3c;
+    background-image: linear-gradient(transparent 0, #000 400px), url(img/game_pre.gif);
+    background-repeat: no-repeat;
+    background-position: center top;
+    padding-top: 150px;
 }
 
 .leaders {
@@ -1106,4 +1110,8 @@ accordion-section .accordion-header:hover {
 
 .color-white {
   color: #fff;
+}
+
+h1, h2, h3 {
+  font-weight: 400;
 }
