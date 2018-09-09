@@ -84,8 +84,8 @@ export class RoomListComponent extends Component<IProps, IComponentState> {
     createRoom = () => {
         const id = Math.random().toString(36).substring(3);
 
-        this.promptService.show('Введите название комнаты')
-            .pipe(switchMap(title => this.apiService.createRoom(id, title)))
+        this.promptService.prompt('Введите название комнаты')
+            .pipe(switchMap(({title}) => this.apiService.createRoom(id, title)))
             .subscribe(() => {
                 this.updateRooms();
             })

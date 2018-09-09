@@ -100,8 +100,8 @@ export class EditorComponent {
                     return of(response);
                 }
 
-                return this.promptService.show('Впишите свое имя')
-                    .pipe(tap(name => this.clientState.set({name})))
+                return this.promptService.prompt('Впишите свое имя')
+                    .pipe(tap(({title}) => this.clientState.set({name: title})))
             }))
             .subscribe(() => {
                 this.consoleService.infoLog('Кажется, вы готовы к битве! Но код еще можно редактировать =)');

@@ -4,15 +4,32 @@ import {PromptModal} from './PromptModal';
 
 export class PromptService {
 
-    show(title: string): Observable<string> {
-        const onSubmit$ = new Subject<string>();
+    prompt(title: string): Observable<{title: string}> {
+        const onSubmit$ = new Subject<{title: string}>();
         const modalContainer = document.querySelector('.modals');
+        const template = (<input name="title" type="text" required/>);
 
         modalContainer.innerHTML = '';
 
         render((
             <div>
-                <PromptModal {...{title, onSubmit$}} />
+                <PromptModal {...{title, template, onSubmit$}} />
+            </div>
+        ), modalContainer);
+
+        return onSubmit$.asObservable();
+    }
+
+    alert(title: string, text: string): Observable<{}> {
+        const onSubmit$ = new Subject<{title: string}>();
+        const modalContainer = document.querySelector('.modals');
+        const template = (<div>{text}</div>);
+
+        modalContainer.innerHTML = '';
+
+        render((
+            <div>
+                <PromptModal {...{title, template, onSubmit$}} />
             </div>
         ), modalContainer);
 

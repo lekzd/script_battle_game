@@ -3,12 +3,7 @@ import {Inject} from "../src/common/InjectDectorator";
 import {LeaderBoard} from "./LeaderBoard";
 import {RoomStorage} from "./RoomStorage";
 import {RoomModel} from "./models/RoomModel";
-
-interface IResponse {
-    result: any;
-    success: boolean;
-    error?: string;
-}
+import {IApiFullResponse} from './models/IApiFullResponse.model';
 
 export class ApiController {
     @Inject(LeaderBoard) private leaderBoard: LeaderBoard;
@@ -76,7 +71,7 @@ export class ApiController {
         });
     }
 
-    private getSafeResult(dataCallback: () => any): IResponse {
+    private getSafeResult(dataCallback: () => any): IApiFullResponse {
         let result = null;
         let error = null;
         let success = false;

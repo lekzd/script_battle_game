@@ -9,20 +9,26 @@ import {EnemyState} from "./EnemyState";
 import {RightArmy} from "../../right/RightArmy";
 import {ISessionResult} from "../battle/BattleSession";
 import {IPlayerState, IState} from '../state.model';
-import {distinctUntilChanged, filter} from 'rxjs/internal/operators';
+import {catchError, distinctUntilChanged, filter, map, switchMap} from 'rxjs/internal/operators';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {ClientComponent} from './ClientComponent';
 import {Observable} from 'rxjs/index';
 import "../console/BattleConsole";
 import {RoomService} from "../RoomService";
 import {BattleGame} from '../battle/BattleGame';
+import {PromptService} from '../../leaders/PromptService';
+import {ApiService} from '../ApiService';
+import {Environment} from '../Environment';
 
 export class ClientApp {
 
     @Inject(BattleGame) private battleGame: BattleGame;
     @Inject(EnemyState) private enemyState: EnemyState;
+    @Inject(ApiService) private apiService: ApiService;
     @Inject(ClientState) private clientState: ClientState;
     @Inject(RoomService) private roomService: RoomService;
+    @Inject(Environment) private environment: Environment;
+    @Inject(PromptService) private promptService: PromptService;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
     get leftIsReady$(): Observable<boolean> {
@@ -154,6 +160,19 @@ export class ClientApp {
 
         this.connection.onClose$.subscribe(() => {
             this.battleGame.setState(BattleState.connectionClosed);
+
+            const {roomId} = this.roomService;
+
+            this.apiService.getRoom(roomId)
+                .pipe(
+                    map(() => false),
+                    catchError(() => [true]),
+                    filter(response => response),
+                    switchMap(() => this.promptService.alert('Ошибка', 'Данная комната больше не существует'))
+                )
+                .subscribe(() => {
+                    location.href = this.environment.config.baseUrl;
+                });
         });
 
         const enemySide = side === BattleSide.left ? BattleSide.right : BattleSide.left;

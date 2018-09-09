@@ -3,7 +3,8 @@ import {Subject} from 'rxjs/index';
 
 interface IProps {
     title: string;
-    onSubmit$: Subject<string>;
+    template: any;
+    onSubmit$: Subject<Object>;
 }
 
 interface IComponentState {
@@ -11,7 +12,7 @@ interface IComponentState {
 }
 
 export class PromptModal extends Component<IProps, IComponentState> {
-    private input: any;
+    private form: any;
     private dialog: any;
 
     componentDidMount() {
@@ -22,12 +23,12 @@ export class PromptModal extends Component<IProps, IComponentState> {
         return (
             <dialog class="modal-dialog" ref={ref => this.dialog = ref}>
                 <div className="modal-dialog-content">
-                    <form onSubmit={this.onSubmit}>
+                    <form onSubmit={this.onSubmit} ref={ref => this.form = ref}>
                         <div class="modal-dialog-row">
                             {props.title}:
                         </div>
                         <div class="modal-dialog-row">
-                            <input type="text" ref={ref => this.input = ref} required/>
+                            {props.template}
                         </div>
                         <div class="modal-dialog-row">
                             <button class="sample-button">Ок</button>
@@ -43,7 +44,14 @@ export class PromptModal extends Component<IProps, IComponentState> {
 
         this.dialog.close();
 
-        this.props.onSubmit$.next(this.input.value);
+        const formData = new FormData(this.form);
+        const object = {};
+
+        formData.forEach(function(value, key){
+            object[key] = value;
+        });
+
+        this.props.onSubmit$.next(object);
     }
 
 }

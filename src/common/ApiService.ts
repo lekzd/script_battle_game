@@ -1,11 +1,11 @@
-import {Observable} from 'rxjs/index';
+import {Observable, of, throwError} from 'rxjs/index';
 import {fromPromise} from 'rxjs/internal/observable/fromPromise';
 import {pluck, switchMap} from 'rxjs/internal/operators';
 import {IState} from './state.model';
 import {Inject} from './InjectDectorator';
 import {Environment} from './Environment';
-import {Room} from "../../server/Room";
 import {RoomModel} from "../../server/models/RoomModel";
+import {IApiFullResponse} from '../../server/models/IApiFullResponse.model';
 
 export class ApiService {
 
@@ -60,7 +60,14 @@ export class ApiService {
 
         return fromPromise<Response>(fetchPromise)
             .pipe(
-                switchMap<Response, T>(reponse => fromPromise(reponse.json()))
+                switchMap<Response, IApiFullResponse>(reponse => fromPromise(reponse.json())),
+                switchMap<IApiFullResponse, T>(response => {
+                    if (response.success) {
+                        return of(response);
+                    }
+
+                    return throwError(response);
+                })
             );
     }
 

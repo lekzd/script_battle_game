@@ -8,16 +8,22 @@ import {EMPTY_ARMY} from "../common/client/EMPTY_ARMY";
 import {RightArmy} from "../right/RightArmy";
 import {Observable, fromEvent, timer} from 'rxjs/index';
 import {IPlayerState, IState} from '../common/state.model';
-import {filter, first, map, pluck, switchMap, tap, timeInterval, timeout} from 'rxjs/internal/operators';
+import {catchError, filter, first, map, pluck, switchMap, tap, timeInterval, timeout} from 'rxjs/internal/operators';
 import {BattleSide} from '../common/battle/BattleSide';
 import {ClientComponent} from '../common/client/ClientComponent';
 import {RoomService} from "../common/RoomService";
 import {BattleGame} from '../common/battle/BattleGame';
+import {ApiService} from '../common/ApiService';
+import {PromptService} from '../leaders/PromptService';
+import {Environment} from '../common/Environment';
 
 export class MasterApp {
 
     @Inject(BattleGame) private battleGame: BattleGame;
+    @Inject(ApiService) private apiService: ApiService;
+    @Inject(Environment) private environment: Environment;
     @Inject(RoomService) private roomService: RoomService;
+    @Inject(PromptService) private promptService: PromptService;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
     private leftCode: CodeDisplay;
@@ -29,22 +35,6 @@ export class MasterApp {
 
     get newSessionClick$(): Observable<MouseEvent> {
         return fromEvent<MouseEvent>(this.container.querySelector('#newSession'), 'click')
-    }
-
-    get leftIsReady$(): Observable<boolean> {
-        return this.connection.onState$<boolean>('left', 'isReady')
-            .pipe(
-                filter(isReady => isReady === true),
-                first()
-            )
-    }
-
-    get rightIsReady$(): Observable<boolean> {
-        return this.connection.onState$<boolean>('right', 'isReady')
-            .pipe(
-                filter(isReady => isReady === true),
-                first()
-            );
     }
 
     constructor() {
@@ -66,6 +56,19 @@ export class MasterApp {
 
         this.connection.onClose$.subscribe(() => {
             this.setState(BattleState.connectionClosed);
+
+            const {roomId} = this.roomService;
+
+            this.apiService.getRoom(roomId)
+                .pipe(
+                    map(() => false),
+                    catchError(() => [true]),
+                    filter(response => response),
+                    switchMap(() => this.promptService.alert('Ошибка', 'Данная комната больше не существует'))
+                )
+                .subscribe(() => {
+                    location.href = this.environment.config.baseUrl;
+                });
         });
 
         this.connection.onMessage$
