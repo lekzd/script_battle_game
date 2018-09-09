@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import {Inject} from "../../InjectDectorator";
+import {inject, Inject} from "../../InjectDectorator";
 import {CharactersList} from "../../characters/CharactersList";
 import {BattleFieldDrawer} from "../BattleFieldDrawer";
 import {BattleFieldModel} from "../BattleFieldModel";
@@ -20,6 +20,7 @@ import {BulletDrawer, BulletType} from "../BulletDrawer";
 import {IPlayerState} from '../../state.model';
 import {ConsoleService} from "../../console/ConsoleService";
 import {RoomService} from "../../RoomService";
+import {BattleGame} from '../BattleGame';
 
 export class BattleView extends Phaser.Scene {
 
@@ -259,5 +260,9 @@ export class BattleView extends Phaser.Scene {
 
     private dispatchWinner(sessionResult: ISessionResult) {
         this.connection.sendWinner(sessionResult, this.roomService.roomId);
+
+        const battleGame = inject<BattleGame>(BattleGame);
+
+        battleGame.showResults(sessionResult);
     }
 }

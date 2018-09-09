@@ -75,6 +75,7 @@ export class MasterApp {
             .pipe(
                 pluck<any, IState>('data'),
                 filter(state => state.mode === BattleState.ready || state.mode === BattleState.results),
+                first(),
                 switchMap(state =>
                     timer(2000).pipe(map(() => state))
                 ),
@@ -133,12 +134,6 @@ export class MasterApp {
     private onMessage(message: IMessage) {
         if (message.type === 'state') {
             this.setState(message.data);
-        }
-
-        if (message.type === 'endSession') {
-            if (this.battleGame.currentState !== BattleState.results) {
-                this.battleGame.showResults(message.data.sessionResult);
-            }
         }
 
         if (message.type === 'newSession') {

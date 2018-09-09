@@ -921,23 +921,24 @@ canvas {
   width: 580px;
   border-top: 1px solid #007a9c;
   border-bottom: 1px solid #007a9c;
+  background-color: rgba(0, 0, 0, .2);
   box-sizing: border-box;
   color: #69909f;
   padding: 10px;
 }
 
 .room-item-ready {
-  background-image: linear-gradient(135deg, rgba(255, 165, 0, 0.15), rgba(0, 0, 0, .2) 300px);
+  background-image: linear-gradient(135deg, rgba(255, 165, 0, 0.15), transparent 300px);
   border-top-color: orange;
 }
 
 .room-item-waiting {
-  background-image: linear-gradient(135deg, rgba(0, 158, 0, 0.15), rgba(0, 0, 0, .2) 300px);
+  background-image: linear-gradient(135deg, rgba(0, 158, 0, 0.15), transparent 300px);
   border-top-color: green;
 }
 
 .room-item-results {
-  background-image: linear-gradient(135deg, rgba(35, 122, 127, 0.27), rgba(0, 0, 0, .2) 300px);
+  background-image: linear-gradient(135deg, rgba(35, 122, 127, 0.27), transparent 300px);
   border-top-color: #1e7980;
 }
 
@@ -1015,10 +1016,11 @@ canvas {
 }
 
 .room-item .watchers-count {
-  padding: 3px;
+  display: inline-block;
+  padding: 3px 6px;
   box-sizing: border-box;
   border-radius: 3px;
-  width: 25px;
+  min-width: 25px;
   height: 25px;
   margin-right: 5px;
   text-align: center;

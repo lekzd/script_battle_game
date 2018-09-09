@@ -44,14 +44,15 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
                         <div class="mb-20">
                             <div className="watchers-count">{props.room.watchersCount}</div>
                         </div>
-
-                        <div class="watchers">
-                            <a class="green-button" href={this.generateLInk('master')} target="_blank">Смотреть</a>
-                        </div>
                     </div>
 
                     <div className="room-item-data">
-                        <div class="room-item-name">{props.room.title}</div>
+                        <div class="room-item-name flex-row flex-align-center">
+                            <div>{props.room.title}</div>
+                            <a class="ml-auto green-button" href={this.generateLInk('master')} target="_blank">
+                                Смотреть
+                            </a>
+                        </div>
 
                         <div class="players">
                             <div class="players-item left">

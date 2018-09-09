@@ -44,7 +44,7 @@ export class ResultsView extends Phaser.Scene {
 
         if (isLeftWins) {
             units = this.getAliveUnits(BattleSide.left);
-            result = 'Победил левый';
+            result = `Победил левый`;
         }
 
         if (isRightWins) {
