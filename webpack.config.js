@@ -36,8 +36,8 @@ if (!isDevServer) {
 
 module.exports = function(env = {}) {
     const config = {
-        mode: 'development',
-        devtool: 'source-map',
+        mode: isDevServer ? 'development' : 'production',
+        devtool: isDevServer ? 'source-map': false,
         entry: './src/App.ts',
         output: {
             path: path.join(__dirname, 'public'),
