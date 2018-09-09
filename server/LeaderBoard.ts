@@ -30,22 +30,6 @@ export class LeaderBoard {
         this.writeToFile(leaderBoardPath, item)
     }
 
-    toHTML() {
-        return `
-            <table>
-                ${this.data.map(row => `
-                    <tr>
-                        <td>${row.winner}</td>
-                        <td>${row.state.left.name}</td>
-                        <td>${row.damage.left}</td>
-                        <td>${row.state.right.name}</td>
-                        <td>${row.damage.right}</td>
-                    </tr>
-                `).join('')}
-            </table>
-        `;
-    }
-
     private writeToFile(filePath: string, item) {
         this.createFileIfNotExists(filePath);
 
