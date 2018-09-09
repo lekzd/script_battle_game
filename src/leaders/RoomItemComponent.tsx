@@ -46,7 +46,7 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
                         </div>
 
                         <div class="watchers">
-                            <a class="green-button" href={this.generateLInk('master')} target="_blank">Зайти</a>
+                            <a class="green-button" href={this.generateLInk('master')} target="_blank">Смотреть</a>
                         </div>
                     </div>
 

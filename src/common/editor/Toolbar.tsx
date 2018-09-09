@@ -3,12 +3,12 @@ import {CharactersList, CharacterType, ICharacterConfig} from "../characters/Cha
 import {Inject} from "../InjectDectorator";
 import {filter, map, tap} from 'rxjs/internal/operators';
 import {ClientState} from '../client/ClientState';
-import {Documentation} from './Documentation';
 import {elementHasParent} from '../helpers/elementHasParent';
 import {WebsocketConnection} from "../WebsocketConnection";
+import {render, h} from 'preact';
+import {Documentation} from '../documentation/Documentation';
 
 export class Toolbar {
-    private documentation: Documentation;
 
     get buttons(): HTMLButtonElement[] {
         return Array.from(document.querySelectorAll('.select-button'));
@@ -44,7 +44,7 @@ export class Toolbar {
         )
             .pipe(filter(() => this.isSelectorOpen))
             .pipe(map((event: MouseEvent) => {
-                const index = this.unitButtons.indexOf(<HTMLElement>event.currentTarget);
+                const index = this.unitButtons.indexOf(event.currentTarget as HTMLElement);
 
                 return this.charactersList.types[index + 1];
             }))
@@ -173,7 +173,7 @@ export class Toolbar {
         `;
 
         this.selectClick$.subscribe(event => {
-            const itemIndex = this.buttons.indexOf(<HTMLButtonElement>event.currentTarget);
+            const itemIndex = this.buttons.indexOf(event.currentTarget as HTMLButtonElement);
 
             if (itemIndex === this.selectedItem) {
                 this.isSelectorOpen = false;
@@ -218,12 +218,7 @@ export class Toolbar {
                 })
             });
 
-        this.helpButtonClick$
-            .subscribe(() => {
-                this.documentation.opened = true;
-            });
-
-        this.documentation = new Documentation(this.container.querySelector('#documentation'));
+        render((<Documentation open$={this.helpButtonClick$} />), this.container.querySelector('#documentation'));
 
     }
 

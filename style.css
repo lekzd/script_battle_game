@@ -121,6 +121,7 @@ body {
 }
 
 canvas {
+  image-rendering: -moz-crisp-edges;
   image-rendering: pixelated;
 }
 
@@ -766,31 +767,31 @@ canvas {
   opacity: .35;
 }
 
-accordion-section {
+.accordion-section {
   display: block;
   background: #2a2e3c;
   border-left: 3px solid #1f4a63;
 }
 
-accordion-section.opened {
+.accordion-section.opened {
   display: block;
   background: #2a2e3c;
   border-left: 3px solid #409acf;
 }
 
-accordion-section + accordion-section {
+.accordion-section + .accordion-section {
   margin-top: 10px;
 }
 
-accordion-section .accordion-content {
+.accordion-section .accordion-content {
   display: none;
 }
 
-accordion-section.opened .accordion-content {
+.accordion-section.opened .accordion-content {
   display: block;
 }
 
-accordion-section .accordion-header {
+.accordion-section .accordion-header {
   font-size: 20px;
   font-weight: normal;
   text-align: left;
@@ -803,11 +804,11 @@ accordion-section .accordion-header {
   justify-content: space-between;
 }
 
-accordion-section.opened .accordion-header {
+.accordion-section.opened .accordion-header {
   color: #fff;
 }
 
-accordion-section .accordion-header:hover {
+.accordion-section .accordion-header:hover {
   background: #383d50;
   color: rgba(255, 255, 255, 0.7);
 }
