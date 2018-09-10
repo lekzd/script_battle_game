@@ -9,6 +9,7 @@ export class ClientState {
 
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
+    createTime: number;
     roomId: string;
     roomTitle: string;
 

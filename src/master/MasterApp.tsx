@@ -1,14 +1,13 @@
 import {IMessage, WebsocketConnection} from '../common/WebsocketConnection';
 import {Inject, setInject} from '../common/InjectDectorator';
 import {BattleState} from '../common/battle/BattleState.model';
-import {combineLatest} from "rxjs/internal/observable/combineLatest";
 import {CodeDisplay} from './CodeDisplay';
 import {LeftArmy} from "../left/LeftArmy";
 import {EMPTY_ARMY} from "../common/client/EMPTY_ARMY";
 import {RightArmy} from "../right/RightArmy";
 import {Observable, fromEvent, timer} from 'rxjs/index';
 import {IPlayerState, IState} from '../common/state.model';
-import {catchError, filter, first, map, pluck, switchMap, tap, timeInterval, timeout} from 'rxjs/internal/operators';
+import {catchError, filter, first, map, pluck, switchMap, tap} from 'rxjs/internal/operators';
 import {BattleSide} from '../common/battle/BattleSide';
 import {ClientComponent} from '../common/client/ClientComponent';
 import {RoomService} from "../common/RoomService";
@@ -16,6 +15,8 @@ import {BattleGame} from '../common/battle/BattleGame';
 import {ApiService} from '../common/ApiService';
 import {PromptService} from '../leaders/PromptService';
 import {Environment} from '../common/Environment';
+import {render, h} from 'preact';
+import {RoomTimer} from '../common/roomTimer/RoomTimer';
 
 export class MasterApp {
 
@@ -105,6 +106,12 @@ export class MasterApp {
         this.connection.onState$('left')
             .subscribe((state: IPlayerState) => {
                 this.leftCode.setState(state);
+            });
+
+        this.connection.onState$<IState>()
+            .pipe(first())
+            .subscribe(state => {
+                render((<RoomTimer startTime={state.createTime} endTime={state.endTime} />), document.querySelector('.clients-display'));
             });
 
         // setTimeout(() => {

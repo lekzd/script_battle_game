@@ -6,6 +6,7 @@ import {RoomModel} from '../../server/models/RoomModel';
 import {BehaviorSubject} from 'rxjs/index';
 import {Maybe} from "../common/helpers/Maybe";
 import {BattleState} from '../common/battle/BattleState.model';
+import {RoomTimer} from '../common/roomTimer/RoomTimer';
 
 interface IComponentState {
 }
@@ -43,6 +44,10 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
 
                         <div class="mb-20">
                             <div className="watchers-count">{props.room.watchersCount}</div>
+                        </div>
+
+                        <div class="mb-20">
+                            <RoomTimer startTime={props.room.state.createTime} endTime={props.room.state.endTime}/>
                         </div>
                     </div>
 

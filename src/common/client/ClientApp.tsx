@@ -8,7 +8,7 @@ import {LeftArmy} from "../../left/LeftArmy";
 import {EnemyState} from "./EnemyState";
 import {RightArmy} from "../../right/RightArmy";
 import {IPlayerState, IState} from '../state.model';
-import {catchError, distinctUntilChanged, filter, map, switchMap, tap} from 'rxjs/internal/operators';
+import {catchError, distinctUntilChanged, filter, first, map, switchMap, tap} from 'rxjs/internal/operators';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
 import {ClientComponent} from './ClientComponent';
 import {Observable} from 'rxjs/index';
@@ -19,6 +19,7 @@ import {ApiService} from '../ApiService';
 import {Environment} from '../Environment';
 import {render, h} from 'preact';
 import {BattleConsole} from '../console/BattleConsole';
+import {RoomTimer} from '../roomTimer/RoomTimer';
 
 export class ClientApp {
 
@@ -204,6 +205,8 @@ export class ClientApp {
             if (side === BattleSide.right && state.army) {
                 setInject(RightArmy, state.army)
             }
+
+
         });
 
         combineLatest(this.leftIsReady$, this.rightIsReady$)
@@ -217,6 +220,13 @@ export class ClientApp {
 
                 location.href = `${baseUrl}/master/#room=${roomId}`;
             });
+
+        this.connection.onState$<IState>()
+            .pipe(first())
+            .subscribe(state => {
+                render((<RoomTimer startTime={state.createTime} endTime={null} />), document.querySelector('.clients-display'));
+            });
+
 
     }
 

@@ -44,7 +44,8 @@ export class Room {
             .pipe(first())
             .subscribe(data => {
                 const state = Object.assign({}, data.sessionResult, this.state, {
-                    mode: BattleState.results
+                    mode: BattleState.results,
+                    endTime: Date.now()
                 });
 
                 this.connectionsStorage.setState(state);

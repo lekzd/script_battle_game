@@ -28,6 +28,9 @@ export interface IPlayerState {
 
 export interface IState {
     mode: BattleState;
+    createTime: number;
+    endTime: number;
+
     roomId: string;
     roomTitle: string;
 

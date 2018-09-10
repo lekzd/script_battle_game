@@ -689,6 +689,7 @@ canvas {
 }
 
 .clients-display {
+  position: relative;
   height: 47px;
   min-height: 47px;
   display: flex;
@@ -699,6 +700,16 @@ canvas {
   box-sizing: border-box;
   padding: 0 15px;
   border-bottom: 1px solid #007a9c;
+}
+
+.clients-display .room-timer {
+  position: absolute;
+  top: 14px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: 100px;
+  text-align: center;
 }
 
 .clients-display > .left,
@@ -1142,6 +1153,14 @@ canvas {
 
 .color-yellow {
   color: #c9c370;
+}
+
+.color-green {
+  color: #55c95b;
+}
+
+.color-red {
+  color: #c9554f;
 }
 
 h1, h2, h3 {

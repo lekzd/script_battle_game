@@ -19,9 +19,11 @@ export class ConnectionsStorage {
     leftPlayer = new Player();
     rightPlayer = new Player();
 
-    state: Partial<IState> = {
-        mode: BattleState.wait
-    };
+    state: Partial<IState> = {};
+
+    constructor() {
+        this.state = this.getInitialState();
+    }
 
     isRegistered(connection: ws): boolean {
         return this.connections.has(connection);
@@ -91,9 +93,7 @@ export class ConnectionsStorage {
     }
 
     newSession() {
-        this.state = {
-            mode: BattleState.wait
-        };
+        this.state = this.getInitialState();
 
         this.master.dispatchNewSession();
         this.leftPlayer.dispatchNewSession();
@@ -118,6 +118,13 @@ export class ConnectionsStorage {
 
     private getClient(name: string): Client {
         return this[name] as Client;
+    }
+
+    private getInitialState(): Partial<IState> {
+        return {
+            mode: BattleState.wait,
+            createTime: Date.now()
+        }
     }
 
 }
