@@ -16,8 +16,15 @@ app.use(express.static('public'));
 // parse application/json
 app.use(bodyParser.json());
 
-app.use(cors());
-app.options('*', cors());
+const corsOptions = {
+    origin: args.port === 80 ? '' : 'http://localhost:8080',
+    methods: ['GET', 'PUT', 'POST', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use('/api', cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 const {router} = new ApiController(express.Router());
 
