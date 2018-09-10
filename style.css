@@ -796,7 +796,7 @@ canvas {
   font-weight: normal;
   text-align: left;
   margin: 0 0 5px;
-  padding: 3px 20px 9px;
+  padding: 3px 20px 5px;
   color: rgba(255, 255, 255, 0.5);
   cursor: pointer;
   user-select: none;
@@ -1134,6 +1134,14 @@ canvas {
 
 .color-white {
   color: #fff;
+}
+
+.color-blue {
+  color: #409acf;
+}
+
+.color-yellow {
+  color: #c9c370;
 }
 
 h1, h2, h3 {

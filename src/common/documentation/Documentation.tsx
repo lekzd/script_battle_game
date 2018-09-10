@@ -7,6 +7,7 @@ import {BasicJS} from './BasicJS';
 import {FirstSteps} from './FirstSteps';
 import {UnitApi} from './UnitApi';
 import {UsefulTips} from './UsefulTips';
+import {HowCodeWorks} from './HowCodeWorks';
 
 interface IComponentState {
 }
@@ -63,11 +64,14 @@ export class Documentation extends Component<IProps, IComponentState> {
                 <AccordionSection header={'FAQ'} opened={true}>
                     <BasicFAQ />
                 </AccordionSection>
-                <AccordionSection header={'Основы JavaScript'} opened={false}>
-                    <BasicJS />
-                </AccordionSection>
                 <AccordionSection header={'Первые шаги'} opened={false}>
                     <FirstSteps />
+                </AccordionSection>
+                <AccordionSection header={'Как работает код'} opened={false}>
+                    <HowCodeWorks />
+                </AccordionSection>
+                <AccordionSection header={'Основы JavaScript'} opened={false}>
+                    <BasicJS />
                 </AccordionSection>
                 <AccordionSection header={'API'} opened={false}>
                     <UnitApi />

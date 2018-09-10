@@ -17,7 +17,7 @@ export const BasicJS = () => (
                     <div class="header">Цикл</div>
                     <div>
 <pre class="code">{`
-    for (i = 0; i < 10; i++) {
+    for (var i = 0; i < 10; i++) {
        shoot('ie')
     }`}
 </pre>

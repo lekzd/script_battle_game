@@ -4,43 +4,55 @@ export const FirstSteps = () => (
     <div>
         <section>
             <section>
-                <p>
-                    Дано:
-                </p>
-                <ul>
-                    <li>У нас сть 2 юнита: <span class="attr">CSS</span> и <span class="attr">PWA</span></li>
-                    <li>У противника: <span class="attr">CSS</span> и <span class="attr">$</span></li>
-                </ul>
-            </section>
 
-            <section class="signature">
+                <div className="signature flex-row flex-align-center">
+                    <div>
+                        У нас сть 2 юнита: <span class="color-yellow">'CSS'</span> и <span class="color-yellow">'PWA'</span>
+                    </div>
+                    <div className="ml-auto">
+                        <img src="/img/css_unit.png" height="80" alt=""/>
+                        <img src="/img/pwa_unit.png" height="80" className="ml-20" alt=""/>
+                    </div>
+                </div>
+
+                <div className="signature flex-row flex-align-center">
+                    <div>
+                        У противника: <span class="color-yellow">'CSS'</span> и <span class="color-yellow">'$'</span>
+                    </div>
+                    <div className="ml-auto">
+                        <img src="/img/css_unit.png" height="80" alt=""/>
+                        <img src="/img/$_unit.png" height="80" className="ml-20" alt=""/>
+                    </div>
+                </div>
+
                 <p>
-                    <span class="attr">id</span> юнита написан в фиолетовом прямоугольнике у его ног
+                    * Это <span className="color-yellow">ID</span> юнитов которые вам нужно использовать в коде
                 </p>
-                <p>
-                    <img src="/img/tuttorial_id.png" width="100" />
-                </p>
+
             </section>
 
             <section>
                 <p>Если заглянуть в характеристики персонажей:</p>
                 <ul>
-                    <li>Стрелковые атаки будут менее эффективны против стрелков (<span class="attr">$</span>)</li>
+                    <li>Стрелковые атаки будут менее эффективны против стрелков (<span class="color-yellow">'$'</span>)</li>
                     <li>Чтобы нанести больше урона стрелкам надо подойти ближе к цели</li>
-                    <li>У нас есть один пехотинец (<span class="attr">CSS</span>) с ближней атакой</li>
+                    <li>У нас есть один пехотинец (<span class="color-yellow">'CSS'</span>) с ближней атакой</li>
                 </ul>
             </section>
 
             <section class="signature">
-                <video src="/img/scripting_guide.mov" width="600" controls></video>
+                <p>Как написать более-менее эффективный скрипт:</p>
+                <video src="/img/scripting_guide.mov" width="600" controls />
             </section>
 
             <section>
-                <p>Как написать более-менее эффективный скрипт:</p>
                 <ul>
                     <li>Нажать "Сгенерировать пример кода", чтобы сразу получить стартовый код для нашей армии</li>
-                    <li>Подвести <span class="attr">PWA</span> ближе к противнику, чтобы наносить больше урона</li>
-                    <li>Ближнюю атаку направить на <span class="attr">$</span> а стрелковую на &mdash; <span class="attr">CSS</span></li>
+                    <li>Подвести <span class="color-yellow">'PWA'</span> ближе к противнику, чтобы наносить больше урона</li>
+                    <li>
+                        Ближнюю атаку направить на <span class="color-yellow">'$'</span> а стрелковую на &mdash;
+                        <span class="color-yellow">'CSS'</span>
+                    </li>
                 </ul>
             </section>
 
