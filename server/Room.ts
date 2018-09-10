@@ -2,14 +2,14 @@ import {ConnectionsStorage} from "./ConnectionsStorage";
 import {IPlayerState, IState} from "../src/common/state.model";
 import {IClientRegisterMessage} from "./SocketMiddleware";
 import * as ws from 'ws';
-import {Observable, Subject} from 'rxjs/index';
+import {merge, Observable, Subject} from 'rxjs/index';
 import {filter} from 'rxjs/operators';
 import {IMessage} from '../src/common/WebsocketConnection';
 import {LeaderBoard} from './LeaderBoard';
 import {Inject} from '../src/common/InjectDectorator';
 import {Maybe} from "../src/common/helpers/Maybe";
 import {BattleState} from '../src/common/battle/BattleState.model';
-import {first} from 'rxjs/internal/operators';
+import {first, pluck, tap} from 'rxjs/internal/operators';
 import {mergeDeep} from '../src/common/helpers/mergeDeep';
 
 export class Room {
@@ -56,6 +56,19 @@ export class Room {
         this.on$('newSession').subscribe(data => {
             this.connectionsStorage.newSession();
         });
+
+        merge(
+            this.on$('registerLeftPlayer'),
+            this.on$('registerRightPlayer')
+        )
+            .pipe(first())
+            .subscribe(() => {
+                this.connectionsStorage.setState({
+                    createTime: Date.now()
+                });
+
+                this.guestConnectionsStorage.guest.dispatchRoomsChanged();
+            });
 
         this.on$('state').subscribe(data => {
             const isAllReady = this.isAllPlayersReady(data.state);

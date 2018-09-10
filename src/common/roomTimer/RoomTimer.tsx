@@ -25,7 +25,7 @@ export class RoomTimer extends Component<IProps, IComponentState> {
             .pipe(takeUntil(this.unmount$))
             .subscribe(() => {
                 this.setState({
-                    time: this.getEndTime() - this.props.startTime
+                    time: this.getEndTime() - (this.props.startTime || Date.now())
                 });
             });
     }

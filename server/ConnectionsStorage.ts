@@ -122,8 +122,7 @@ export class ConnectionsStorage {
 
     private getInitialState(): Partial<IState> {
         return {
-            mode: BattleState.wait,
-            createTime: Date.now()
+            mode: BattleState.wait
         }
     }
 
