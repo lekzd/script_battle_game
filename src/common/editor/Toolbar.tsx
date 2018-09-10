@@ -1,12 +1,16 @@
-import {fromEvent, merge, Observable} from "rxjs/index";
+import {combineLatest, fromEvent, merge, NEVER, Observable, of, timer} from "rxjs/index";
 import {CharactersList, CharacterType, ICharacterConfig} from "../characters/CharactersList";
 import {Inject} from "../InjectDectorator";
-import {filter, map, tap} from 'rxjs/internal/operators';
+import {filter, map, switchMap, takeUntil, tap} from 'rxjs/internal/operators';
 import {ClientState} from '../client/ClientState';
 import {elementHasParent} from '../helpers/elementHasParent';
 import {WebsocketConnection} from "../WebsocketConnection";
 import {render, h} from 'preact';
 import {Documentation} from '../documentation/Documentation';
+import {PromptService} from '../../leaders/PromptService';
+
+const maxSelectTime = 1000 * 60 * 12;
+const maxSelectTimeAlert = 1000 * 60 * 11;
 
 export class Toolbar {
 
@@ -101,7 +105,36 @@ export class Toolbar {
             )
     }
 
+    get stopSelectUnit$() {
+        return this.connection.onState$<number>('createTime')
+            .pipe(switchMap(createTime => {
+                const delta = Date.now() - createTime;
+                const timeout = maxSelectTime - delta;
+
+                if (timeout <= 0) {
+                    return of(null);
+                }
+
+                return timer(timeout);
+            }))
+    }
+
+    get selectUnitAlert$() {
+        return this.connection.onState$<number>('createTime')
+            .pipe(switchMap(createTime => {
+                const delta = Date.now() - createTime;
+                const timeout = maxSelectTimeAlert - delta;
+
+                if (timeout <= 0) {
+                    return NEVER;
+                }
+
+                return timer(timeout);
+            }))
+    }
+
     @Inject(ClientState) private clientState: ClientState;
+    @Inject(PromptService) private promptService: PromptService;
     @Inject(CharactersList) private charactersList: CharactersList;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
@@ -172,19 +205,21 @@ export class Toolbar {
             <div id="documentation" class="documentation"></div>
         `;
 
-        this.selectClick$.subscribe(event => {
-            const itemIndex = this.buttons.indexOf(event.currentTarget as HTMLButtonElement);
+        this.selectClick$
+            .subscribe(event => {
+                const itemIndex = this.buttons.indexOf(event.currentTarget as HTMLButtonElement);
 
-            if (itemIndex === this.selectedItem) {
-                this.isSelectorOpen = false;
-            } else {
-                this.isSelectorOpen = true;
+                if (itemIndex === this.selectedItem) {
+                    this.isSelectorOpen = false;
+                } else {
+                    this.isSelectorOpen = true;
 
-                this.selectedItem = itemIndex;
-            }
-        });
+                    this.selectedItem = itemIndex;
+                }
+            });
 
         this.chooseUnitClick$
+            .pipe(takeUntil(this.stopSelectUnit$))
             .subscribe((characterConfig) => {
                 const {army} = this.clientState;
 
@@ -194,6 +229,31 @@ export class Toolbar {
 
                 this.isSelectorOpen = false;
             });
+
+        combineLatest(this.stopSelectUnit$, this.chooseUnitClick$)
+            .pipe(
+                tap(() => {
+                    this.isSelectorOpen = false;
+                }),
+                switchMap(() =>
+                    this.promptService.alert('Время вышло', 'Время на выбор юнитов закончилось')
+                )
+            )
+            .subscribe();
+
+        this.selectUnitAlert$
+            .pipe(
+                filter(() => {
+                    const {army} = this.clientState;
+                    const keys = Object.keys(army);
+
+                    return keys.some(key => army[key] === 'character_null');
+                }),
+                switchMap(() =>
+                    this.promptService.alert('Время почти вышло', 'Осталась ровно минута до отключения возможности выбирать юнитов')
+                )
+            )
+            .subscribe();
 
 
         merge(

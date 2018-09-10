@@ -57,19 +57,6 @@ export class Room {
             this.connectionsStorage.newSession();
         });
 
-        merge(
-            this.on$('registerLeftPlayer'),
-            this.on$('registerRightPlayer')
-        )
-            .pipe(first())
-            .subscribe(() => {
-                this.connectionsStorage.setState({
-                    createTime: Date.now()
-                });
-
-                this.guestConnectionsStorage.guest.dispatchRoomsChanged();
-            });
-
         this.on$('state').subscribe(data => {
             const isAllReady = this.isAllPlayersReady(data.state);
             let modeIsChanged = false;
@@ -89,6 +76,8 @@ export class Room {
                 this.guestConnectionsStorage.guest.dispatchRoomsChanged();
             }
         });
+
+        this.onSessionLoad();
     }
 
     closeConnections() {
@@ -117,6 +106,22 @@ export class Room {
 
     reloadSession() {
         this.connectionsStorage.newSession();
+        this.onSessionLoad();
+    }
+
+    private onSessionLoad() {
+        merge(
+            this.on$('registerLeftPlayer'),
+            this.on$('registerRightPlayer')
+        )
+            .pipe(first())
+            .subscribe(() => {
+                this.connectionsStorage.setState({
+                    createTime: Date.now()
+                });
+
+                this.guestConnectionsStorage.guest.dispatchRoomsChanged();
+            });
     }
 
     private on$(event: string): Observable<any> {

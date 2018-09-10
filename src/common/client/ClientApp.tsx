@@ -221,10 +221,13 @@ export class ClientApp {
                 location.href = `${baseUrl}/master/#room=${roomId}`;
             });
 
-        this.connection.onState$<IState>()
-            .pipe(first())
-            .subscribe(state => {
-                render((<RoomTimer startTime={state.createTime} endTime={null} />), document.querySelector('.clients-display'));
+        this.connection.onState$<number>('createTime')
+            .pipe(
+                filter(createTime => !!createTime),
+                first()
+            )
+            .subscribe(createTime => {
+                render((<RoomTimer startTime={createTime} endTime={null} />), document.querySelector('.clients-display'));
             });
 
 
