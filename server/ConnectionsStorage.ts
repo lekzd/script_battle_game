@@ -7,6 +7,7 @@ import {IClientRegisterMessage} from "./SocketMiddleware";
 import * as ws from 'ws';
 import {Guest} from './clients/Guest';
 import {BattleState} from '../src/common/battle/BattleState.model';
+import {Admin} from './clients/Admin';
 
 type Partial<T> = {
     [P in keyof T]?: T[P];
@@ -14,6 +15,7 @@ type Partial<T> = {
 
 export class ConnectionsStorage {
     connections = new Map<ws, string>();
+    admin = new Admin();
     guest = new Guest();
     master = new Master();
     leftPlayer = new Player();
@@ -31,6 +33,8 @@ export class ConnectionsStorage {
 
     registerConnection(data: IClientRegisterMessage, connection: ws): boolean {
         switch (data.type) {
+            case 'registerAdmin':
+                return this.tryRegisterEntity(connection, 'admin');
             case 'registerGuest':
                 return this.tryRegisterEntity(connection, 'guest');
             case 'registerMaster':

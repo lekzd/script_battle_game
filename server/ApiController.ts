@@ -1,13 +1,15 @@
-import {Router} from "express";
+import {Request, Router} from "express";
 import {Inject} from "../src/common/InjectDectorator";
 import {LeaderBoard} from "./LeaderBoard";
 import {RoomStorage} from "./RoomStorage";
 import {RoomModel} from "./models/RoomModel";
 import {IApiFullResponse} from './models/IApiFullResponse.model';
+import {ConnectionsStorage} from './ConnectionsStorage';
 
 export class ApiController {
     @Inject(LeaderBoard) private leaderBoard: LeaderBoard;
     @Inject(RoomStorage) private roomStorage: RoomStorage;
+    @Inject(ConnectionsStorage) private guestConnectionsStorage: ConnectionsStorage;
 
     constructor(public router: Router) {
 
@@ -34,6 +36,8 @@ export class ApiController {
 
         router.post('/rooms/:id', (request, response) => {
             const output = this.getSafeResult(() => {
+                this.checkTokenOrThrow(request);
+
                 this.roomStorage.createNew(request.params.id, request.body.title);
 
                 return 'OK';
@@ -44,6 +48,8 @@ export class ApiController {
 
         router.post('/rooms/:id/reload', (request, response) => {
             const output = this.getSafeResult(() => {
+                this.checkTokenOrThrow(request);
+
                 this.roomStorage.reloadRoomSession(request.params.id);
 
                 return 'OK';
@@ -54,6 +60,8 @@ export class ApiController {
 
         router.delete('/rooms/:id', (request, response) => {
             const output = this.getSafeResult(() => {
+                this.checkTokenOrThrow(request);
+
                 this.roomStorage.delete(request.params.id);
 
                 return 'OK';
@@ -85,6 +93,14 @@ export class ApiController {
         }
 
         return {result, success, error};
+    }
+
+    private checkTokenOrThrow(request: Request) {
+        const token = request.query.token || request.params.token || request.body.token;
+
+        if (!this.guestConnectionsStorage.admin.checkToken(token)) {
+            throw Error('Invalid token');
+        }
     }
 
 }

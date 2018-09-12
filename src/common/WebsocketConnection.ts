@@ -75,6 +75,12 @@ export class WebsocketConnection {
         }));
     }
 
+    registerAsAdmin() {
+        this.send(JSON.stringify({
+            type: 'registerAdmin'
+        }));
+    }
+
     registerAsMaster(roomId: string) {
         this.send(JSON.stringify({
             type: 'registerMaster',

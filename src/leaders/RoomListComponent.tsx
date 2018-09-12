@@ -15,6 +15,7 @@ interface IComponentState {
 
 interface IProps {
     isAdmin: boolean;
+    adminToken?: string;
 }
 
 export class RoomListComponent extends Component<IProps, IComponentState> {
@@ -68,12 +69,12 @@ export class RoomListComponent extends Component<IProps, IComponentState> {
 
     renderRoomsList() {
         const {items} = this.state;
-        const {isAdmin} = this.props;
+        const {isAdmin, adminToken} = this.props;
 
         return Object.keys(items).map(name => {
             const room = items[name];
 
-            return (<RoomItemComponent {...{name, room, isAdmin, update$: this.update$}} />)
+            return (<RoomItemComponent {...{name, room, isAdmin, adminToken, update$: this.update$}} />)
         })
     }
 
@@ -85,7 +86,7 @@ export class RoomListComponent extends Component<IProps, IComponentState> {
         const id = Math.random().toString(36).substring(3);
 
         this.promptService.prompt('Введите название комнаты')
-            .pipe(switchMap(({title}) => this.apiService.createRoom(id, title)))
+            .pipe(switchMap(({title}) => this.apiService.createRoom(id, title, this.props.adminToken)))
             .subscribe(() => {
                 this.updateRooms();
             })

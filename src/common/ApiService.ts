@@ -15,24 +15,24 @@ export class ApiService {
         return this.get<IState[]>('/leaderboard').pipe(pluck('result'));
     }
 
-    createRoom(id: string, title: string): Observable<void> {
-        return this.post<void>(`/rooms/${id}`, {title}).pipe(pluck('result'));
+    createRoom(id: string, title: string, token: string): Observable<void> {
+        return this.post<void>(`/rooms/${id}`, {title, token}).pipe(pluck('result'));
     }
 
     getRoom(name: string): Observable<RoomModel> {
         return this.get<RoomModel>(`/rooms/${name}`).pipe(pluck('result'));
     }
 
-    deleteRoom(name: string): Observable<void> {
-        return this.delete<void>(`/rooms/${name}`).pipe(pluck('result'));
+    deleteRoom(name: string, token: string): Observable<void> {
+        return this.delete<void>(`/rooms/${name}?token=${token}`).pipe(pluck('result'));
     }
 
     getAllRooms(): Observable<{[key: string]: RoomModel}> {
         return this.get<{[key: string]: RoomModel}>(`/rooms`).pipe(pluck('result'));
     }
 
-    reloadRoomSession(id: string): Observable<string> {
-        return this.post(`/rooms/${id}/reload`).pipe(pluck('result'));
+    reloadRoomSession(id: string, token: string): Observable<string> {
+        return this.post(`/rooms/${id}/reload`, {token}).pipe(pluck('result'));
     }
 
     private get<T>(url: string): Observable<T> {

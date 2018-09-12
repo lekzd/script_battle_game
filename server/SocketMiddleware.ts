@@ -25,7 +25,7 @@ export class SocketMiddleware {
                 map(message => JSON.parse(message.data)),
                 tap(message => {
                     // todo: temporary
-                    if (message.type === 'registerGuest') {
+                    if (message.type === 'registerGuest' || message.type === 'registerAdmin') {
                         return this.tryRegisterGuestConnection(message, this.connection);
                     }
 

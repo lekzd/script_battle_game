@@ -13,6 +13,7 @@ interface IComponentState {
 
 interface IComponentProps {
     isAdmin: boolean;
+    adminToken?: string;
     name: string;
     room: RoomModel;
     update$: BehaviorSubject<any>;
@@ -92,14 +93,14 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
     }
 
     removeRoom = () => {
-        this.apiService.deleteRoom(this.props.name)
+        this.apiService.deleteRoom(this.props.name, this.props.adminToken)
             .subscribe(() => {
                 this.props.update$.next(this.props.room);
             });
     };
 
     reloadRoom = () => {
-        this.apiService.reloadRoomSession(this.props.name)
+        this.apiService.reloadRoomSession(this.props.name, this.props.adminToken)
             .subscribe(() => {
                 this.props.update$.next(this.props.room);
             });
