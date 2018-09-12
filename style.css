@@ -1235,3 +1235,19 @@ h1, h2, h3 {
     text-shadow: none;
     background: url(/img/pepe-sad.png) center center no-repeat;
 }
+
+.input {
+  height: 28px;
+  font-size: 14px;
+  box-sizing: border-box;
+  background: #171921;
+  color: #69909f;
+  border: none;
+  padding: 0 8px;
+  outline: 1px solid #384863;
+}
+
+.input:focus {
+  outline: 1px solid #43517b;
+  outline-offset: 0;
+}

@@ -7,6 +7,7 @@ import {BehaviorSubject} from 'rxjs/index';
 import {Maybe} from "../common/helpers/Maybe";
 import {BattleState} from '../common/battle/BattleState.model';
 import {RoomTimer} from '../common/roomTimer/RoomTimer';
+import {PlayerLink} from './PlayerLink';
 
 interface IComponentState {
 }
@@ -157,7 +158,7 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
                     </div>
                 </div>
                 <div>
-                    {this.renderJoinButton(canJoin, side)}
+                    {this.renderJoinButton(this.props.isAdmin, side)}
                 </div>
             </div>
         );
@@ -169,7 +170,7 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
         }
 
         return (
-            <a class="sample-button" href={this.generateLInk(side)} target="_blank">В бой!</a>
+            <PlayerLink link={this.generateLInk(side)}/>
         )
     }
 }
