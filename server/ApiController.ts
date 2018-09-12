@@ -5,6 +5,7 @@ import {RoomStorage} from "./storages/RoomStorage";
 import {RoomModel} from "./models/RoomModel";
 import {IApiFullResponse} from './models/IApiFullResponse.model';
 import {ConnectionsStorage} from './storages/ConnectionsStorage';
+import {BattleState} from '../src/common/battle/BattleState.model';
 
 export class ApiController {
     @Inject(LeaderBoard) private leaderBoard: LeaderBoard;
@@ -24,9 +25,22 @@ export class ApiController {
                 const rooms = this.roomStorage.getAll();
                 const result = {};
 
-                Object.keys(rooms).forEach(name => {
-                    result[name] = new RoomModel(rooms[name]);
-                });
+                if (request.query.isAll) {
+                    Object.keys(rooms).forEach(name => {
+                        const room = rooms[name];
+
+                        result[name] = new RoomModel(room);
+                    });
+
+                } else {
+                    Object.keys(rooms).forEach(name => {
+                        const room = rooms[name];
+
+                        if (room.state.mode !== BattleState.wait) {
+                            result[name] = new RoomModel(room);
+                        }
+                    });
+                }
 
                 return result;
             });
@@ -46,7 +60,7 @@ export class ApiController {
             response.json(output);
         });
 
-        router.post('/rooms/save', (request, response) => {
+        router.post('/saveRoomState', (request, response) => {
             const output = this.getSafeResult(() => {
                 this.checkTokenOrThrow(request);
 
@@ -111,6 +125,8 @@ export class ApiController {
         const token = request.query.token || request.params.token || request.body.token;
 
         if (!this.guestConnectionsStorage.admin.checkToken(token)) {
+            console.log('Invalid token:', request.method, request.url);
+
             throw Error('Invalid token');
         }
     }

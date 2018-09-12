@@ -948,6 +948,11 @@ canvas {
   border-top-color: green;
 }
 
+.room-item-codding {
+  background-image: linear-gradient(135deg, rgba(88, 158, 13, 0.15), transparent 300px);
+  border-top-color: #5c8006;
+}
+
 .room-item-results {
   background-image: linear-gradient(135deg, rgba(35, 122, 127, 0.27), transparent 300px);
   border-top-color: #1e7980;
@@ -964,6 +969,10 @@ canvas {
 
 .room-item-waiting .room-item-status-title {
   color: #0eae0e;
+}
+
+.room-item-codding .room-item-status-title {
+  color: #6aae15;
 }
 
 .room-item-data {

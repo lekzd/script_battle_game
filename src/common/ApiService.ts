@@ -27,12 +27,16 @@ export class ApiService {
         return this.delete<void>(`/rooms/${name}?token=${token}`).pipe(pluck('result'));
     }
 
-    getAllRooms(): Observable<{[key: string]: RoomModel}> {
-        return this.get<{[key: string]: RoomModel}>(`/rooms`).pipe(pluck('result'));
+    getAllRooms(isAll = false): Observable<{[key: string]: RoomModel}> {
+        return this.get<{[key: string]: RoomModel}>(`/rooms${isAll ? '?isAll=1' : ''}`).pipe(pluck('result'));
     }
 
     reloadRoomSession(id: string, token: string): Observable<string> {
         return this.post(`/rooms/${id}/reload`, {token}).pipe(pluck('result'));
+    }
+
+    saveRoomsState(token: string): Observable<string> {
+        return this.post(`/saveRoomState`, {token}).pipe(pluck('result'));
     }
 
     private get<T>(url: string): Observable<T> {

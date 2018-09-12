@@ -1,7 +1,7 @@
 import {combineLatest, fromEvent, merge, NEVER, Observable, of, timer} from "rxjs/index";
 import {CharactersList, CharacterType, ICharacterConfig} from "../characters/CharactersList";
 import {Inject} from "../InjectDectorator";
-import {filter, map, switchMap, takeUntil, tap} from 'rxjs/internal/operators';
+import {filter, first, map, switchMap, takeUntil, tap} from 'rxjs/internal/operators';
 import {ClientState} from '../client/ClientState';
 import {elementHasParent} from '../helpers/elementHasParent';
 import {WebsocketConnection} from "../WebsocketConnection";
@@ -10,7 +10,7 @@ import {Documentation} from '../documentation/Documentation';
 import {PromptService} from '../../leaders/PromptService';
 
 const maxSelectTime = 1000 * 60 * 12;
-const maxSelectTimeAlert = 1000 * 60 * 11;
+const maxSelectTimeAlert = 1000 * 60 * 13;
 
 export class Toolbar {
 
@@ -107,30 +107,36 @@ export class Toolbar {
 
     get stopSelectUnit$() {
         return this.connection.onState$<number>('createTime')
-            .pipe(switchMap(createTime => {
-                const delta = Date.now() - createTime;
-                const timeout = maxSelectTime - delta;
+            .pipe(
+                first(),
+                switchMap(createTime => {
+                    const delta = Date.now() - createTime;
+                    const timeout = maxSelectTime - delta;
 
-                if (timeout <= 0) {
-                    return of(null);
-                }
+                    if (timeout <= 0) {
+                        return of(null);
+                    }
 
-                return timer(timeout);
-            }))
+                    return timer(timeout);
+                })
+            )
     }
 
     get selectUnitAlert$() {
         return this.connection.onState$<number>('createTime')
-            .pipe(switchMap(createTime => {
-                const delta = Date.now() - createTime;
-                const timeout = maxSelectTimeAlert - delta;
+            .pipe(
+                first(),
+                switchMap(createTime => {
+                    const delta = Date.now() - createTime;
+                    const timeout = maxSelectTimeAlert - delta;
 
-                if (timeout <= 0) {
-                    return NEVER;
-                }
+                    if (timeout <= 0) {
+                        return NEVER;
+                    }
 
-                return timer(timeout);
-            }))
+                    return timer(timeout);
+                })
+            )
     }
 
     @Inject(ClientState) private clientState: ClientState;

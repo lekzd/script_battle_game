@@ -28,6 +28,7 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
 
         const modeTitles = {
             [BattleState.results]: 'Бой окончен',
+            [BattleState.codding]: 'Пишут код',
             [BattleState.ready]: 'Идет бой',
             [BattleState.wait]: 'Ожидание'
         };
@@ -158,7 +159,7 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
                     </div>
                 </div>
                 <div>
-                    {this.renderJoinButton(this.props.isAdmin, side)}
+                    {this.renderJoinButton(this.props.isAdmin && canJoin, side)}
                 </div>
             </div>
         );

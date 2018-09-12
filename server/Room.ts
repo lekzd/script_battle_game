@@ -2,7 +2,7 @@ import {ConnectionsStorage} from "./storages/ConnectionsStorage";
 import {IPlayerState, IState} from "../src/common/state.model";
 import {IClientRegisterMessage} from "./SocketMiddleware";
 import * as ws from 'ws';
-import {merge, Observable, Subject} from 'rxjs/index';
+import {forkJoin, merge, Observable, Subject} from 'rxjs/index';
 import {filter} from 'rxjs/operators';
 import {IMessage} from '../src/common/WebsocketConnection';
 import {LeaderBoard} from './storages/LeaderBoard';
@@ -122,6 +122,18 @@ export class Room {
             .subscribe(() => {
                 this.connectionsStorage.setState({
                     createTime: Date.now()
+                });
+
+                this.guestConnectionsStorage.dispatchRoomsChanged();
+            });
+
+        forkJoin(
+            this.on$('registerLeftPlayer').pipe(first()),
+            this.on$('registerRightPlayer').pipe(first())
+        )
+            .subscribe(() => {
+                this.connectionsStorage.setState({
+                    mode: BattleState.codding
                 });
 
                 this.guestConnectionsStorage.dispatchRoomsChanged();

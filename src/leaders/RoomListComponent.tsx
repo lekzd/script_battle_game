@@ -27,19 +27,17 @@ interface IRoomItem {
 export class RoomListComponent extends Component<IProps, IComponentState> {
     update$ = new BehaviorSubject([]);
 
+    state = {
+        items: {}
+    };
+
     @Inject(ApiService) private apiService: ApiService;
     @Inject(PromptService) private promptService: PromptService;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
     private unmount$ = new Subject();
 
-    constructor() {
-        super();
-
-        this.setState({
-            items: {}
-        });
-
+    componentDidMount() {
         merge(
             this.update$,
             this.connection.onRoomsChanged$
@@ -63,12 +61,22 @@ export class RoomListComponent extends Component<IProps, IComponentState> {
 
         return (
             <div class="rooms-list">
+                {this.renderNewRoomButton()}
+
                 {this.renderRoomsWithHeader(current, 'Текущие бои:')}
 
                 {this.renderRoomsWithHeader(past, 'Прошедшие бои:')}
-
-                {this.renderNewRoomButton()}
             </div>
+        )
+    }
+
+    renderNewRoomButton() {
+        if (this.props.isAdmin === false) {
+            return;
+        }
+
+        return (
+            <button class="sample-button" onClick={this.createRoom}>Новая комната</button>
         )
     }
 
@@ -84,16 +92,6 @@ export class RoomListComponent extends Component<IProps, IComponentState> {
                     {this.renderRoomsList(items)}
                 </div>
             </div>
-        )
-    }
-
-    renderNewRoomButton() {
-        if (this.props.isAdmin === false) {
-            return;
-        }
-
-        return (
-            <button class="sample-button" onClick={this.createRoom}>Новая комната</button>
         )
     }
 
@@ -120,7 +118,7 @@ export class RoomListComponent extends Component<IProps, IComponentState> {
     };
 
     private updateRooms() {
-        this.apiService.getAllRooms()
+        this.apiService.getAllRooms(this.props.isAdmin)
             .subscribe(items => {
                 this.setState({items});
             });
