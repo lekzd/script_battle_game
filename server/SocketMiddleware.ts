@@ -2,9 +2,9 @@ import * as ws from 'ws';
 import {catchError, filter, map, tap} from 'rxjs/operators';
 import {Observable, fromEvent, throwError} from 'rxjs/index';
 import {Inject} from '../src/common/InjectDectorator';
-import {LeaderBoard} from './LeaderBoard';
-import {RoomStorage} from "./RoomStorage";
-import {ConnectionsStorage} from './ConnectionsStorage';
+import {LeaderBoard} from './storages/LeaderBoard';
+import {RoomStorage} from "./storages/RoomStorage";
+import {ConnectionsStorage} from './storages/ConnectionsStorage';
 import {IMessage} from '../src/common/WebsocketConnection';
 
 export interface IClientRegisterMessage {

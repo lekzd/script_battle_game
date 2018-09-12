@@ -1,13 +1,13 @@
-import {Master} from "./clients/Master";
-import {Player} from "./clients/Player";
-import {IPlayerState, IState} from '../src/common/state.model';
-import {mergeDeep} from '../src/common/helpers/mergeDeep';
-import {Client} from './clients/Client';
-import {IClientRegisterMessage} from "./SocketMiddleware";
+import {Master} from "../clients/Master";
+import {Player} from "../clients/Player";
+import {IPlayerState, IState} from '../../src/common/state.model';
+import {mergeDeep} from '../../src/common/helpers/mergeDeep';
+import {Client} from '../clients/Client';
+import {IClientRegisterMessage} from "../SocketMiddleware";
 import * as ws from 'ws';
-import {Guest} from './clients/Guest';
-import {BattleState} from '../src/common/battle/BattleState.model';
-import {Admin} from './clients/Admin';
+import {Guest} from '../clients/Guest';
+import {BattleState} from '../../src/common/battle/BattleState.model';
+import {Admin} from '../clients/Admin';
 
 type Partial<T> = {
     [P in keyof T]?: T[P];

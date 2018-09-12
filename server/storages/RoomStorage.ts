@@ -1,14 +1,45 @@
-import {Room} from "./Room";
+import {Room} from "../Room";
 import * as ws from 'ws';
 import {ConnectionsStorage} from './ConnectionsStorage';
-import {Inject} from '../src/common/InjectDectorator';
+import {Inject} from '../../src/common/InjectDectorator';
+import {AbstractFileBasedStorage} from './AbstractFileBasedStorage';
 
-export class RoomStorage {
+const filePath = './.data/rooms.json';
+
+export class RoomStorage extends AbstractFileBasedStorage {
 
     private rooms = new Map<string, Room>();
     private connections = new WeakMap<ws, Room>();
 
     @Inject(ConnectionsStorage) private guestConnectionsStorage: ConnectionsStorage;
+
+    constructor() {
+        super();
+
+        const data = this.readFromFile(filePath);
+
+        data.forEach(({id, title, state}) => {
+            const room = new Room(title);
+
+            room.state = state;
+
+            this.rooms.set(id, room);
+        })
+    }
+
+    saveState() {
+        const data = [];
+
+        this.rooms.forEach((room, id) => {
+            data.push({
+                id,
+                title: room.title,
+                state: room.state
+            })
+        })
+
+        this.writeAllData(filePath, data);
+    }
 
     createNew(id: string, title: string) {
         this.rooms.set(id, new Room(title));

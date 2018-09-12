@@ -1,10 +1,10 @@
 import {Request, Router} from "express";
 import {Inject} from "../src/common/InjectDectorator";
-import {LeaderBoard} from "./LeaderBoard";
-import {RoomStorage} from "./RoomStorage";
+import {LeaderBoard} from "./storages/LeaderBoard";
+import {RoomStorage} from "./storages/RoomStorage";
 import {RoomModel} from "./models/RoomModel";
 import {IApiFullResponse} from './models/IApiFullResponse.model';
-import {ConnectionsStorage} from './ConnectionsStorage';
+import {ConnectionsStorage} from './storages/ConnectionsStorage';
 
 export class ApiController {
     @Inject(LeaderBoard) private leaderBoard: LeaderBoard;
@@ -39,6 +39,18 @@ export class ApiController {
                 this.checkTokenOrThrow(request);
 
                 this.roomStorage.createNew(request.params.id, request.body.title);
+
+                return 'OK';
+            });
+
+            response.json(output);
+        });
+
+        router.post('/rooms/save', (request, response) => {
+            const output = this.getSafeResult(() => {
+                this.checkTokenOrThrow(request);
+
+                this.roomStorage.saveState();
 
                 return 'OK';
             });

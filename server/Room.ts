@@ -1,11 +1,11 @@
-import {ConnectionsStorage} from "./ConnectionsStorage";
+import {ConnectionsStorage} from "./storages/ConnectionsStorage";
 import {IPlayerState, IState} from "../src/common/state.model";
 import {IClientRegisterMessage} from "./SocketMiddleware";
 import * as ws from 'ws';
 import {merge, Observable, Subject} from 'rxjs/index';
 import {filter} from 'rxjs/operators';
 import {IMessage} from '../src/common/WebsocketConnection';
-import {LeaderBoard} from './LeaderBoard';
+import {LeaderBoard} from './storages/LeaderBoard';
 import {Inject} from '../src/common/InjectDectorator';
 import {Maybe} from "../src/common/helpers/Maybe";
 import {BattleState} from '../src/common/battle/BattleState.model';
@@ -35,6 +35,10 @@ export class Room {
 
     get state(): Partial<IState> {
         return this.connectionsStorage.state;
+    }
+
+    set state(state: Partial<IState>) {
+        this.connectionsStorage.setState(state);
     }
 
     constructor(public title: string) {
