@@ -8,6 +8,7 @@ import {Component, h} from "preact";
 import {debounceTime, switchMap, takeUntil} from 'rxjs/internal/operators';
 import {WebsocketConnection} from '../common/WebsocketConnection';
 import {PromptService} from './PromptService';
+import {BattleState} from '../common/battle/BattleState.model';
 
 interface IComponentState {
     items: {[key: string]: RoomModel}
@@ -16,6 +17,11 @@ interface IComponentState {
 interface IProps {
     isAdmin: boolean;
     adminToken?: string;
+}
+
+interface IRoomItem {
+    id: string;
+    room: RoomModel;
 }
 
 export class RoomListComponent extends Component<IProps, IComponentState> {
@@ -46,13 +52,37 @@ export class RoomListComponent extends Component<IProps, IComponentState> {
     }
 
     render(props: IProps, state: IComponentState) {
+        const rooms = Object.keys(state.items)
+            .map(id => ({id, room: state.items[id]}))
+            .sort((a, b) =>
+                a.room.state.createTime < b.room.state.createTime ? 1 : -1
+            );
+
+        const current = rooms.filter(({room}) => room.state.mode !== BattleState.results);
+        const past = rooms.filter(({room}) => room.state.mode === BattleState.results);
+
         return (
             <div class="rooms-list">
-                <div class="rooms">
-                    {this.renderRoomsList()}
-                </div>
+                {this.renderRoomsWithHeader(current, 'Текущие бои:')}
+
+                {this.renderRoomsWithHeader(past, 'Прошедшие бои:')}
 
                 {this.renderNewRoomButton()}
+            </div>
+        )
+    }
+
+    renderRoomsWithHeader(items: IRoomItem[], title: string) {
+        if (items.length === 0) {
+            return;
+        }
+
+        return (
+            <div>
+                <h2 class="color-white mb-20">{title}</h2>
+                <div class="rooms">
+                    {this.renderRoomsList(items)}
+                </div>
             </div>
         )
     }
@@ -67,14 +97,11 @@ export class RoomListComponent extends Component<IProps, IComponentState> {
         )
     }
 
-    renderRoomsList() {
-        const {items} = this.state;
+    renderRoomsList(items: IRoomItem[]) {
         const {isAdmin, adminToken} = this.props;
 
-        return Object.keys(items).map(name => {
-            const room = items[name];
-
-            return (<RoomItemComponent {...{name, room, isAdmin, adminToken, update$: this.update$}} />)
+        return items.map(({id, room}) => {
+            return (<RoomItemComponent {...{name: id, room, isAdmin, adminToken, update$: this.update$}} />)
         })
     }
 
