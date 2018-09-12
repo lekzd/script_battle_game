@@ -120,6 +120,11 @@ export class ConnectionsStorage {
         });
     }
 
+    dispatchRoomsChanged() {
+        this.guest.dispatchRoomsChanged();
+        this.admin.dispatchRoomsChanged();
+    }
+
     private getClient(name: string): Client {
         return this[name] as Client;
     }

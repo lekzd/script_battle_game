@@ -13,7 +13,7 @@ export class RoomStorage {
     createNew(id: string, title: string) {
         this.rooms.set(id, new Room(title));
 
-        this.guestConnectionsStorage.guest.dispatchRoomsChanged();
+        this.guestConnectionsStorage.dispatchRoomsChanged();
     }
 
     delete(roomId: string) {
@@ -22,7 +22,7 @@ export class RoomStorage {
         room.closeConnections();
         this.rooms.delete(roomId);
 
-        this.guestConnectionsStorage.guest.dispatchRoomsChanged();
+        this.guestConnectionsStorage.dispatchRoomsChanged();
     }
 
     get(roomId: string): Room {

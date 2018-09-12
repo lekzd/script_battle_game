@@ -5,6 +5,7 @@ import {Inject} from '../src/common/InjectDectorator';
 import {LeaderBoard} from './LeaderBoard';
 import {RoomStorage} from "./RoomStorage";
 import {ConnectionsStorage} from './ConnectionsStorage';
+import {IMessage} from '../src/common/WebsocketConnection';
 
 export interface IClientRegisterMessage {
     type: string;
@@ -25,7 +26,7 @@ export class SocketMiddleware {
                 map(message => JSON.parse(message.data)),
                 tap(message => {
                     // todo: temporary
-                    if (message.type === 'registerGuest' || message.type === 'registerAdmin') {
+                    if (this.isAdminMessage(message)) {
                         return this.tryRegisterGuestConnection(message, this.connection);
                     }
 
@@ -42,6 +43,7 @@ export class SocketMiddleware {
 
                     return room.tryRegisterConnection(message, this.connection);
                 }),
+                filter(message => !this.isAdminMessage(message)),
                 catchError(error => {
                     console.log(error);
 
@@ -63,7 +65,7 @@ export class SocketMiddleware {
 
             if (room) {
                 room.onConnectionLost(this.connection);
-                this.guestConnectionsStorage.guest.dispatchRoomsChanged();
+                this.guestConnectionsStorage.dispatchRoomsChanged();
             }
         });
 
@@ -91,6 +93,10 @@ export class SocketMiddleware {
 
             return;
         }
+    }
+
+    private isAdminMessage(message: IMessage): boolean {
+        return message.type === 'registerGuest' || message.type === 'registerAdmin';
     }
 
 }

@@ -73,7 +73,7 @@ export class Room {
             const rightUpdated = this.isNeedToUpdateRooms(data.state.right);
 
             if (leftUpdated || rightUpdated || modeIsChanged) {
-                this.guestConnectionsStorage.guest.dispatchRoomsChanged();
+                this.guestConnectionsStorage.dispatchRoomsChanged();
             }
         });
 
@@ -98,7 +98,7 @@ export class Room {
                 return;
             }
 
-            this.guestConnectionsStorage.guest.dispatchRoomsChanged();
+            this.guestConnectionsStorage.dispatchRoomsChanged();
 
             return;
         }
@@ -120,7 +120,7 @@ export class Room {
                     createTime: Date.now()
                 });
 
-                this.guestConnectionsStorage.guest.dispatchRoomsChanged();
+                this.guestConnectionsStorage.dispatchRoomsChanged();
             });
     }
 

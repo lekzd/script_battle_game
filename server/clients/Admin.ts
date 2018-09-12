@@ -23,4 +23,11 @@ export class Admin extends Client {
     checkToken(token: string): boolean {
         return this.adminToken === token;
     }
+
+    dispatchRoomsChanged() {
+        this.send({
+            type: 'roomsChanged',
+            data: null
+        })
+    }
 }
