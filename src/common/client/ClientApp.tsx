@@ -1,7 +1,6 @@
 import {WebsocketConnection} from '../WebsocketConnection';
 import {Inject, setInject} from '../InjectDectorator';
 import {BattleState} from '../battle/BattleState.model';
-import {EditorComponent} from '../editor/EditorComponent';
 import {BattleSide} from '../battle/BattleSide';
 import {ClientState} from "./ClientState";
 import {LeftArmy} from "../../left/LeftArmy";
@@ -10,8 +9,7 @@ import {RightArmy} from "../../right/RightArmy";
 import {IPlayerState, IState} from '../state.model';
 import {catchError, distinctUntilChanged, filter, first, map, switchMap, tap} from 'rxjs/internal/operators';
 import {combineLatest} from 'rxjs/internal/observable/combineLatest';
-import {ClientComponent} from './ClientComponent';
-import {Observable} from 'rxjs/index';
+import {Observable} from 'rxjs';
 import {RoomService} from "../RoomService";
 import {BattleGame} from '../battle/BattleGame';
 import {PromptService} from '../../leaders/PromptService';
@@ -19,7 +17,8 @@ import {ApiService} from '../ApiService';
 import {Environment} from '../Environment';
 import {render, h} from 'preact';
 import {BattleConsole} from '../console/BattleConsole';
-import {RoomTimer} from '../roomTimer/RoomTimer';
+import {EditorComponent} from "../../player/editor/EditorComponent";
+import {PlayerScreen} from "../../player/PlayerScreen";
 
 export class ClientApp {
 
@@ -42,11 +41,7 @@ export class ClientApp {
             .pipe(filter(isReady => isReady === true));
     }
 
-    private editorComponent: EditorComponent;
-
     constructor(private side: BattleSide) {
-        this.battleGame.init();
-
         this.clientState.side = side;
 
         render((<BattleConsole />), document.querySelector('.rightSide'));
@@ -62,65 +57,6 @@ export class ClientApp {
             setInject(LeftArmy, this.enemyState.army);
             setInject(RightArmy, this.clientState.army);
         }
-
-        this.battleGame.setState(BattleState.battle);
-
-        this.editorComponent = new EditorComponent();
-
-        this.editorComponent.runCode$.subscribe(code => {
-            if (side === BattleSide.left) {
-                this.battleGame.runCode(code, '');
-            } else {
-                this.battleGame.runCode('', code);
-            }
-        });
-
-        this.editorComponent.pushCode$.subscribe(() => {
-            const newState = {
-                left: {},
-                right: {}
-            } as IState;
-
-            if (side === BattleSide.left) {
-                newState.left.isReady = true;
-            } else {
-                newState.right.isReady = true;
-            }
-
-            this.connection.sendState(newState, this.roomService.roomId);
-        });
-
-        this.editorComponent.change$.subscribe(code => {
-            const newState = {
-                left: {editor: {}},
-                right: {editor: {}}
-            } as IState;
-
-            if (side === BattleSide.left) {
-                newState.left.editor.code = code;
-            } else {
-                newState.right.editor.code = code;
-            }
-
-            this.connection.sendState(newState, this.roomService.roomId);
-        });
-
-        this.editorComponent.editorScroll$.subscribe(pointer => {
-            const newState = {
-                left: {editor: {}},
-                right: {editor: {}}
-            } as IState;
-
-            if (side === BattleSide.left) {
-                newState.left.editor.scrollX = pointer.x;
-                newState.left.editor.scrollY = pointer.y;
-            } else {
-                newState.right.editor.scrollX = pointer.x;
-                newState.right.editor.scrollY = pointer.y;
-            }
-
-            this.connection.sendState(newState, this.roomService.roomId);
-        });
 
         this.clientState.change$
             .pipe(
@@ -180,9 +116,6 @@ export class ClientApp {
 
         const enemySide = side === BattleSide.left ? BattleSide.right : BattleSide.left;
 
-        new ClientComponent(document.querySelector('#enemyClient'), enemySide);
-        new ClientComponent(document.querySelector('#myClient'), side);
-
         this.connection.onState$<IPlayerState>(enemySide).subscribe(state => {
             this.enemyState.set(state);
 
@@ -206,8 +139,13 @@ export class ClientApp {
                 setInject(RightArmy, state.army)
             }
 
-
         });
+
+        this.connection.onState$<IState>()
+            .pipe(first())
+            .subscribe(state => {
+                render((<PlayerScreen state={state} side={side} />), document.querySelector('.player'));
+            });
 
         combineLatest(this.leftIsReady$, this.rightIsReady$)
             .pipe(
@@ -221,16 +159,62 @@ export class ClientApp {
                 location.href = `${baseUrl}/master/#room=${roomId}`;
             });
 
-        this.connection.onState$<number>('createTime')
-            .pipe(
-                filter(createTime => !!createTime),
-                first()
-            )
-            .subscribe(createTime => {
-                render((<RoomTimer startTime={createTime} endTime={null} />), document.querySelector('.clients-display'));
-            });
-
-
     }
 
+    private onEditorInit(ref: EditorComponent) {
+        ref.runCode$.subscribe(code => {
+            if (this.side === BattleSide.left) {
+                this.battleGame.runCode(code, '');
+            } else {
+                this.battleGame.runCode('', code);
+            }
+        });
+
+        ref.pushCode$.subscribe(() => {
+            const newState = {
+                left: {},
+                right: {}
+            } as IState;
+
+            if (this.side === BattleSide.left) {
+                newState.left.isReady = true;
+            } else {
+                newState.right.isReady = true;
+            }
+
+            this.connection.sendState(newState, this.roomService.roomId);
+        });
+
+        ref.change$.subscribe(code => {
+            const newState = {
+                left: {editor: {}},
+                right: {editor: {}}
+            } as IState;
+
+            if (this.side === BattleSide.left) {
+                newState.left.editor.code = code;
+            } else {
+                newState.right.editor.code = code;
+            }
+
+            this.connection.sendState(newState, this.roomService.roomId);
+        });
+
+        ref.editorScroll$.subscribe(pointer => {
+            const newState = {
+                left: {editor: {}},
+                right: {editor: {}}
+            } as IState;
+
+            if (this.side === BattleSide.left) {
+                newState.left.editor.scrollX = pointer.x;
+                newState.left.editor.scrollY = pointer.y;
+            } else {
+                newState.right.editor.scrollX = pointer.x;
+                newState.right.editor.scrollY = pointer.y;
+            }
+
+            this.connection.sendState(newState, this.roomService.roomId);
+        });
+    }
 }

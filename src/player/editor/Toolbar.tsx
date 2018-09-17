@@ -1,12 +1,12 @@
 import {combineLatest, fromEvent, merge, NEVER, Observable, of, timer} from "rxjs/index";
-import {CharactersList, CharacterType, ICharacterConfig} from "../characters/CharactersList";
-import {Inject} from "../InjectDectorator";
+import {CharactersList, CharacterType, ICharacterConfig} from "../../common/characters/CharactersList";
+import {Inject} from "../../common/InjectDectorator";
 import {filter, first, map, switchMap, takeUntil, tap} from 'rxjs/internal/operators';
-import {ClientState} from '../client/ClientState';
-import {elementHasParent} from '../helpers/elementHasParent';
-import {WebsocketConnection} from "../WebsocketConnection";
+import {ClientState} from '../../common/client/ClientState';
+import {elementHasParent} from '../../common/helpers/elementHasParent';
+import {WebsocketConnection} from "../../common/WebsocketConnection";
 import {render, h} from 'preact';
-import {Documentation} from '../documentation/Documentation';
+import {Documentation} from '../../common/documentation/Documentation';
 import {PromptService} from '../../leaders/PromptService';
 
 const maxSelectTime = 1000 * 60 * 12;
@@ -171,7 +171,7 @@ export class Toolbar {
                 
                 <div class="select-view">
                     ${this.charactersList.types.slice(1).map(characterConfig => {
-                        return `
+            return `
                             <section class="unit">
                                 <div class="unit-img ${characterConfig.key}"></div>
                                 <div class="unit-description">
@@ -192,7 +192,7 @@ export class Toolbar {
                                 </div>
                             </section>
                         `;
-                    }).join('')}
+        }).join('')}
                 </div>
             </div>
             <button id="push" class="runButton toolbar-button" type="button">

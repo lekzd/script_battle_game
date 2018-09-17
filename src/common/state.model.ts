@@ -10,18 +10,20 @@ export interface IEditorState {
     cursorY: number;
 }
 
+export interface IArmyState {
+    0: string;
+    1: string;
+    2: string;
+    3: string;
+}
+
 export interface IPlayerState {
     name: string;
     side: BattleSide;
     isReady: boolean;
     isConnected: boolean;
 
-    army: {
-        0: string;
-        1: string;
-        2: string;
-        3: string;
-    };
+    army: IArmyState;
 
     editor: IEditorState;
 }

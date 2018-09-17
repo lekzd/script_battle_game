@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack",
     "start": "webpack-dev-server",
-    "server": "ts-node ./server/index.ts",
+    "server": "ts-node ./server/index.ts --port=1337",
     "release": "npm run build && npm run release:copy && npm run release:zip",
     "release:copy": "cp -R ./img ./public && cp style.css ./public",
     "release:zip": "zip -r archive.zip . -x *.git* *.map *.idea* *.data* node_modules/**\\*",

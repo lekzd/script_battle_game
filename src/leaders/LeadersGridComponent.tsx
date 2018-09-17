@@ -1,6 +1,6 @@
 import {Inject} from '../common/InjectDectorator';
 import {ApiService} from '../common/ApiService';
-import {IState} from '../common/state.model';
+import {IArmyState, IState} from '../common/state.model';
 import {Component, h} from 'preact';
 import {Wreath} from './Wreath';
 
@@ -89,7 +89,7 @@ export class LeadersGridComponent extends Component<any, IGridState> {
             });
     }
 
-    private renderUnits(army: {[key: number]: string}) {
+    private renderUnits(army: IArmyState) {
         return Object.keys(army).map(i => (
             <div class={`unit-img ${army[i]}`} />
         ));

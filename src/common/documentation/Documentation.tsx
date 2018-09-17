@@ -23,7 +23,7 @@ export class Documentation extends Component<IProps, IComponentState> {
     onCloseClick$ = new Subject();
 
     get container(): HTMLElement {
-        return this.base.parentElement;
+        return this.base;
     }
 
     set opened(value: boolean) {
@@ -60,29 +60,31 @@ export class Documentation extends Component<IProps, IComponentState> {
 
     render(props: IProps, state: IComponentState) {
         return (
-            <div class="container">
-                <AccordionSection header={'FAQ'} opened={true}>
-                    <BasicFAQ />
-                </AccordionSection>
-                <AccordionSection header={'Первые шаги'} opened={false}>
-                    <FirstSteps />
-                </AccordionSection>
-                <AccordionSection header={'Как работает код'} opened={false}>
-                    <HowCodeWorks />
-                </AccordionSection>
-                <AccordionSection header={'Основы JavaScript'} opened={false}>
-                    <BasicJS />
-                </AccordionSection>
-                <AccordionSection header={'API'} opened={false}>
-                    <UnitApi />
-                </AccordionSection>
-                <AccordionSection header={'Полезные советы'} opened={false}>
-                    <UsefulTips />
-                </AccordionSection>
+            <div class="documentation">
+                <div class="container">
+                    <AccordionSection header={'FAQ'} opened={true}>
+                        <BasicFAQ />
+                    </AccordionSection>
+                    <AccordionSection header={'Первые шаги'} opened={false}>
+                        <FirstSteps />
+                    </AccordionSection>
+                    <AccordionSection header={'Как работает код'} opened={false}>
+                        <HowCodeWorks />
+                    </AccordionSection>
+                    <AccordionSection header={'Основы JavaScript'} opened={false}>
+                        <BasicJS />
+                    </AccordionSection>
+                    <AccordionSection header={'API'} opened={false}>
+                        <UnitApi />
+                    </AccordionSection>
+                    <AccordionSection header={'Полезные советы'} opened={false}>
+                        <UsefulTips />
+                    </AccordionSection>
 
-                <div class="container-footer">
-                    ⇣ Скрольте вниз, чтобы изучить документацию
-                    <button class="sample-button" onClick={e => this.onCloseClick$.next()}>Закрыть</button>
+                    <div class="container-footer">
+                        ⇣ Скрольте вниз, чтобы изучить документацию
+                        <button class="sample-button" onClick={e => this.onCloseClick$.next()}>Закрыть</button>
+                    </div>
                 </div>
             </div>
         );

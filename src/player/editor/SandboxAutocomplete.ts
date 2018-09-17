@@ -1,5 +1,5 @@
 import * as ace from "brace";
-import {getUnitApi} from '../codeSandbox/getUnitApi';
+import {getUnitApi} from '../../common/codeSandbox/getUnitApi';
 
 interface IAutocompleteItem {
     name: string;

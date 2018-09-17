@@ -10,6 +10,10 @@ body {
   height: 100vh;
 }
 
+.player.right {
+  flex-direction: row-reverse;
+}
+
 .master {
   position: relative;
   display: flex;

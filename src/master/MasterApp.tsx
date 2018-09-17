@@ -5,7 +5,7 @@ import {CodeDisplay} from './CodeDisplay';
 import {LeftArmy} from "../left/LeftArmy";
 import {EMPTY_ARMY} from "../common/client/EMPTY_ARMY";
 import {RightArmy} from "../right/RightArmy";
-import {Observable, fromEvent, timer} from 'rxjs/index';
+import {Observable, fromEvent, timer} from 'rxjs';
 import {IPlayerState, IState} from '../common/state.model';
 import {catchError, filter, first, map, pluck, switchMap, tap} from 'rxjs/internal/operators';
 import {BattleSide} from '../common/battle/BattleSide';
@@ -17,6 +17,7 @@ import {PromptService} from '../leaders/PromptService';
 import {Environment} from '../common/Environment';
 import {render, h} from 'preact';
 import {RoomTimer} from '../common/roomTimer/RoomTimer';
+import {Maybe} from "../common/helpers/Maybe";
 
 export class MasterApp {
 
@@ -91,7 +92,10 @@ export class MasterApp {
                 ),
             )
             .subscribe(state => {
-                this.battleGame.runCode(state.left.editor.code, state.right.editor.code);
+                const leftCode = Maybe(state).pluck('left.editor.code').getOrElse('');
+                const rightCode = Maybe(state).pluck('right.editor.code').getOrElse('');
+
+                this.battleGame.runCode(leftCode, rightCode);
             });
 
         this.newSessionClick$.subscribe(() => {
