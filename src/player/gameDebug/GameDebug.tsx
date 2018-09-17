@@ -46,7 +46,7 @@ export class GameDebug extends Component<IProps, IComponentState> {
                     <ClientDisplay side={BattleSide.left} playerState={props.state.left} />
                     <ClientDisplay side={BattleSide.right} playerState={props.state.right} />
 
-                    <RoomTimer startTime={state.createTime} endTime={null} />
+                    <RoomTimer startTime={this.props.state.createTime} endTime={null} />
                 </div>
                 <BattleGameScreen runCode$={this.props.runCode$} />
                 <BattleConsole />

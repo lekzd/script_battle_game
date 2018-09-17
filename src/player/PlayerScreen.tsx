@@ -6,11 +6,14 @@ import {IPlayerState, IState} from "../common/state.model";
 import {BattleSide} from "../common/battle/BattleSide";
 import {Inject} from "../common/InjectDectorator";
 import {WebsocketConnection} from "../common/WebsocketConnection";
-import { Subject } from 'rxjs';
-import { ClientState } from '../common/client/ClientState';
-import { PromptService } from '../leaders/PromptService';
-import { filter, switchMap, tap } from 'rxjs/operators';
-import { ConsoleService } from '../common/console/ConsoleService';
+import {Observable, Subject} from 'rxjs';
+import {ClientState} from '../common/client/ClientState';
+import {PromptService} from '../leaders/PromptService';
+import {filter, map, switchMap, tap} from 'rxjs/operators';
+import {ConsoleService} from '../common/console/ConsoleService';
+import {BattleState} from "../common/battle/BattleState.model";
+import {RoomService} from "../common/RoomService";
+import {Environment} from "../common/Environment";
 
 interface IComponentState {
     playerState: Partial<IPlayerState>;
@@ -25,6 +28,8 @@ interface IProps {
 export class PlayerScreen extends Component<IProps, IComponentState> {
 
     @Inject(ClientState) private clientState: ClientState;
+    @Inject(RoomService) private roomService: RoomService;
+    @Inject(Environment) private environment: Environment;
     @Inject(PromptService) private promptService: PromptService;
     @Inject(ConsoleService) private consoleService: ConsoleService;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
@@ -36,6 +41,14 @@ export class PlayerScreen extends Component<IProps, IComponentState> {
         playerState: this.props.state[this.props.side] || {},
         state: this.props.state
     };
+
+    get bothIsReady$(): Observable<boolean> {
+        return this.connection.onState$<BattleState>('mode')
+            .pipe(
+                map(mode => mode === BattleState.ready || mode === BattleState.results),
+                filter(result => result)
+            );
+    }
 
     componentDidMount() {
         this.connection.onState$<IState>()
@@ -63,6 +76,17 @@ export class PlayerScreen extends Component<IProps, IComponentState> {
                 this.consoleService.infoLog('Кажется, вы готовы к битве! Но код еще можно редактировать =)');
                 
                 this.clientState.set({isReady: true});
+            });
+
+        this.bothIsReady$
+            .pipe(
+                switchMap(() => this.promptService.goToMaster())
+            )
+            .subscribe(() => {
+                const {roomId} = this.roomService;
+                const {baseUrl} = this.environment.config;
+
+                location.href = `${baseUrl}/master/#room=${roomId}`;
             });
     }
 

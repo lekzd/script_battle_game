@@ -72,8 +72,7 @@ export class SelectWindow extends Component<IProps, IComponentState> {
 
                     return maxSelectTime - delta;
                 }),
-                filter(timeout => timeout > 0),
-                switchMap(timeout => timer(timeout))
+                switchMap(timeout => timer(Math.max(timeout, 0)))
             )
     }
 
@@ -95,6 +94,7 @@ export class SelectWindow extends Component<IProps, IComponentState> {
         merge(this.onEscape$, this.outsideSelectorClick$)
             .subscribe(() => {
                 this.setState({
+                    selectIndex: null,
                     opened: false
                 });
             });
@@ -109,6 +109,7 @@ export class SelectWindow extends Component<IProps, IComponentState> {
             .pipe(
                 tap(() => {
                     this.setState({
+                        selectIndex: null,
                         opened: false
                     });
                 }),

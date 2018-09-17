@@ -21,6 +21,7 @@ import {IPlayerState} from '../../state.model';
 import {ConsoleService} from "../../console/ConsoleService";
 import {RoomService} from "../../RoomService";
 import {BattleGame} from '../BattleGame';
+import {EMPTY_ARMY} from "../../client/EMPTY_ARMY";
 
 export class BattleView extends Phaser.Scene {
 
@@ -95,7 +96,7 @@ export class BattleView extends Phaser.Scene {
 
         for (let i = 0; i < 4; i++) {
             const {x, y} = this.getUnitStartPosition(BattleSide.left, i);
-            const army = this.leftArmy;
+            const army = this.leftArmy || EMPTY_ARMY;
             const type = army[i];
             const side = BattleSide.left;
             const scene = this;
@@ -108,7 +109,7 @@ export class BattleView extends Phaser.Scene {
 
         for (let i = 0; i < 4; i++) {
             const {x, y} = this.getUnitStartPosition(BattleSide.right, i);
-            const army = this.rightArmy;
+            const army = this.rightArmy || EMPTY_ARMY;
             const type = army[i];
             const side = BattleSide.right;
             const scene = this;
@@ -176,9 +177,13 @@ export class BattleView extends Phaser.Scene {
 
             const evalPromise = this.codeSandbox.eval(unitCode, unit);
 
-            evalPromise.then((actions) => {
-                unit.setActions(actions);
-            });
+            evalPromise
+                .then((actions) => {
+                    unit.setActions(actions);
+                })
+                .catch(() => {
+                    unit.setActions([]);
+                });
 
             promises.push(evalPromise);
         });
@@ -192,14 +197,21 @@ export class BattleView extends Phaser.Scene {
 
             const evalPromise = this.codeSandbox.eval(unitCode, unit);
 
-            evalPromise.then((actions) => {
-                unit.setActions(actions);
-            });
+            evalPromise
+                .then((actions) => {
+                    unit.setActions(actions);
+                })
+                .catch(() => {
+                    unit.setActions([]);
+                });
 
             promises.push(evalPromise);
         });
 
         Promise.all(promises)
+            .catch(error => {
+                return;
+            })
             .then(() => {
                 return this.battleSession.stop();
             })
@@ -212,7 +224,7 @@ export class BattleView extends Phaser.Scene {
                 if (sessionResult && this.connection.isMaster) {
                     this.dispatchWinner(sessionResult);
                 }
-            })
+            });
     }
 
     private createBullet(fromUnit: BattleUnit, toUnit: BattleUnit, type: BulletType) {
