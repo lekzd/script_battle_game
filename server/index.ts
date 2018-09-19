@@ -3,6 +3,7 @@ import * as cors from 'cors';
 import * as argsParser from 'args-parser';
 import * as expressWs from 'express-ws';
 import * as bodyParser from 'body-parser';
+import * as passport from 'passport';
 import {SocketMiddleware} from './SocketMiddleware';
 import {ApiController} from "./ApiController";
 
@@ -12,9 +13,9 @@ const args = argsParser(process.argv);
 expressWs(app);
 
 app.use(express.static('public'));
-
-// parse application/json
 app.use(bodyParser.json());
+app.use(passport.initialize());
+app.use(passport.session());
 
 const corsOptions = {
     origin: args.port === 80 ? '' : 'http://localhost:8080',

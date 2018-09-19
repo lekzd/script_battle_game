@@ -1,4 +1,5 @@
 import {Request, Router} from "express";
+import * as passport from 'passport';
 import {Inject} from "../src/common/InjectDectorator";
 import {LeaderBoard} from "./storages/LeaderBoard";
 import {RoomStorage} from "./storages/RoomStorage";
@@ -6,13 +7,21 @@ import {RoomModel} from "./models/RoomModel";
 import {IApiFullResponse} from './models/IApiFullResponse.model';
 import {ConnectionsStorage} from './storages/ConnectionsStorage';
 import {BattleState} from '../src/common/battle/BattleState.model';
+import {AuthController} from "./AuthController";
 
 export class ApiController {
     @Inject(LeaderBoard) private leaderBoard: LeaderBoard;
     @Inject(RoomStorage) private roomStorage: RoomStorage;
+    @Inject(AuthController) private authController: AuthController;
     @Inject(ConnectionsStorage) private guestConnectionsStorage: ConnectionsStorage;
 
     constructor(public router: Router) {
+
+        passport.use(this.authController.middleware());
+
+        router.post('/login', this.authController.authenticate(), (req, res) => {
+            res.redirect('/');
+        });
 
         router.get('/leaderboard', (request, response) => {
             const output = this.getSafeResult(() => this.leaderBoard.data);

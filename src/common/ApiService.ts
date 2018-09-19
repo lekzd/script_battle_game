@@ -35,6 +35,10 @@ export class ApiService {
         return this.post(`/rooms/${id}/reload`, {token}).pipe(pluck('result'));
     }
 
+    login(username: string, password: string): Observable<boolean> {
+        return this.post(`/login`, {username, password}).pipe(pluck('result'));
+    }
+
     saveRoomsState(token: string): Observable<string> {
         return this.post(`/saveRoomState`, {token}).pipe(pluck('result'));
     }
