@@ -15,6 +15,7 @@ interface IComponentState {
 }
 
 interface IProps {
+    setState$?: Observable<BattleState>;
     runCode$: Observable<[string, string]>;
 }
 
@@ -29,7 +30,11 @@ export class BattleGameScreen extends Component<IProps, IComponentState> {
     componentDidMount() {
         this.props.runCode$.subscribe(([leftCode, rightCode]) => {
             this.runCode(leftCode, rightCode);
-        })
+        });
+
+        this.props.setState$.subscribe((state: BattleState) => {
+            this.setGameState(state);
+        });
     }
 
     shouldComponentUpdate(): boolean {
