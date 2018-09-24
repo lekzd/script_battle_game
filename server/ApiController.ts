@@ -17,10 +17,33 @@ export class ApiController {
 
     constructor(public router: Router) {
 
-        passport.use(this.authController.middleware());
+        passport.use(this.authController.cookiesMiddleware());
+        passport.use(this.authController.localMiddleware());
 
-        router.post('/login', this.authController.authenticate(), (req, res) => {
-            res.redirect('/');
+        router.get('/authData', this.authController.checkAuth(), (req, response) => {
+            const output = this.getSafeResult(() => req.user);
+
+            response.json(output);
+        });
+
+        router.post('/logout', this.authController.authenticate(), (req, response) => {
+            const output = this.getSafeResult(() => 'OK');
+
+            response.clearCookie('token');
+
+            response.json(output);
+        });
+
+        router.post('/login', this.authController.authenticate(), (req, response) => {
+            const output = this.getSafeResult(() => req.user);
+
+            response.cookie('token', this.authController.lastToken, {
+                maxAge: 1000 * 60 * 60 * 24,
+                httpOnly: true,
+                signed: true
+            });
+
+            response.json(output);
         });
 
         router.get('/leaderboard', (request, response) => {

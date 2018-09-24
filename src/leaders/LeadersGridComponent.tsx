@@ -3,6 +3,7 @@ import {ApiService} from '../common/ApiService';
 import {IArmyState, IState} from '../common/state.model';
 import {Component, h} from 'preact';
 import {Wreath} from './Wreath';
+import {EMPTY_ARMY} from "../common/client/EMPTY_ARMY";
 
 interface IGridState {
     items: IState[]
@@ -89,7 +90,7 @@ export class LeadersGridComponent extends Component<any, IGridState> {
             });
     }
 
-    private renderUnits(army: IArmyState) {
+    private renderUnits(army: IArmyState = EMPTY_ARMY) {
         return Object.keys(army).map(i => (
             <div class={`unit-img ${army[i]}`} />
         ));

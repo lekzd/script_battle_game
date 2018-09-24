@@ -64,7 +64,15 @@ export class ApiService {
             'content-type': 'application/json'
         });
 
-        const fetchPromise = fetch(`${this.environment.config.api}${url}`, {method, body, headers});
+        const config = {
+            method,
+            body,
+            headers,
+            mode: 'cors' as RequestMode,
+            credentials: 'include' as RequestCredentials
+        };
+
+        const fetchPromise = fetch(`${this.environment.config.api}${url}`, config);
 
         return fromPromise<Response>(fetchPromise)
             .pipe(
