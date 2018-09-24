@@ -20,18 +20,12 @@ export class CodeDisplay extends Component<IProps, IComponentState> {
     private current = '';
     private pre: HTMLPreElement;
 
+    componentDidMount() {
+        this.onStateChanged(this.props.playerState);
+    }
+
     componentDidUpdate() {
-        const editorState = Maybe(this.props.playerState).pluck('editor').getOrElse({
-            scrollX: 0,
-            scrollY: 0,
-            code: ''
-        }) as IEditorState;
-
-        this.pre.scroll(editorState.scrollX || 0, editorState.scrollY || 0);
-
-        if (editorState.code !== undefined) {
-            this.setCode(editorState.code);
-        }
+        this.onStateChanged(this.props.playerState);
     }
 
     render(props: IProps, state: IComponentState) {
@@ -87,4 +81,17 @@ export class CodeDisplay extends Component<IProps, IComponentState> {
         this.pre.appendChild(fragment);
     }
 
+    private onStateChanged(playerState: IPlayerState) {
+        const editorState = Maybe(playerState).pluck('editor').getOrElse({
+            scrollX: 0,
+            scrollY: 0,
+            code: ''
+        }) as IEditorState;
+
+        this.pre.scroll(editorState.scrollX || 0, editorState.scrollY || 0);
+
+        if (editorState.code !== undefined) {
+            this.setCode(editorState.code);
+        }
+    }
 }

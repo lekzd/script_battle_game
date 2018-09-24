@@ -11,6 +11,7 @@ import {PromptService} from '../leaders/PromptService';
 import {Environment} from '../common/Environment';
 import {render, h} from 'preact';
 import {MasterScreen} from './MasterScreen';
+import {Observable} from 'rxjs/index';
 
 export class MasterApp {
 
@@ -31,18 +32,7 @@ export class MasterApp {
         });
 
         this.connection.onClose$.subscribe(() => {
-            const {roomId} = this.roomService;
-
-            this.apiService.getRoom(roomId)
-                .pipe(
-                    map(() => false),
-                    catchError(() => [true]),
-                    filter(response => response),
-                    switchMap(() => this.promptService.alert('Ошибка', 'Данная комната больше не существует'))
-                )
-                .subscribe(() => {
-                    location.href = this.environment.config.baseUrl;
-                });
+            this.checkRoomExistenceAndShowError('Данная комната больше не существует');
         });
 
         this.connection.onState$<IState>()
@@ -52,12 +42,35 @@ export class MasterApp {
                     <MasterScreen state={state} />
                 ), document.querySelector('.master'));
             });
+
+        this.checkRoomExistenceAndShowError('Данная комната не существует');
     }
 
     private onMessage(message: IMessage) {
         if (message.type === 'newSession') {
             location.reload();
         }
+    }
+
+    private checkRoomExistenceAndShowError(errorMessage: string) {
+        this.checkRoomExistence()
+            .pipe(
+                filter(response => !response),
+                switchMap(() => this.promptService.alert('Ошибка', errorMessage))
+            )
+            .subscribe(() => {
+                location.href = this.environment.config.baseUrl;
+            });
+    }
+
+    private checkRoomExistence(): Observable<boolean> {
+        const {roomId} = this.roomService;
+
+        return this.apiService.getRoom(roomId)
+            .pipe(
+                map(() => true),
+                catchError(() => [false])
+            );
     }
 
 }

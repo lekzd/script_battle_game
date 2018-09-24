@@ -174,7 +174,11 @@ canvas {
   flex-direction: row-reverse;
 }
 
-.master.wait .codeDisplay {
+.master.waiting .codeDisplay {
+  display: flex;
+}
+
+.master.codding .codeDisplay {
   display: flex;
 }
 
