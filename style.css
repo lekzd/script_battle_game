@@ -22,16 +22,14 @@ body {
   height: 100vh;
 }
 
-.display,
 .playerDisplay,
-.display canvas,
 .playerDisplay canvas {
   width: 800px;
   height: 550px;
   min-height: 550px;
 }
 
-.display {
+.master .playerDisplay {
   margin: auto;
   border: 3px solid gold;
 }
@@ -864,6 +862,19 @@ canvas {
   margin: 20px auto;
 }
 
+.admin {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: calc(100% - 40px);
+  margin: 20px auto;
+}
+
+.admin-sidebar {
+  min-width: 200px;
+  margin-right: 20px;
+}
+
 .leaders-grid {
   display: block;
   background: linear-gradient(#453a0b, #0b1622 200px);
@@ -1057,8 +1068,9 @@ canvas {
 }
 
 .modal-dialog {
+  position: fixed;
   padding: 0;
-  top: 40%;
+  top: 35%;
   box-shadow: 0 0 20px #000;
 }
 
@@ -1078,19 +1090,7 @@ canvas {
 .modal-dialog-row {
   margin: 15px 0;
   display: flex;
-  justify-content: flex-end;
-}
-
-.modal-dialog-row input{
-  flex-grow: 1;
-  height: 28px;
-  font-size: 14px;
-  box-sizing: border-box;
-  background: #171921;
-  color: #69909f;
-  border: none;
-  padding: 0 8px;
-  outline: 1px solid #384863;
+  justify-content: space-evenly;
 }
 
 .leaders-main {
@@ -1182,6 +1182,7 @@ canvas {
 
 h1, h2, h3 {
   font-weight: 400;
+  margin: 0;
 }
 
 .wreath {
@@ -1267,4 +1268,8 @@ h1, h2, h3 {
 .input:focus {
   outline: 1px solid #43517b;
   outline-offset: 0;
+}
+
+.login-label {
+  width: 100px;
 }

@@ -26,7 +26,7 @@ export class ApiController {
             response.json(output);
         });
 
-        router.post('/logout', this.authController.authenticate(), (req, response) => {
+        router.post('/logout', this.authController.checkAuth(), (req, response) => {
             const output = this.getSafeResult(() => 'OK');
 
             response.clearCookie('token');

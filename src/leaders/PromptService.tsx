@@ -3,7 +3,7 @@ import {render, h} from 'preact';
 import {PromptModal} from './PromptModal';
 import {Inject} from "../common/InjectDectorator";
 import {ApiService} from "../common/ApiService";
-import {switchMap, tap} from "rxjs/operators";
+import {switchMap} from "rxjs/operators";
 
 export class PromptService {
 
@@ -12,7 +12,7 @@ export class PromptService {
     prompt(title: string): Observable<{title: string}> {
         const onSubmit$ = new Subject<{title: string}>();
         const modalContainer = document.querySelector('.modals');
-        const template = (<input name="title" type="text" required/>);
+        const template = (<input class="input" name="title" type="text" required/>);
 
         modalContainer.innerHTML = '';
 
@@ -61,16 +61,16 @@ export class PromptService {
     loginModal(): Observable<boolean> {
         const onSubmit$ = new Subject<{username: string, password: string}>();
         const modalContainer = document.querySelector('.modals');
-        const title = '!';
+        const title = 'Требуется авторизация';
         const template = (
-            <div>
+            <div class="login">
                 <div className="mb-20 flex-row">
-                    <label for="username">Логин</label>
-                    <input type="text" name="username" id="username" required/>
+                    <label class="login-label" for="username">Логин</label>
+                    <input class="input login-field" autocomplete="off" type="text" name="username" id="username" required/>
                 </div>
                 <div className="mb-20 flex-row">
-                    <label for="password">Пароль</label>
-                    <input type="password" name="password" id="password" required/>
+                    <label class="login-label" for="password">Пароль</label>
+                    <input class="input login-field" type="password" name="password" id="password" required/>
                 </div>
             </div>
         );
@@ -84,7 +84,7 @@ export class PromptService {
         ), modalContainer);
 
         return onSubmit$.asObservable()
-            .pipe(switchMap(({username, password}) => this.apiService.login(username, password)), tap(console.log))
+            .pipe(switchMap(({username, password}) => this.apiService.login(username, password)))
     }
 
 }

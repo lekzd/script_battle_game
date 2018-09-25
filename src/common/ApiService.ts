@@ -1,15 +1,24 @@
 import {Observable, of, throwError} from 'rxjs/index';
 import {fromPromise} from 'rxjs/internal/observable/fromPromise';
-import {pluck, switchMap} from 'rxjs/internal/operators';
+import {pluck, share, switchMap} from 'rxjs/internal/operators';
 import {IState} from './state.model';
 import {Inject} from './InjectDectorator';
 import {Environment} from './Environment';
 import {RoomModel} from "../../server/models/RoomModel";
 import {IApiFullResponse} from '../../server/models/IApiFullResponse.model';
 
+interface IUser {
+    isAdmin: boolean;
+    name: string;
+}
+
 export class ApiService {
 
     @Inject(Environment) private environment: Environment;
+
+    getAuthData(): Observable<IUser> {
+        return this.get<IUser>('/authData').pipe(pluck('result'));
+    }
 
     getLeaderBoard(): Observable<IState[]> {
         return this.get<IState[]>('/leaderboard').pipe(pluck('result'));
@@ -37,6 +46,10 @@ export class ApiService {
 
     login(username: string, password: string): Observable<boolean> {
         return this.post(`/login`, {username, password}).pipe(pluck('result'));
+    }
+
+    logout(): Observable<void> {
+        return this.post(`/logout`, {}).pipe(pluck('result'));
     }
 
     saveRoomsState(token: string): Observable<string> {
@@ -76,7 +89,16 @@ export class ApiService {
 
         return fromPromise<Response>(fetchPromise)
             .pipe(
-                switchMap<Response, IApiFullResponse>(reponse => fromPromise(reponse.json())),
+                switchMap<Response, IApiFullResponse>(reponse => {
+                    if (reponse.status === 200) {
+                        return fromPromise(reponse.json())
+                    }
+
+                    return of({
+                        success: false,
+                        error: reponse.statusText
+                    })
+                }),
                 switchMap<IApiFullResponse, T>(response => {
                     if (response.success) {
                         return of(response);

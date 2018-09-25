@@ -5,7 +5,7 @@ import "./RoomItemComponent";
 import {RoomItemComponent} from "./RoomItemComponent";
 import {RoomModel} from "../../server/models/RoomModel";
 import {Component, h} from "preact";
-import {debounceTime, switchMap, takeUntil} from 'rxjs/internal/operators';
+import {debounceTime, takeUntil} from 'rxjs/internal/operators';
 import {WebsocketConnection} from '../common/WebsocketConnection';
 import {PromptService} from './PromptService';
 import {BattleState} from '../common/battle/BattleState.model';
@@ -61,22 +61,10 @@ export class RoomListComponent extends Component<IProps, IComponentState> {
 
         return (
             <div class="rooms-list">
-                {this.renderNewRoomButton()}
-
                 {this.renderRoomsWithHeader(current, 'Текущие бои:')}
 
                 {this.renderRoomsWithHeader(past, 'Прошедшие бои:')}
             </div>
-        )
-    }
-
-    renderNewRoomButton() {
-        if (this.props.isAdmin === false) {
-            return;
-        }
-
-        return (
-            <button class="sample-button" onClick={this.createRoom}>Новая комната</button>
         )
     }
 
@@ -106,16 +94,6 @@ export class RoomListComponent extends Component<IProps, IComponentState> {
     componentWillUnmount() {
         this.unmount$.next();
     }
-
-    createRoom = () => {
-        const id = Math.random().toString(36).substring(3);
-
-        this.promptService.prompt('Введите название комнаты')
-            .pipe(switchMap(({title}) => this.apiService.createRoom(id, title, this.props.adminToken)))
-            .subscribe(() => {
-                this.updateRooms();
-            })
-    };
 
     private updateRooms() {
         this.apiService.getAllRooms(this.props.isAdmin)

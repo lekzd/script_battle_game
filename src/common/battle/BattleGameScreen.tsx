@@ -10,6 +10,8 @@ import {LostView} from "./views/LostView";
 import {ConnectionClosedView} from "./views/ConnectionClosedView";
 import {ISessionResult} from "./BattleSession";
 import { Observable } from 'rxjs/internal/Observable';
+import {BattleGame} from './BattleGame';
+import {Inject} from '../InjectDectorator';
 
 interface IComponentState {
 }
@@ -25,9 +27,12 @@ export class BattleGameScreen extends Component<IProps, IComponentState> {
     stateParams: any = {};
     currentState: BattleState;
 
+    @Inject(BattleGame) private battleGame: BattleGame;
     private game: Phaser.Game;
 
     componentDidMount() {
+        this.battleGame.register(this);
+
         this.props.runCode$.subscribe(([leftCode, rightCode]) => {
             this.runCode(leftCode, rightCode);
         });

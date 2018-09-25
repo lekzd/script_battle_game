@@ -9,6 +9,8 @@ import {BattleGameScreen} from "../../common/battle/BattleGameScreen";
 import {BattleConsole} from "../../common/console/BattleConsole";
 import {IState} from "../../common/state.model";
 import { Observable } from 'rxjs/internal/Observable';
+import {Subject} from 'rxjs/index';
+import {BattleState} from '../../common/battle/BattleState.model';
 
 interface IComponentState {
     createTime: number
@@ -26,6 +28,8 @@ export class GameDebug extends Component<IProps, IComponentState> {
     };
 
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
+
+    private setState$ = new Subject<BattleState>();
 
     componentDidMount() {
         this.connection.onState$<number>('createTime')
@@ -48,7 +52,7 @@ export class GameDebug extends Component<IProps, IComponentState> {
 
                     <RoomTimer startTime={this.props.state.createTime} endTime={null} />
                 </div>
-                <BattleGameScreen runCode$={this.props.runCode$} />
+                <BattleGameScreen setState$={this.setState$} runCode$={this.props.runCode$} />
                 <BattleConsole />
             </div>
         );
