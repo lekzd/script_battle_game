@@ -1,10 +1,13 @@
 import * as passport from 'passport';
+import * as dotenv from 'dotenv';
 import {Strategy as CookieStrategy} from 'passport-cookie';
 import {Strategy as LocalStrategy} from 'passport-local';
 import {Client} from "./clients/Client";
 import {Admin} from "./clients/Admin";
 
 type doneFunction = (error: any, result: Client) => any;
+
+const config = dotenv.config({path: './.data/.env'});
 
 const localConfig = {
 };
@@ -62,7 +65,7 @@ export class AuthController {
     }
 
     private findUser(username: string, password: string): any {
-        if (username === 'admin' && password === 'admin') {
+        if (username === 'admin' && password === config.parsed.ADMIN_PASSWORD) {
             return {isAdmin: true, login: 'admin'};
         }
 

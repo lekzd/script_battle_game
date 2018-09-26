@@ -7,7 +7,7 @@ import {IState} from '../common/state.model';
 import {catchError, filter, first, map, switchMap} from 'rxjs/internal/operators';
 import {RoomService} from "../common/RoomService";
 import {ApiService} from '../common/ApiService';
-import {PromptService} from '../leaders/PromptService';
+import {PromptService} from '../admin/PromptService';
 import {Environment} from '../common/Environment';
 import {render, h} from 'preact';
 import {MasterScreen} from './MasterScreen';

@@ -17,7 +17,7 @@ const plugins = [
     new HtmlWebpackPlugin(getHtmlWebpackConfig('master')),
     new HtmlWebpackPlugin(getHtmlWebpackConfig('left')),
     new HtmlWebpackPlugin(getHtmlWebpackConfig('right')),
-    new HtmlWebpackPlugin(getHtmlWebpackConfig('leaders')),
+    new HtmlWebpackPlugin(getHtmlWebpackConfig('admin')),
     new HtmlWebpackPlugin(getHtmlWebpackConfig(''))
 ];
 

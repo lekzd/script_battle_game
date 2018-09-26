@@ -45,7 +45,8 @@ export class PromptService {
         const onSubmit$ = new Subject<{title: string}>();
         const modalContainer = document.querySelector('.modals');
         const title = 'Понеслась!';
-        const template = 'Кажмите Ок, чтобы перейти к бою';
+        // const template = 'Нажмите Ок, чтобы перейти к бою';
+        const template = 'Через 3 секунды начнется бой!';
 
         modalContainer.innerHTML = '';
 

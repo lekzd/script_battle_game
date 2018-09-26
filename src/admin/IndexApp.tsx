@@ -1,5 +1,4 @@
 import { h, render } from 'preact';
-import './LeadersGridComponent';
 import {RoomListComponent} from './RoomListComponent';
 import {LeadersGridComponent} from './LeadersGridComponent';
 import {WebsocketConnection} from '../common/WebsocketConnection';

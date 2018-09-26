@@ -45,14 +45,14 @@ export class AdminApp {
                 <div>
                     <h2 className="color-white mb-20 text-center">Администрирование комнат</h2>
                     <div class="flex-row">
-                        <div class="admin-sidebar">
+                        <div class="admin-sidebar flex-column">
                             <button class="sample-button mb-20" onClick={() => this.createRoom(adminToken)}>+ Новая комната</button>
                             <button type="button" class="green-button mb-20"
                                     onClick={_=> this.saveRoomsState(adminToken)}>Сохранить комнаты</button>
                             <button class="red-button mb-20" onClick={() => this.logout()}>⎋ Выход</button>
                         </div>
 
-                        <div>
+                        <div class="flex-grow">
                             <RoomListComponent isAdmin={true} adminToken={adminToken} />
                         </div>
                     </div>

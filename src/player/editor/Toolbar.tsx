@@ -7,7 +7,7 @@ import {elementHasParent} from '../../common/helpers/elementHasParent';
 import {WebsocketConnection} from "../../common/WebsocketConnection";
 import {render, h} from 'preact';
 import {Documentation} from '../../common/documentation/Documentation';
-import {PromptService} from '../../leaders/PromptService';
+import {PromptService} from '../../admin/PromptService';
 
 const maxSelectTime = 1000 * 60 * 12;
 const maxSelectTimeAlert = 1000 * 60 * 13;

@@ -8,7 +8,7 @@ import {Inject} from "../common/InjectDectorator";
 import {WebsocketConnection} from "../common/WebsocketConnection";
 import {Observable, Subject} from 'rxjs';
 import {ClientState} from '../common/client/ClientState';
-import {PromptService} from '../leaders/PromptService';
+import {PromptService} from '../admin/PromptService';
 import {filter, map, switchMap, tap} from 'rxjs/operators';
 import {ConsoleService} from '../common/console/ConsoleService';
 import {BattleState} from "../common/battle/BattleState.model";
@@ -86,7 +86,7 @@ export class PlayerScreen extends Component<IProps, IComponentState> {
                 const {roomId} = this.roomService;
                 const {baseUrl} = this.environment.config;
 
-                location.href = `${baseUrl}/master/#room=${roomId}`;
+                // location.href = `${baseUrl}/master/#room=${roomId}`;
             });
     }
 

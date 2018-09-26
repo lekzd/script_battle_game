@@ -4,7 +4,7 @@ import {CharactersList, ICharacterConfig} from "../../common/characters/Characte
 import {UnitItem} from "./UnitItem";
 import {IArmyState} from "../../common/state.model";
 import {ClientState} from "../../common/client/ClientState";
-import {PromptService} from "../../leaders/PromptService";
+import {PromptService} from "../../admin/PromptService";
 import {combineLatest, fromEvent, merge, Observable, Subject, timer} from "rxjs";
 import {filter, map, tap} from "rxjs/internal/operators";
 import {elementHasParent} from "../../common/helpers/elementHasParent";

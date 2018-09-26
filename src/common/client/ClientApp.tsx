@@ -10,7 +10,7 @@ import {IPlayerState, IState} from '../state.model';
 import {catchError, distinctUntilChanged, filter, first, map, switchMap} from 'rxjs/internal/operators';
 import {RoomService} from "../RoomService";
 import {BattleGame} from '../battle/BattleGame';
-import {PromptService} from '../../leaders/PromptService';
+import {PromptService} from '../../admin/PromptService';
 import {ApiService} from '../ApiService';
 import {Environment} from '../Environment';
 import {render, h} from 'preact';
