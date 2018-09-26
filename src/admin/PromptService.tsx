@@ -44,7 +44,7 @@ export class PromptService {
     goToMaster(): Observable<{}> {
         const onSubmit$ = new Subject<{title: string}>();
         const modalContainer = document.querySelector('.modals');
-        const title = 'Понеслась!';
+        const title = 'Внимание на главный экран!';
         // const template = 'Нажмите Ок, чтобы перейти к бою';
         const template = 'Через 3 секунды начнется бой!';
 

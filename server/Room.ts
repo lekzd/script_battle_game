@@ -2,14 +2,14 @@ import {ConnectionsStorage} from "./storages/ConnectionsStorage";
 import {IPlayerState, IState} from "../src/common/state.model";
 import {IClientRegisterMessage} from "./SocketMiddleware";
 import * as ws from 'ws';
-import {forkJoin, merge, Observable, Subject} from 'rxjs/index';
+import {forkJoin, merge, Observable, Subject} from 'rxjs';
 import {filter} from 'rxjs/operators';
 import {IMessage} from '../src/common/WebsocketConnection';
 import {LeaderBoard} from './storages/LeaderBoard';
 import {Inject} from '../src/common/InjectDectorator';
 import {Maybe} from "../src/common/helpers/Maybe";
 import {BattleState} from '../src/common/battle/BattleState.model';
-import {first, pluck, tap} from 'rxjs/internal/operators';
+import {first} from 'rxjs/internal/operators';
 import {mergeDeep} from '../src/common/helpers/mergeDeep';
 
 export class Room {
@@ -45,7 +45,7 @@ export class Room {
         this.connectionsStorage.setState({roomTitle: title});
 
         this.on$('sendWinner')
-            .pipe(first())
+            .pipe(filter(() => this.state.mode !== BattleState.results))
             .subscribe(data => {
                 const state = Object.assign({}, data.sessionResult, this.state, {
                     mode: BattleState.results,
