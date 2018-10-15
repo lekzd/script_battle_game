@@ -81,6 +81,15 @@ export class Room {
             }
         });
 
+        merge(
+            this.connectionsStorage.leftPlayer.onMessage$,
+            this.connectionsStorage.rightPlayer.onMessage$,
+            this.connectionsStorage.master.onMessage$
+        )
+            .subscribe(message => {
+                this.onMessage$.next(message);
+            });
+
         this.onSessionLoad();
     }
 

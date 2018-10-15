@@ -1,5 +1,6 @@
 import {Master} from "../clients/Master";
-import {Player} from "../clients/Player";
+import {LeftPlayer} from "../clients/LeftPlayer";
+import {RightPlayer} from "../clients/RightPlayer";
 import {IPlayerState, IState} from '../../src/common/state.model';
 import {mergeDeep} from '../../src/common/helpers/mergeDeep';
 import {Client} from '../clients/Client';
@@ -18,8 +19,8 @@ export class ConnectionsStorage {
     admin = new Admin();
     guest = new Guest();
     master = new Master();
-    leftPlayer = new Player();
-    rightPlayer = new Player();
+    leftPlayer = new LeftPlayer();
+    rightPlayer = new RightPlayer();
 
     state: Partial<IState> = {};
 

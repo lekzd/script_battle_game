@@ -1,7 +1,13 @@
 import {Client} from './Client';
 import * as ws from 'ws';
+import {NEVER, Observable} from "rxjs";
+import {IMessage} from "../../src/common/WebsocketConnection";
 
 export class Admin extends Client {
+
+    get onMessage$(): Observable<IMessage> {
+        return NEVER;
+    }
 
     private adminToken = Math.random().toString(36).substr(2);
 

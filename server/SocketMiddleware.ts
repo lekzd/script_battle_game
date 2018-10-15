@@ -1,6 +1,6 @@
 import * as ws from 'ws';
-import {catchError, filter, map, tap} from 'rxjs/operators';
-import {Observable, fromEvent, throwError} from 'rxjs/index';
+import {catchError, filter, first, map, tap} from 'rxjs/operators';
+import {Observable, fromEvent, throwError, merge} from 'rxjs';
 import {Inject} from '../src/common/InjectDectorator';
 import {LeaderBoard} from './storages/LeaderBoard';
 import {RoomStorage} from "./storages/RoomStorage";
@@ -19,17 +19,73 @@ export class SocketMiddleware {
     @Inject(RoomStorage) private roomStorage: RoomStorage;
     @Inject(ConnectionsStorage) private guestConnectionsStorage: ConnectionsStorage;
 
-    get onMessage$(): Observable<any> {
+    // get onMessage$(): Observable<any> {
+    //     return fromEvent<MessageEvent>(this.ws, 'message')
+    //         .pipe(
+    //             filter(message => message.type === 'message'),
+    //             map(message => JSON.parse(message.data)),
+    //             tap(message => {
+    //                 // todo: temporary
+    //                 if (this.isAdminMessage(message)) {
+    //                     return this.tryRegisterGuestConnection(message, this.connection);
+    //                 }
+    //
+    //                 const {roomId} = message;
+    //                 const room = this.roomStorage.get(roomId);
+    //
+    //                 if (!room) {
+    //                     this.connection.close();
+    //
+    //                     return throwError(`room id ${roomId} is not found`);
+    //                 }
+    //
+    //                 this.roomStorage.addConnection(this.connection, room);
+    //
+    //                 return room.tryRegisterConnection(message, this.connection);
+    //             }),
+    //             filter(message => !this.isAdminMessage(message)),
+    //             catchError(error => {
+    //                 console.log(error);
+    //
+    //                 return [];
+    //             })
+    //         )
+    // }
+
+    get onRegisterMessage$(): Observable<IClientRegisterMessage> {
         return fromEvent<MessageEvent>(this.ws, 'message')
             .pipe(
                 filter(message => message.type === 'message'),
+                first(),
                 map(message => JSON.parse(message.data)),
-                tap(message => {
-                    // todo: temporary
-                    if (this.isAdminMessage(message)) {
-                        return this.tryRegisterGuestConnection(message, this.connection);
-                    }
+                filter(message => message.type.startsWith('register'))
+            )
+    }
 
+    get onClose$(): Observable<void> {
+        return fromEvent(this.ws, 'close');
+    }
+
+    get onGuestRegister$(): Observable<IClientRegisterMessage> {
+        return merge(
+            this.onRegister$('registerGuest'),
+            this.onRegister$('registerAdmin')
+        )
+            .pipe(
+                tap(message => {
+                    this.tryRegisterGuestConnection(message, this.connection);
+                })
+            )
+    }
+
+    get onRoomMemberRegister$(): Observable<IClientRegisterMessage> {
+        return merge(
+            this.onRegister$('registerMaster'),
+            this.onRegister$('registerLeftPlayer'),
+            this.onRegister$('registerRightPlayer')
+        )
+            .pipe(
+                tap(message => {
                     const {roomId} = message;
                     const room = this.roomStorage.get(roomId);
 
@@ -41,19 +97,9 @@ export class SocketMiddleware {
 
                     this.roomStorage.addConnection(this.connection, room);
 
-                    return room.tryRegisterConnection(message, this.connection);
-                }),
-                filter(message => !this.isAdminMessage(message)),
-                catchError(error => {
-                    console.log(error);
-
-                    return [];
+                    room.tryRegisterConnection(message, this.connection);
                 })
             )
-    }
-
-    get onClose$(): Observable<void> {
-        return fromEvent(this.ws, 'close');
     }
 
     constructor(private ws: ws) {
@@ -69,16 +115,36 @@ export class SocketMiddleware {
             }
         });
 
-        this.onMessage$.subscribe(message => {
-            const {roomId} = message;
-            const room = roomId ? this.roomStorage.get(roomId) : null;
+        // this.onMessage$.subscribe(message => {
+        //     const {roomId} = message;
+        //     const room = roomId ? this.roomStorage.get(roomId) : null;
+        //
+        //     if (room) {
+        //         room.onMessage$.next(message);
+        //     } else {
+        //         console.error(`room id ${roomId} is not found`);
+        //     }
+        // });
 
-            if (room) {
-                room.onMessage$.next(message);
-            } else {
-                console.error(`room id ${roomId} is not found`);
-            }
-        });
+        merge(
+            this.onGuestRegister$,
+            this.onRoomMemberRegister$
+        )
+            .pipe(
+                catchError(error => {
+                    console.log(error);
+
+                    return [];
+                })
+            )
+            .subscribe();
+    }
+
+    private onRegister$(type: string): Observable<IClientRegisterMessage> {
+        return this.onRegisterMessage$
+            .pipe(
+                filter(message => message.type === type)
+            )
     }
 
     private tryRegisterGuestConnection(data: IClientRegisterMessage, connection: ws) {

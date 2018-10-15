@@ -1,22 +1,27 @@
 import {Client} from './Client';
 import {Observable} from "rxjs";
 import {IMessage} from "../../src/common/WebsocketConnection";
-import {first} from "rxjs/operators";
+import {map, pluck} from "rxjs/operators";
 
-export class Master extends Client {
+export class LeftPlayer extends Client {
+
+    code = '';
+    state = {};
 
     get onMessage$(): Observable<IMessage> {
-        return this.onUnsafeMessage$('sendWinner').pipe(first());
+        return this.onUnsafeMessage$('state')
+            .pipe(
+                pluck('state', 'left'),
+                map(left => (<any>{state: {left}, type: 'state'}))
+            )
     }
 
     constructor() {
         super();
 
-        this.maxConnections = Infinity;
-
         this.send({
             type: 'state',
-            data: 'wait'
+            data: 'battle'
         });
     }
 
@@ -24,6 +29,6 @@ export class Master extends Client {
         this.send({
             type: 'endSession',
             data: {sessionResult}
-        })
+        });
     }
 }

@@ -2,8 +2,12 @@ import {IMessage} from '../../src/common/WebsocketConnection';
 import {IState} from '../../src/common/state.model';
 import {mergeDeep} from '../../src/common/helpers/mergeDeep';
 import * as ws from 'ws';
+import {fromEvent, Observable, Subject} from "rxjs";
+import {catchError, filter, map} from "rxjs/operators";
 
 export abstract class Client {
+
+    abstract onMessage$: Observable<IMessage>;
 
     protected maxConnections = 1;
 
@@ -11,6 +15,7 @@ export abstract class Client {
     private messagesToSend: IMessage[] = [];
     private clientState: Partial<IState> = {};
     private mainConnection: ws;
+    private unsafeMessage$ = new Subject<IMessage>();
 
     setConnection(connection: ws) {
         this.connectionsPool.add(connection);
@@ -18,6 +23,20 @@ export abstract class Client {
         if (this.connectionsPool.size === 1) {
             this.mainConnection = connection;
         }
+
+        fromEvent<MessageEvent>(connection, 'message')
+            .pipe(
+                filter(message => message.type === 'message'),
+                map(message => JSON.parse(message.data)),
+                catchError(error => {
+                    console.error(error);
+
+                    return [];
+                })
+            )
+            .subscribe(message => {
+                this.unsafeMessage$.next(message);
+            });
 
         this.send({
             type: 'setState',
@@ -71,6 +90,11 @@ export abstract class Client {
 
     isMain(connection: ws): boolean {
         return connection === this.mainConnection;
+    }
+
+    protected onUnsafeMessage$(type: string): Observable<IMessage> {
+        return this.unsafeMessage$
+            .pipe(filter(message => message.type === type))
     }
 
     protected send(data: IMessage) {
