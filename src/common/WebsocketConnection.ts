@@ -7,7 +7,9 @@ import {filter, pluck} from 'rxjs/internal/operators';
 
 export interface IMessage {
     type: string;
-    data: any;
+    data?: any;
+    state?: any;
+    roomId?: string;
 }
 
 export class WebsocketConnection {

@@ -12,7 +12,7 @@ export class RightPlayer extends Client {
         return this.onUnsafeMessage$('state')
             .pipe(
                 pluck('state', 'right'),
-                map(right => (<any>{state: {right}, type: 'state'}))
+                map(right => ({state: {right}, type: 'state'}))
             )
     }
 

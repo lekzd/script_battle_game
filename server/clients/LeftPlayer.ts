@@ -12,7 +12,7 @@ export class LeftPlayer extends Client {
         return this.onUnsafeMessage$('state')
             .pipe(
                 pluck('state', 'left'),
-                map(left => (<any>{state: {left}, type: 'state'}))
+                map(left => ({state: {left}, type: 'state'}))
             )
     }
 
