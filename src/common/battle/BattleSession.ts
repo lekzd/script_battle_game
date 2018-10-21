@@ -99,7 +99,11 @@ export class BattleSession {
         const action = activeUnit.actions.shift();
 
         if (action) {
-            return this.battleFieldModel.doAction(activeUnit, action);
+            try {
+                return this.battleFieldModel.doAction(activeUnit, action)
+            } catch (e) {
+                return Promise.resolve();
+            }
         }
 
         return Promise.resolve();

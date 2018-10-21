@@ -218,6 +218,9 @@ export class BattleView extends Phaser.Scene {
             .then(() => {
                 return this.battleSession.start([...this.leftUnits, ...this.rightUnits]);
             })
+            .catch(error => {
+                return;
+            })
             .then((sessionResult: ISessionResult) => {
                 this.consoleService.infoLog('Код успешно выполнен!');
 

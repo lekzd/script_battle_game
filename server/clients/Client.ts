@@ -7,6 +7,8 @@ import {catchError, filter, map} from "rxjs/operators";
 
 export abstract class Client {
 
+    registered$ = new Subject();
+
     abstract onMessage$: Observable<IMessage>;
 
     protected maxConnections = 1;
@@ -23,6 +25,8 @@ export abstract class Client {
         if (this.connectionsPool.size === 1) {
             this.mainConnection = connection;
         }
+
+        this.registered$.next();
 
         fromEvent<MessageEvent>(connection, 'message')
             .pipe(

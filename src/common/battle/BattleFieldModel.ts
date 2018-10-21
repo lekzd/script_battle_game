@@ -70,11 +70,11 @@ export class BattleFieldModel {
             const toY = parseInt(action.y, 10);
 
             if (isNaN(toX)) {
-                this.dispatchError('x не может быть приведен к числу');
+                this.dispatchError(`[${unit.id}][goTo(${toX}, ${toY})]: x не может быть приведен к числу!`);
             }
 
             if (isNaN(toY)) {
-                this.dispatchError('y не может быть приведен к числу');
+                this.dispatchError(`[${unit.id}][goTo(${toX}, ${toY})]: y не может быть приведен к числу!`);
             }
 
             const path = this.getPath(unit.x, unit.y, toX, toY);
@@ -116,7 +116,7 @@ export class BattleFieldModel {
 
         if (action.action === 'say') {
             if (!action.text) {
-                this.dispatchError(`say(text) Не задан обязательный параметр text`);
+                this.dispatchError(`[${unit.id}][say(text)] Не задан обязательный параметр text`);
             }
 
             return unit.sayAction(action.text.toString());
@@ -206,7 +206,7 @@ export class BattleFieldModel {
 
     private getEnemy(id: string, toUnit: BattleUnit): BattleUnit {
         if (!id) {
-            this.dispatchError(`Не задан обязательный параметр id`);
+            this.dispatchError(`[${toUnit.id}] Не задан обязательный параметр id`);
         }
 
         const units = this.units.filter(unit => {
@@ -238,7 +238,7 @@ export class BattleFieldModel {
 
     private getFriend(id: string, toUnit: BattleUnit): BattleUnit {
         if (!id) {
-            this.dispatchError(`Не задан обязательный параметр id`);
+            this.dispatchError(`[${toUnit.id}] Не задан обязательный параметр id`);
         }
 
         const unit = this.units.find(unit => {
@@ -246,7 +246,7 @@ export class BattleFieldModel {
         });
 
         if (!unit) {
-            this.dispatchError(`Союзник с ID "${id}" не найден`);
+            this.dispatchError(`[${toUnit.id}] Союзник с ID "${id}" не найден`);
         }
 
         return unit;
@@ -319,7 +319,7 @@ export class BattleFieldModel {
             });
     }
 
-    private dispatchError(errorText: string) {
+    private dispatchError(errorText: string): Promise<any> {
 
         this.consoleService.runtimeLog(errorText);
 

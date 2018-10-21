@@ -124,8 +124,8 @@ export class Room {
 
     private onSessionLoad() {
         merge(
-            this.on$('registerLeftPlayer'),
-            this.on$('registerRightPlayer')
+            this.connectionsStorage.leftPlayer.registered$,
+            this.connectionsStorage.rightPlayer.registered$
         )
             .pipe(first())
             .subscribe(() => {
@@ -137,8 +137,8 @@ export class Room {
             });
 
         forkJoin(
-            this.on$('registerLeftPlayer').pipe(first()),
-            this.on$('registerRightPlayer').pipe(first())
+            this.connectionsStorage.leftPlayer.registered$.pipe(first()),
+            this.connectionsStorage.rightPlayer.registered$.pipe(first())
         )
             .subscribe(() => {
                 this.connectionsStorage.setState({
