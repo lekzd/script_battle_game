@@ -44,9 +44,9 @@ export class PromptService {
     goToMaster(): Observable<{}> {
         const onSubmit$ = new Subject<{title: string}>();
         const modalContainer = document.querySelector('.modals');
-        const title = 'Внимание на главный экран!';
+        const title = 'Attention to main screen!';
         // const template = 'Нажмите Ок, чтобы перейти к бою';
-        const template = 'Через 3 секунды начнется бой!';
+        const template = 'Battle starts in 3 seconds!';
 
         modalContainer.innerHTML = '';
 
@@ -62,15 +62,15 @@ export class PromptService {
     loginModal(): Observable<boolean> {
         const onSubmit$ = new Subject<{username: string, password: string}>();
         const modalContainer = document.querySelector('.modals');
-        const title = 'Требуется авторизация';
+        const title = 'Authorization required';
         const template = (
             <div class="login">
                 <div className="mb-20 flex-row">
-                    <label class="login-label" for="username">Логин</label>
+                    <label class="login-label" for="username">Login</label>
                     <input class="input login-field" autocomplete="off" type="text" name="username" id="username" required/>
                 </div>
                 <div className="mb-20 flex-row">
-                    <label class="login-label" for="password">Пароль</label>
+                    <label class="login-label" for="password">Password</label>
                     <input class="input login-field" type="password" name="password" id="password" required/>
                 </div>
             </div>

@@ -61,9 +61,9 @@ export class RoomListComponent extends Component<IProps, IComponentState> {
 
         return (
             <div class="rooms-list">
-                {this.renderRoomsWithHeader(current, 'Текущие бои:')}
+                {this.renderRoomsWithHeader(current, 'Current battles:')}
 
-                {this.renderRoomsWithHeader(past, 'Прошедшие бои:')}
+                {this.renderRoomsWithHeader(past, 'Complete battles:')}
             </div>
         )
     }

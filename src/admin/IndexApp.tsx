@@ -12,10 +12,10 @@ export class IndexApp {
 
         render((
             <div>
-                <h2 class="color-white mb-20 text-center">Комнаты</h2>
+                <h2 class="color-white mb-20 text-center">Rooms</h2>
                 <RoomListComponent isAdmin={false} />
 
-                <h2 class="color-white mb-20 text-center">Список лидеров</h2>
+                <h2 class="color-white mb-20 text-center">Leaders board</h2>
                 <LeadersGridComponent />
             </div>
         ), document.querySelector('.leaders'));

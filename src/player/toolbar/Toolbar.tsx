@@ -1,11 +1,8 @@
 import {Component, h} from 'preact';
 import {Documentation} from "../../common/documentation/Documentation";
-import {NEVER, of, Subject, timer} from "rxjs";
+import {Subject} from "rxjs";
 import {SelectWindow} from "./SelectWindow";
 import {IPlayerState} from "../../common/state.model";
-import {first, switchMap} from "../../../node_modules/rxjs/internal/operators";
-import {Inject} from "../../common/InjectDectorator";
-import {WebsocketConnection} from "../../common/WebsocketConnection";
 
 interface IComponentState {
 }

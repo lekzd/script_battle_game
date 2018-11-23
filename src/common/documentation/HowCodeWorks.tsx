@@ -4,17 +4,17 @@ export const HowCodeWorks = () => (
     <div>
         <section>
             <ol>
-                <li class="mb-10">Весь код исполняется 1 раз ДО начала битвы</li>
-                <li class="mb-10">Один и тот же код исполняется для каждого юнита</li>
-                <li>далее юниты ходят согласно получившимуся сценарию</li>
+                <li class="mb-10">All code performs 1 time BEFORE battle starts</li>
+                <li class="mb-10">Similar code performs for each unit of the battle side</li>
+                <li>After that units will go using generated script</li>
             </ol>
             <section>
-                <p>Надо ставить условия, чтобы разный код исполнялся для разных юнитов</p>
+                <p>Make fork conditions to make different code for units</p>
             </section>
 
             <div className="signature">
                 <div className="mb-20">
-                    Можно ставить условия по ID:
+                    You can use IDs:
                 </div>
                 <div class="flex-row flex-align-center mb-20">
                     <div>
@@ -34,7 +34,7 @@ export const HowCodeWorks = () => (
 
             <div className="signature">
                 <div className="mb-20">
-                    Или по классу юнита:
+                    Or unit class:
                 </div>
                 <div class="flex-row flex-align-center mb-20">
                     <div>

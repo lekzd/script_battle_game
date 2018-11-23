@@ -27,7 +27,7 @@ export class ResultsView extends Phaser.Scene {
         graphics.setAlpha(0.6);
         graphics.fillRect(0, 0, 400, 300);
 
-        this.text = this.add.text(200, 150, 'Результаты', {
+        this.text = this.add.text(200, 150, 'Results', {
             font: font(16),
             align: 'right',
             fill: '#00ff00'
@@ -44,16 +44,16 @@ export class ResultsView extends Phaser.Scene {
 
         if (isLeftWins) {
             units = this.getAliveUnits(BattleSide.left);
-            result = `Победил левый`;
+            result = `Left wins`;
         }
 
         if (isRightWins) {
             units = this.getAliveUnits(BattleSide.right);
-            result = 'Победил правый';
+            result = 'Right wins';
         }
 
         if (!result) {
-            result = 'Ничья';
+            result = 'Nobody wins';
         }
 
         this.text.setText(result);

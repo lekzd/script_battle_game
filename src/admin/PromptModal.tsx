@@ -31,7 +31,7 @@ export class PromptModal extends Component<IProps, IComponentState> {
                             {props.template}
                         </div>
                         <div class="modal-dialog-row">
-                            <button class="sample-button">Ок</button>
+                            <button class="sample-button">Ok</button>
                         </div>
                     </form>
                 </div>

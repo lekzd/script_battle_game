@@ -5,9 +5,9 @@ export const UsefulTips = () => (
         <section>
             <ol class="main">
                 <li>
-                    <div class="header">Каждому свое</div>
+                    <div class="header">Different behavior</div>
                     <p>
-                        Разделяйте логику юнитов по классу персонажа
+                        Separate unit logic by class
                     </p>
 <pre class="code">{
 `    if (isShooter()) {
@@ -21,7 +21,7 @@ export const UsefulTips = () => (
     }`}
 </pre>
 
-                    <p>или по <span class="attr">id</span></p>
+                    <p>or using <span class="attr">id</span></p>
 <pre class="code">{
 `    if (is('eval')) {
         spell('ie')
@@ -30,14 +30,14 @@ export const UsefulTips = () => (
                 </li>
 
                 <li>
-                    <div class="header">Стрелки – ближе, маги – дальше</div>
-                    <p>Чтобы достичь максимальной атаки:</p>
+                    <div class="header">Shooters – closer, magicians – farther</div>
+                    <p>To reach maximal damage:</p>
 <pre class="code">{
-`    // стрелки должны стоять максиум за 5 клеток от противника
+`    // shooters should have at least 5 cells of distance to enemy
     if (isShooter()) {
         relativeGoTo(5, 0)
     }
-    // маги – минимум за 10
+    // magicians – at least 10
     if (isMagician()) {
         relativeGoTo(-2, -1)
     }`}
@@ -46,8 +46,8 @@ export const UsefulTips = () => (
                 </li>
 
                 <li>
-                    <div class="header">Слишком много действий</div>
-                    <p>Если юнит противника погиб, а действия на его атаку еще остались...</p>
+                    <div class="header">Too much actions</div>
+                    <p>In case of enemy is killed but unit has actions to attack him...</p>
 <pre class="code">{
 `     for (i = 0; i < 10; i++) {
          goToEnemyAndHit('dart')
@@ -56,12 +56,12 @@ export const UsefulTips = () => (
          goToEnemyAndHit('css')
      }`}
 </pre>
-                    <p>...юнит будет пропускать ходы пока не дойдет до действий атаки еще живого противника, если они еще есть</p>
+                    <p>...unit will skip all attack turns for this enemy</p>
                 </li>
 
                 <li>
-                    <div class="header">Списки противников</div>
-                    <p>Бывает так, что противник все время меняет юнитов</p>
+                    <div class="header">Array of enemies</div>
+                    <p>Sometimes, opponent changes his units a lot</p>
 <pre class="code">{
 `    ids = ['ie', '$', 'dart']
 
@@ -70,7 +70,7 @@ export const UsefulTips = () => (
         shoot(id)
     })`}
 </pre>
-                    <p>потому их проще записать в массив и менять вместе с ним</p>
+                    <p>it simpler to store all IDs in array, to can change it fast</p>
                 </li>
 
             </ol>

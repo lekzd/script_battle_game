@@ -27,10 +27,10 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
     render(props: IComponentProps, state: IComponentState) {
 
         const modeTitles = {
-            [BattleState.results]: 'Бой окончен',
-            [BattleState.codding]: 'Пишут код',
-            [BattleState.ready]: 'Идет бой',
-            [BattleState.wait]: 'Ожидание'
+            [BattleState.results]: 'Battle ends',
+            [BattleState.codding]: 'Codding',
+            [BattleState.ready]: 'Battle in progress',
+            [BattleState.wait]: 'Waiting'
         };
 
         const modeTitle = modeTitles[props.room.state.mode];
@@ -43,7 +43,7 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
                             {modeTitle}
                         </div>
 
-                        <div class="title">Зрители:</div>
+                        <div class="title">Watchers:</div>
 
                         <div class="mb-20">
                             <div className="watchers-count">{props.room.watchersCount}</div>
@@ -58,7 +58,7 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
                         <div class="room-item-name flex-row flex-align-center">
                             <div>{props.room.title}</div>
                             <a class="ml-auto green-button" href={this.generateLInk('master')} target="_blank">
-                                Смотреть
+                                Watch
                             </a>
                         </div>
 
@@ -88,8 +88,8 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
 
         return (
             <div>
-                <button class="red-button" onClick={this.removeRoom}>Удалить комнату</button>
-                <button class="red-button ml-20" onClick={this.reloadRoom}>Перезагрузить сессию</button>
+                <button class="red-button" onClick={this.removeRoom}>Remove room</button>
+                <button class="red-button ml-20" onClick={this.reloadRoom}>Reload session</button>
             </div>
         )
     }
@@ -118,16 +118,16 @@ export class RoomItemComponent extends Component<IComponentProps, IComponentStat
         const isReady = Maybe(room).pluck(`state.${side}.isReady`).getOrElse(false);
         const canJoin = Maybe(room).pluck(`state.mode`).getOrElse(null) === BattleState.wait;
 
-        let status = 'оффлайн';
+        let status = 'offline';
         let statusClass = 'offline';
 
         if (isAvailable) {
-            status = 'пишет код';
+            status = 'codding';
             statusClass = 'wait';
         }
 
         if (isReady && isAvailable) {
-            status = 'готов';
+            status = 'ready';
             statusClass = 'ready';
         }
 

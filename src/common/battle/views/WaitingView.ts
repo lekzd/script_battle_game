@@ -27,7 +27,7 @@ export class WaitingView extends Phaser.Scene {
 
         this.charactersList.load(this.load);
 
-        const text = this.add.text(200, 150, 'Соединение с сервером...', {
+        const text = this.add.text(200, 150, 'Connecting...', {
             font: font(16),
             align: 'right',
             fill: '#00ff00'

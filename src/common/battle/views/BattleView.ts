@@ -172,7 +172,7 @@ export class BattleView extends Phaser.Scene {
             let unitCode = leftCode;
 
             if (leftCode && unit.character.id === 'NULL') {
-                unitCode = `say('Я null, выбери другого')`;
+                unitCode = `say('I just null, select anybody')`;
             }
 
             const evalPromise = this.codeSandbox.eval(unitCode, unit);
@@ -192,7 +192,7 @@ export class BattleView extends Phaser.Scene {
             let unitCode = rightCode;
 
             if (rightCode && unit.character.id === 'NULL') {
-                unitCode = `say('Я просто null, выбери другого')`;
+                unitCode = `say('I just null, select anybody')`;
             }
 
             const evalPromise = this.codeSandbox.eval(unitCode, unit);
@@ -222,7 +222,7 @@ export class BattleView extends Phaser.Scene {
                 return;
             })
             .then((sessionResult: ISessionResult) => {
-                this.consoleService.infoLog('Код успешно выполнен!');
+                this.consoleService.infoLog('Code running successfully ends!');
 
                 if (sessionResult && this.connection.isMaster) {
                     this.dispatchWinner(sessionResult);

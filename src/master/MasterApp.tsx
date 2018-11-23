@@ -32,7 +32,7 @@ export class MasterApp {
         });
 
         this.connection.onClose$.subscribe(() => {
-            this.checkRoomExistenceAndShowError('Данная комната больше не существует');
+            this.checkRoomExistenceAndShowError('Current room is not exists yet');
         });
 
         this.connection.onState$<IState>()
@@ -43,7 +43,7 @@ export class MasterApp {
                 ), document.querySelector('.master'));
             });
 
-        this.checkRoomExistenceAndShowError('Данная комната не существует');
+        this.checkRoomExistenceAndShowError('Current room is not exists yet');
     }
 
     private onMessage(message: IMessage) {
@@ -56,7 +56,7 @@ export class MasterApp {
         this.checkRoomExistence()
             .pipe(
                 filter(response => !response),
-                switchMap(() => this.promptService.alert('Ошибка', errorMessage))
+                switchMap(() => this.promptService.alert('Error', errorMessage))
             )
             .subscribe(() => {
                 location.href = this.environment.config.baseUrl;

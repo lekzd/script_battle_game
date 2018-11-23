@@ -64,7 +64,7 @@ export class PlayerScreen extends Component<IProps, IComponentState> {
         this.pushCode$
             .pipe(
                 filter(() => !this.clientState.name),
-                switchMap(() => this.promptService.prompt('Впишите свое имя')),
+                switchMap(() => this.promptService.prompt('Type your name')),
                 tap(({title}) => this.clientState.set({name: title}))
             ).subscribe();
         
@@ -73,8 +73,8 @@ export class PlayerScreen extends Component<IProps, IComponentState> {
                 filter(() => !!this.clientState.name)
             )
             .subscribe(() => {
-                this.consoleService.infoLog('Кажется, вы готовы к битве! Но код еще можно редактировать =)');
-                
+                this.consoleService.infoLog('Looks like you are ready, but you can edit your code=)');
+
                 this.clientState.set({isReady: true});
             });
 

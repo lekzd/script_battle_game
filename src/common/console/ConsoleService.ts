@@ -22,7 +22,7 @@ export class ConsoleService extends BehaviorSubject<IConsoleLine> {
     constructor() {
         super({
             source: MessageType.Service,
-            text: 'Привет! Это консоль, здесь будет отладочная информация, ошибки и важные сообщения'
+            text: 'Hi! It`s a console, you can see any useful of debug info here'
         })
     }
 

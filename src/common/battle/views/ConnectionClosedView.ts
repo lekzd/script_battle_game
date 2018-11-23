@@ -10,7 +10,7 @@ export class ConnectionClosedView extends Phaser.Scene {
     }
 
     create() {
-        const text = this.add.text(200, 150, 'Соединение потеряно', {
+        const text = this.add.text(200, 150, 'Connection lost', {
             font: font(16),
             fill: '#cc0000'
         });

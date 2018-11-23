@@ -91,7 +91,7 @@ export class ClientApp {
                     map(() => false),
                     catchError(() => [true]),
                     filter(response => response),
-                    switchMap(() => this.promptService.alert('Ошибка', 'Данная комната больше не существует'))
+                    switchMap(() => this.promptService.alert('Error', 'Current room is no longer exists'))
                 )
                 .subscribe(() => {
                     location.href = this.environment.config.baseUrl;

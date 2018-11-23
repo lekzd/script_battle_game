@@ -66,13 +66,13 @@ export class EditorComponent extends Component<IProps, IComponentState> {
         return (
             <div class="editor">
                 <div class="name">
-                    <label for="nickname">Имя: </label>
+                    <label for="nickname">Name: </label>
                     <input type="text"
                            value={props.playerState.name} 
                            onInput={event => this.nameInput$.next((event.target as HTMLInputElement).value)} 
                            />
                     <button class="sample-button" onClick={_=>this.generateSampleCode()}>
-                        Сгенерировать пример кода
+                        Generate code sample
                     </button>
                 </div>
                 <AceEditor ref={ref => this.editor = ref} 
@@ -110,15 +110,15 @@ export class EditorComponent extends Component<IProps, IComponentState> {
 
         this.getUniqueIdList()
             .forEach(id => {
-                sampleCode += `// проверка юнита по ID\n` +
+                sampleCode += `// check unit ID\n` +
                               `if (is('${id}')) {\n` +
-                              `    // действие\n` +
-                              `    say('Привет, я ${id}!')\n` +
+                              `    // action\n` +
+                              `    say('Hi, I am ${id}!')\n` +
                               `}\n`
         });
 
         if (sampleCode === '') {
-            sampleCode = '// выберите хоть одного юнита'
+            sampleCode = '// choose at least one unit'
         }
 
         this.editor.setValue(sampleCode);

@@ -70,11 +70,11 @@ export class BattleFieldModel {
             const toY = parseInt(action.y, 10);
 
             if (isNaN(toX)) {
-                this.dispatchError(`[${unit.id}][goTo(${toX}, ${toY})]: x не может быть приведен к числу!`);
+                this.dispatchError(`[${unit.id}][goTo(${toX}, ${toY})]: x is not a number!`);
             }
 
             if (isNaN(toY)) {
-                this.dispatchError(`[${unit.id}][goTo(${toX}, ${toY})]: y не может быть приведен к числу!`);
+                this.dispatchError(`[${unit.id}][goTo(${toX}, ${toY})]: y is not a number!`);
             }
 
             const path = this.getPath(unit.x, unit.y, toX, toY);
@@ -88,7 +88,7 @@ export class BattleFieldModel {
             const enemy = this.getEnemy(action.id, unit);
 
             if (!enemy) {
-                return unit.sayAction(`${action.id} не найден`);
+                return unit.sayAction(`${action.id} is not found`);
             }
 
             const path = this.getPath(unit.x, unit.y, enemy.x, enemy.y).slice(0, -1);
@@ -116,7 +116,7 @@ export class BattleFieldModel {
 
         if (action.action === 'say') {
             if (!action.text) {
-                this.dispatchError(`[${unit.id}][say(text)] Не задан обязательный параметр text`);
+                this.dispatchError(`[${unit.id}][say(text)] text is required parameter`);
             }
 
             return unit.sayAction(action.text.toString());
@@ -126,11 +126,11 @@ export class BattleFieldModel {
             const enemy = this.getEnemy(action.id, unit);
 
             if (!enemy) {
-                return unit.sayAction(`${action.id} не найден`);
+                return unit.sayAction(`${action.id} is not found`);
             }
 
             if (unit.character.type !== CharacterType.shooting) {
-                return unit.sayAction('Эй, я не умею стрелять');
+                return unit.sayAction('Hey! I can`t shoot');
             }
 
             return this.makeShootingAttack(unit, enemy);
@@ -140,11 +140,11 @@ export class BattleFieldModel {
             const enemy = this.getEnemy(action.id, unit);
 
             if (!enemy) {
-                return unit.sayAction(`${action.id} не найден`);
+                return unit.sayAction(`${action.id} is not found`);
             }
 
             if (unit.character.type !== CharacterType.magic) {
-                return unit.sayAction('Я не знаю магии!');
+                return unit.sayAction('Hey! I can`t spell!');
             }
 
             return this.makeSpellAttack(unit, enemy);
@@ -154,7 +154,7 @@ export class BattleFieldModel {
             const enemy = this.getFriend(action.id, unit);
 
             if (unit.character.type !== CharacterType.magic) {
-                return unit.sayAction('Я не умею лечить!');
+                return unit.sayAction('I can`t heal!');
             }
 
             return this.makeBulletAction(unit, enemy);
@@ -165,7 +165,7 @@ export class BattleFieldModel {
             const enemy = this.getRandomUnit(unit);
 
             if (!enemy) {
-                return unit.sayAction('себе подобных не трогаю!')
+                return unit.sayAction('I can`t touch similar units!')
             }
 
             if (unit.character.type === CharacterType.magic) {
@@ -206,7 +206,7 @@ export class BattleFieldModel {
 
     private getEnemy(id: string, toUnit: BattleUnit): BattleUnit {
         if (!id) {
-            this.dispatchError(`[${toUnit.id}] Не задан обязательный параметр id`);
+            this.dispatchError(`[${toUnit.id}] Parameter id is required`);
         }
 
         const units = this.units.filter(unit => {
@@ -238,7 +238,7 @@ export class BattleFieldModel {
 
     private getFriend(id: string, toUnit: BattleUnit): BattleUnit {
         if (!id) {
-            this.dispatchError(`[${toUnit.id}] Не задан обязательный параметр id`);
+            this.dispatchError(`[${toUnit.id}] Parameter id is required`);
         }
 
         const unit = this.units.find(unit => {
@@ -246,7 +246,7 @@ export class BattleFieldModel {
         });
 
         if (!unit) {
-            this.dispatchError(`[${toUnit.id}] Союзник с ID "${id}" не найден`);
+            this.dispatchError(`[${toUnit.id}] Ally with ID "${id}" is not found`);
         }
 
         return unit;

@@ -1,6 +1,6 @@
 import {Observable, of, throwError} from 'rxjs/index';
 import {fromPromise} from 'rxjs/internal/observable/fromPromise';
-import {pluck, share, switchMap} from 'rxjs/internal/operators';
+import {pluck, switchMap} from 'rxjs/internal/operators';
 import {IState} from './state.model';
 import {Inject} from './InjectDectorator';
 import {Environment} from './Environment';

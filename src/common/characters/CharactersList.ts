@@ -72,7 +72,7 @@ function getAttackConfigs(mellee: number, shoot: number, magic: number): IAttack
 const NULL_CHARACTER: ICharacterConfig = Object.assign({
     id: 'NULL',
     key: 'character_null',
-    title: 'Null, просто Null',
+    title: 'Null, just Null',
     type: CharacterType.melee,
     bulletType: BulletType.snow,
     attackAnimation: <IAnimationName>'slash',
@@ -82,7 +82,7 @@ const NULL_CHARACTER: ICharacterConfig = Object.assign({
 const MAGIC_GIRL: ICharacterConfig = Object.assign({
     id: 'EVAL',
     key: 'character_magic',
-    title: 'кидает файер-боллы, обладает самой сильной магией',
+    title: 'makes fireballs, powerful magician',
     type: CharacterType.magic,
     bulletType: BulletType.fire,
     attackAnimation: <IAnimationName>'spellcast',
@@ -92,7 +92,7 @@ const MAGIC_GIRL: ICharacterConfig = Object.assign({
 const SKELETON: ICharacterConfig = Object.assign({
     id: 'PWA',
     key: 'character_nekr',
-    title: 'Стреляет из лука, почти невосприимчив к магии',
+    title: 'Uses bowl, has magic immunity',
     type: CharacterType.shooting,
     bulletType: BulletType.arrow,
     attackAnimation: <IAnimationName>'shoot',
@@ -102,7 +102,7 @@ const SKELETON: ICharacterConfig = Object.assign({
 const ORK: ICharacterConfig = Object.assign({
     id: '$',
     key: 'character_ork',
-    title: 'Старый добрый jQuery, кидает кирпичи',
+    title: 'Well known jQuery, throws stone bricks',
     type: CharacterType.shooting,
     bulletType: BulletType.stone,
     attackAnimation: <IAnimationName>'shoot',
@@ -112,7 +112,7 @@ const ORK: ICharacterConfig = Object.assign({
 const PALLADIN: ICharacterConfig = Object.assign({
     id: 'DART',
     key: 'character_palladin',
-    title: 'Палладин. Лучший в своем роде, но очень медлительный',
+    title: 'Palladin. Better crusaider ever but slow a lot',
     type: CharacterType.melee,
     bulletType: BulletType.snow,
     attackAnimation: <IAnimationName>'slash',
@@ -122,7 +122,7 @@ const PALLADIN: ICharacterConfig = Object.assign({
 const VARVAR: ICharacterConfig = Object.assign({
     id: 'CSS',
     key: 'character_varvar',
-    title: 'Простой, но очень быстрый воин с длинным копьем',
+    title: 'Simple, but very fast infantry with a spear',
     type: CharacterType.melee,
     bulletType: BulletType.snow,
     attackAnimation: <IAnimationName>'thrust',
@@ -132,7 +132,7 @@ const VARVAR: ICharacterConfig = Object.assign({
 const WINTER: ICharacterConfig = Object.assign({
     id: 'IE',
     key: 'character_winter',
-    title: 'Замораживает всех в округе, но погибает от точных выстрелов',
+    title: 'Makes freeze ball, but has problems with shooting attacks',
     type: CharacterType.magic,
     bulletType: BulletType.snow,
     attackAnimation: <IAnimationName>'spellcast',

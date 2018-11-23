@@ -7,7 +7,7 @@ export const FirstSteps = () => (
 
                 <div className="signature flex-row flex-align-center">
                     <div>
-                        У нас сть 2 юнита: <span class="color-yellow">'CSS'</span> и <span class="color-yellow">'PWA'</span>
+                        So, we have 2 units: <span class="color-yellow">'CSS'</span> and <span class="color-yellow">'PWA'</span>
                     </div>
                     <div className="ml-auto">
                         <img src="/img/css_unit.png" height="80" alt=""/>
@@ -17,7 +17,7 @@ export const FirstSteps = () => (
 
                 <div className="signature flex-row flex-align-center">
                     <div>
-                        У противника: <span class="color-yellow">'CSS'</span> и <span class="color-yellow">'$'</span>
+                        Enemy has: <span class="color-yellow">'CSS'</span> and <span class="color-yellow">'$'</span>
                     </div>
                     <div className="ml-auto">
                         <img src="/img/css_unit.png" height="80" alt=""/>
@@ -26,40 +26,40 @@ export const FirstSteps = () => (
                 </div>
 
                 <p>
-                    * Это <span className="color-yellow">ID</span> юнитов которые вам нужно использовать в коде
+                    * It`s units <span className="color-yellow">ID</span> you need to use in code
                 </p>
 
             </section>
 
             <section>
-                <p>Если заглянуть в характеристики персонажей:</p>
+                <p>In unit characteristics you can see:</p>
                 <ul>
-                    <li>Стрелковые атаки будут менее эффективны против стрелков (<span class="color-yellow">'$'</span>)</li>
-                    <li>Чтобы нанести больше урона стрелкам надо подойти ближе к цели</li>
-                    <li>У нас есть один пехотинец (<span class="color-yellow">'CSS'</span>) с ближней атакой</li>
+                    <li>Bullet attacks became less effective against shooters (<span class="color-yellow">'$'</span>)</li>
+                    <li>It needs keep closer to enemy to make more damage to shooters</li>
+                    <li>And also we have on infantry (<span class="color-yellow">'CSS'</span>) with melee attack</li>
                 </ul>
             </section>
 
             <section class="signature">
-                <p>Как написать более-менее эффективный скрипт:</p>
+                <p>How to make effective script:</p>
                 <video src="/img/scripting_guide.mov" width="600" controls />
             </section>
 
             <section>
                 <ul>
-                    <li>Нажать "Сгенерировать пример кода", чтобы сразу получить стартовый код для нашей армии</li>
-                    <li>Подвести <span class="color-yellow">'PWA'</span> ближе к противнику, чтобы наносить больше урона</li>
+                    <li>Click "Generate code sample" to get template code for your army</li>
+                    <li>Put your <span class="color-yellow">'PWA'</span> closer to enemy, to increase his damage</li>
                     <li>
-                        Ближнюю атаку направить на <span class="color-yellow">'$'</span> а стрелковую на &mdash;
+                        Infantry unit should attack <span class="color-yellow">'$'</span>, shooter should attack
                         <span class="color-yellow">'CSS'</span>
                     </li>
                 </ul>
             </section>
 
             <section class="signature">
-                Код выполняется всего один раз, за один ход юниты не могут
-                дойти до персоанажа или полностью убить его за один выстрел
-                потому накидывайте по-больше действий на юнитов
+                Code will run at least one time. For a one action units can`t
+                go to the enemy, or kill them for a one shoot
+                Make actions for you units as more as it possible
             </section>
 
         </section>

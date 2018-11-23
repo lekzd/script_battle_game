@@ -5,7 +5,7 @@ export const BasicJS = () => (
         <section>
             <ol class="main">
                 <li>
-                    <div class="header">Переменные</div>
+                    <div class="header">Variables</div>
                     <div>
 <pre class="code">{`
     stepsCount = 10
@@ -14,7 +14,7 @@ export const BasicJS = () => (
                     </div>
                 </li>
                 <li>
-                    <div class="header">Цикл</div>
+                    <div class="header">For loop</div>
                     <div>
 <pre class="code">{`
     for (var i = 0; i < 10; i++) {
@@ -24,7 +24,7 @@ export const BasicJS = () => (
                     </div>
                 </li>
                 <li>
-                    <div class="header">Функция</div>
+                    <div class="header">Function</div>
                     <div>
 <pre class="code">{`
     function attack(id) {

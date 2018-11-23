@@ -43,13 +43,13 @@ export class AdminApp {
         this.onAdminToken$.subscribe(adminToken => {
             render((
                 <div>
-                    <h2 className="color-white mb-20 text-center">Администрирование комнат</h2>
+                    <h2 className="color-white mb-20 text-center">Room administration</h2>
                     <div class="flex-row">
                         <div class="admin-sidebar flex-column">
-                            <button class="sample-button mb-20" onClick={() => this.createRoom(adminToken)}>+ Новая комната</button>
+                            <button class="sample-button mb-20" onClick={() => this.createRoom(adminToken)}>+ New room</button>
                             <button type="button" class="green-button mb-20"
-                                    onClick={_=> this.saveRoomsState(adminToken)}>Сохранить комнаты</button>
-                            <button class="red-button mb-20" onClick={() => this.logout()}>⎋ Выход</button>
+                                    onClick={_=> this.saveRoomsState(adminToken)}>Same rooms state</button>
+                            <button class="red-button mb-20" onClick={() => this.logout()}>⎋ Logout</button>
                         </div>
 
                         <div class="flex-grow">
@@ -90,7 +90,7 @@ export class AdminApp {
     private createRoom(adminToken: string) {
         const id = Math.random().toString(36).substring(3);
 
-        this.promptService.prompt('Введите название комнаты')
+        this.promptService.prompt('Type room name')
             .pipe(switchMap(({title}) => this.apiService.createRoom(id, title, adminToken)))
             .subscribe();
     }

@@ -65,25 +65,25 @@ export class Documentation extends Component<IProps, IComponentState> {
                     <AccordionSection header={'FAQ'} opened={true}>
                         <BasicFAQ />
                     </AccordionSection>
-                    <AccordionSection header={'Первые шаги'} opened={false}>
+                    <AccordionSection header={'First steps'} opened={false}>
                         <FirstSteps />
                     </AccordionSection>
-                    <AccordionSection header={'Как работает код'} opened={false}>
+                    <AccordionSection header={'How code works'} opened={false}>
                         <HowCodeWorks />
                     </AccordionSection>
-                    <AccordionSection header={'Основы JavaScript'} opened={false}>
+                    <AccordionSection header={'JavaScript basics'} opened={false}>
                         <BasicJS />
                     </AccordionSection>
                     <AccordionSection header={'API'} opened={false}>
                         <UnitApi />
                     </AccordionSection>
-                    <AccordionSection header={'Полезные советы'} opened={false}>
+                    <AccordionSection header={'Useful tips'} opened={false}>
                         <UsefulTips />
                     </AccordionSection>
 
                     <div class="container-footer">
-                        ⇣ Скрольте вниз, чтобы изучить документацию
-                        <button class="sample-button" onClick={e => this.onCloseClick$.next()}>Закрыть</button>
+                        ⇣ Scroll down to learn more
+                        <button class="sample-button" onClick={e => this.onCloseClick$.next()}>Close</button>
                     </div>
                 </div>
             </div>

@@ -10,7 +10,7 @@ interface IProps {
     playerState: IPlayerState;
 }
 
-const EMPTY_NAME = '--Без имени--';
+const EMPTY_NAME = '--Anonymous--';
 
 export class ClientDisplay extends Component<IProps, IComponentState> {
 
@@ -22,10 +22,10 @@ export class ClientDisplay extends Component<IProps, IComponentState> {
 
     render(props: IProps, state: IComponentState) {
         const playerState: Partial<IPlayerState> = props.playerState || {};
-        let status = 'оффлайн';
+        let status = 'offline';
 
         if (playerState.isConnected) {
-            status = playerState.isReady ? 'готов' : 'пишет код';
+            status = playerState.isReady ? 'ready' : 'codding';
         }
 
         return (

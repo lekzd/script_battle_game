@@ -114,7 +114,7 @@ export class SelectWindow extends Component<IProps, IComponentState> {
                     });
                 }),
                 switchMap(() =>
-                    this.promptService.alert('Время вышло', 'Время на выбор юнитов закончилось')
+                    this.promptService.alert('Too late', 'Time to choose unit is ends')
                 )
             )
             .subscribe();
@@ -128,7 +128,7 @@ export class SelectWindow extends Component<IProps, IComponentState> {
                     return keys.some(key => army[key] === 'character_null');
                 }),
                 switchMap(() =>
-                    this.promptService.alert('Время почти вышло', 'Осталась ровно минута до отключения возможности выбирать юнитов')
+                    this.promptService.alert('Time is almost ends', 'You have at least one minute to complete your army')
                 )
             )
             .subscribe();

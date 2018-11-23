@@ -28,18 +28,18 @@ export class UnitItem extends Component<IProps, IComponentState> {
                         <span class="unit-grey">{characterConfig.title}</span>
                     </div>
                     <div class="unit-values">
-                        <div class="unit-grey">атака / защита</div>
+                        <div class="unit-grey">attack / defence</div>
                         <div class="unit-mellee">
-                            <span class="unit-grey">ближний</span> {characterConfig.mellee.attack.max} / {characterConfig.mellee.defence.max}
+                            <span class="unit-grey">melee</span> {characterConfig.mellee.attack.max} / {characterConfig.mellee.defence.max}
                         </div>
                         <div class="unit-shooting">
-                            <span class="unit-grey">стрельба</span> {characterConfig.shoot.attack.max} / {characterConfig.shoot.defence.max}
+                            <span class="unit-grey">shooting</span> {characterConfig.shoot.attack.max} / {characterConfig.shoot.defence.max}
                         </div>
                         <div class="unit-magic">
-                            <span class="unit-grey">магия</span> {characterConfig.magic.attack.max} / {characterConfig.magic.defence.max}
+                            <span class="unit-grey">magic</span> {characterConfig.magic.attack.max} / {characterConfig.magic.defence.max}
                         </div>
                         <div class="unit-speed">
-                            <span class="unit-grey">скорость</span> {characterConfig.speed}
+                            <span class="unit-grey">speed</span> {characterConfig.speed}
                         </div>
                     </div>
 
@@ -51,11 +51,11 @@ export class UnitItem extends Component<IProps, IComponentState> {
     private getCharacterType(config: ICharacterConfig): string {
         switch (config.type) {
             case CharacterType.magic:
-                return 'Маг';
+                return 'Magician';
             case CharacterType.shooting:
-                return 'Стрелок';
+                return 'Shooter';
             case CharacterType.melee:
-                return 'Пехотинец';
+                return 'Infantry';
         }
     }
 

@@ -182,11 +182,11 @@ export class Toolbar {
                                         <span class="unit-grey">${characterConfig.title}</span>
                                     </div>
                                     <div class="unit-values">
-                                        <div class="unit-grey">атака / защита</div>
-                                        <div class="unit-mellee"><span class="unit-grey">ближний</span> ${characterConfig.mellee.attack.max} / ${characterConfig.mellee.defence.max}</div>
-                                        <div class="unit-shooting"><span class="unit-grey">стрельба</span> ${characterConfig.shoot.attack.max} / ${characterConfig.shoot.defence.max}</div>
-                                        <div class="unit-magic"><span class="unit-grey">магия</span> ${characterConfig.magic.attack.max} / ${characterConfig.magic.defence.max}</div>
-                                        <div class="unit-speed"><span class="unit-grey">скорость</span> ${characterConfig.speed}</div>
+                                        <div class="unit-grey">attack / defence</div>
+                                        <div class="unit-mellee"><span class="unit-grey">melee</span> ${characterConfig.mellee.attack.max} / ${characterConfig.mellee.defence.max}</div>
+                                        <div class="unit-shooting"><span class="unit-grey">shooting</span> ${characterConfig.shoot.attack.max} / ${characterConfig.shoot.defence.max}</div>
+                                        <div class="unit-magic"><span class="unit-grey">magic</span> ${characterConfig.magic.attack.max} / ${characterConfig.magic.defence.max}</div>
+                                        <div class="unit-speed"><span class="unit-grey">speed</span> ${characterConfig.speed}</div>
                                     </div>
                                   
                                 </div>
@@ -199,13 +199,13 @@ export class Toolbar {
               <div>
                 <img src="/img/push.svg" alt="" height="40" style="margin-bottom: -5px">
               </div>
-              Готово!
+              Ready!
             </button>
             <button id="help" class="runButton toolbar-button" type="button">
               <div class="help-icon">
                 ?
               </div>
-              Помощь
+              Help
             </button>
             
             <div id="documentation" class="documentation"></div>
@@ -242,7 +242,7 @@ export class Toolbar {
                     this.isSelectorOpen = false;
                 }),
                 switchMap(() =>
-                    this.promptService.alert('Время вышло', 'Время на выбор юнитов закончилось')
+                    this.promptService.alert('Too late', 'Time to choose unit is ends')
                 )
             )
             .subscribe();
@@ -256,7 +256,7 @@ export class Toolbar {
                     return keys.some(key => army[key] === 'character_null');
                 }),
                 switchMap(() =>
-                    this.promptService.alert('Время почти вышло', 'Осталась ровно минута до отключения возможности выбирать юнитов')
+                    this.promptService.alert('Time is almost ends', 'You have at least one minute to complete your army')
                 )
             )
             .subscribe();
@@ -291,11 +291,11 @@ export class Toolbar {
     private getCharacterType(config: ICharacterConfig): string {
         switch (config.type) {
             case CharacterType.magic:
-                return 'Маг';
+                return 'Magician';
             case CharacterType.shooting:
-                return 'Стрелок';
+                return 'Shooter';
             case CharacterType.melee:
-                return 'Пехотинец';
+                return 'Infantry';
         }
     }
 }

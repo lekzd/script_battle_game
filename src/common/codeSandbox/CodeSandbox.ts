@@ -39,7 +39,7 @@ export class CodeSandbox {
 
         const timeoutClose$ = timer(MAX_EVAL_TIMEOUT).pipe(
             takeUntil(successMessage$),
-            switchMap(() => throwError(`Скрипт исполнялся более 1 секунды и был остановлен!`))
+            switchMap(() => throwError(`Script evaluation was taken more than 1 second and was stopped!`))
         );
 
         return new Promise<IAction[]>((resolve, reject) => {
@@ -99,7 +99,7 @@ export class CodeSandbox {
                     delete this[key];
                 });
                 
-                this.Function = function() { return {'неплохо': 'неплохо =)'} };
+                this.Function = function() { return {'not': 'bad =)'} };
                 
                 with (sandboxProxy) {
                     (function() {
@@ -108,7 +108,7 @@ export class CodeSandbox {
                         } catch (e) {
                             console.error(e);
                         }
-                    }).call({"слишком": 'просто'})
+                    }).call({"too": 'simple'})
                 }
                 
                 function has (target, key) {
