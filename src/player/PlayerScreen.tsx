@@ -66,7 +66,12 @@ export class PlayerScreen extends Component<IProps, IComponentState> {
                 filter(() => !this.clientState.name),
                 switchMap(() => this.promptService.prompt('Впишите свое имя')),
                 tap(({title}) => this.clientState.set({name: title}))
-            ).subscribe();
+            )
+            .subscribe(() => {
+                this.consoleService.infoLog('Кажется, вы готовы к битве! Но код еще можно редактировать =)');
+
+                this.clientState.set({isReady: true});
+            });
         
         this.pushCode$
             .pipe(

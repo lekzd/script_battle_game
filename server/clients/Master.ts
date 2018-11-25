@@ -9,7 +9,6 @@ export class Master extends Client {
     get onMessage$(): Observable<IMessage> {
         return this.onUnsafeMessage$('sendWinner')
             .pipe(
-                first(),
                 pluck('sessionResult'),
                 map(sessionResult => ({sessionResult, type: 'sendWinner'}))
             );

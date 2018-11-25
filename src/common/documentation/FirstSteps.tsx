@@ -7,7 +7,7 @@ export const FirstSteps = () => (
 
                 <div className="signature flex-row flex-align-center">
                     <div>
-                        У нас сть 2 юнита: <span class="color-yellow">'CSS'</span> и <span class="color-yellow">'PWA'</span>
+                        У нас есть 2 юнита: <span class="color-yellow">'CSS'</span> и <span class="color-yellow">'PWA'</span>
                     </div>
                     <div className="ml-auto">
                         <img src="/img/css_unit.png" height="80" alt=""/>
