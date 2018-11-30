@@ -7,6 +7,9 @@
 1. `npm run start`
 2. `npm run server`
 3. open `localhost:8080/public` in browser
+4. create or edit file `./.data/.env` with data: `ADMIN_PASSWORD=admin`
+5. open `localhost:8080/public/admin` in browser
+6. login with `admin/${ADMIN_PASSWORD}` credentials, create room & share link
 
 ## How to make your own server
 
