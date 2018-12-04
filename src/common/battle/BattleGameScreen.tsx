@@ -79,14 +79,6 @@ export class BattleGameScreen extends Component<IProps, IComponentState> {
         resultsView.setResults(sessionResult);
     }
 
-    showWinnerScreen(sessionResult: ISessionResult) {
-        this.setGameState(BattleState.win, sessionResult);
-    }
-
-    showLoseScreen(sessionResult: ISessionResult) {
-        this.setGameState(BattleState.lost, sessionResult);
-    }
-
     private initGame(parent: HTMLElement) {
         const config = {
             type: Phaser.AUTO,

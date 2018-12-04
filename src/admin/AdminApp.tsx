@@ -3,7 +3,7 @@ import {RoomListComponent} from './RoomListComponent';
 import {WebsocketConnection} from '../common/WebsocketConnection';
 import {Inject} from '../common/InjectDectorator';
 import {Observable} from 'rxjs/index';
-import {catchError, filter, map, share, switchMap} from 'rxjs/internal/operators';
+import {catchError, filter, first, map, share, switchMap} from 'rxjs/internal/operators';
 import {ApiService} from '../common/ApiService';
 import {PromptService} from './PromptService';
 
@@ -40,7 +40,7 @@ export class AdminApp {
     private initScreen() {
         this.connection.registerAsAdmin();
 
-        this.onAdminToken$.subscribe(adminToken => {
+        this.onAdminToken$.pipe(first()).subscribe(adminToken => {
             render((
                 <div>
                     <h2 className="color-white mb-20 text-center">Администрирование комнат</h2>
