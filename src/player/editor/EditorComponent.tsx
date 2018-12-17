@@ -72,7 +72,7 @@ export class EditorComponent extends Component<IProps, IComponentState> {
                            onInput={event => this.nameInput$.next((event.target as HTMLInputElement).value)} 
                            />
                     <button class="sample-button" onClick={_=>this.generateSampleCode()}>
-                        Сгенерировать пример кода
+                        Пример кода
                     </button>
                 </div>
                 <AceEditor ref={ref => this.editor = ref} 

@@ -1,8 +1,8 @@
 import {Component, h} from 'preact';
-import * as jsdiff from "diff";
 import {IEditorState, IPlayerState} from '../common/state.model';
 import {Maybe} from '../common/helpers/Maybe';
 import {EMPTY_ARMY} from '../common/client/EMPTY_ARMY';
+import {AceEditor} from "../player/editor/AceEditor";
 
 interface IComponentState {
 }
@@ -18,7 +18,7 @@ export class CodeDisplay extends Component<IProps, IComponentState> {
 
     private previous = '';
     private current = '';
-    private pre: HTMLPreElement;
+    private editor: AceEditor;
 
     componentDidMount() {
         this.onStateChanged(this.props.playerState);
@@ -45,7 +45,14 @@ export class CodeDisplay extends Component<IProps, IComponentState> {
                             );
                         })}
                     </div>
-                    <pre ref={ref => this.pre = ref}/>
+                    <div className="codeDisplay-editor">
+                        <AceEditor ref={ref => this.editor = ref}
+                                   onChange={() => null}
+                                   onCtrlEnter={() => null}
+                                   onScroll={() => null}
+                                   readonly={true}
+                        />
+                    </div>
                 </div>
             </div>
         );
@@ -55,30 +62,7 @@ export class CodeDisplay extends Component<IProps, IComponentState> {
         this.previous = this.current;
         this.current = code;
 
-        const diff = jsdiff.diffChars(this.previous, this.current);
-        const fragment = document.createDocumentFragment();
-
-        let span = null;
-        let color = '';
-
-        diff.forEach((part) => {
-            if (part.removed) {
-                return;
-            }
-
-            const colorGrey = '#cccccc';
-            const colorGreen = '#00cc00';
-
-            color = part.added ? colorGreen : colorGrey;
-            span = document.createElement('span');
-            span.style.color = color;
-            span.appendChild(document.createTextNode(part.value));
-            fragment.appendChild(span);
-        });
-
-        this.pre.innerText = '';
-
-        this.pre.appendChild(fragment);
+        this.editor.setValue(code);
     }
 
     private onStateChanged(playerState: IPlayerState) {
@@ -88,7 +72,7 @@ export class CodeDisplay extends Component<IProps, IComponentState> {
             code: ''
         }) as IEditorState;
 
-        this.pre.scroll(editorState.scrollX || 0, editorState.scrollY || 0);
+        this.editor.scroll(editorState.scrollX || 0, editorState.scrollY || 0);
 
         if (editorState.code !== undefined) {
             this.setCode(editorState.code);
