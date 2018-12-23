@@ -72,7 +72,7 @@ export class CodeSandbox {
                     worker.terminate();
                 });
 
-            worker.postMessage(unit.api); // Start the worker.
+            worker.postMessage(unit.state); // Start the worker.
         });
     }
 

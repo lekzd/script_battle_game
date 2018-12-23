@@ -2,9 +2,9 @@ import {CharactersList, CharacterType, IAttackTypeConfig, ICharacterConfig} from
 import {Inject} from "../InjectDectorator";
 import {BattleFieldDrawer} from "./BattleFieldDrawer";
 import {IAction} from "../codeSandbox/CodeSandbox";
-import {getBattleApi} from "./BattleUnitBattleApi";
 import {BattleSide} from "./BattleSide";
 import {color} from "../helpers/color";
+import {getBattleState} from "./BattleUnitBattleState";
 
 interface IBattleUnitConfig {
     x: number;
@@ -31,7 +31,7 @@ export class BattleUnit {
     actions: IAction[] = [];
     gotDamage = 0;
 
-    api: any;
+    state: any;
 
     @Inject(CharactersList) private charactersList: CharactersList;
     @Inject(BattleFieldDrawer) private battleFieldDrawer: BattleFieldDrawer;
@@ -68,7 +68,7 @@ export class BattleUnit {
 
         this.initGraphics();
 
-        this.api = getBattleApi(this);
+        this.state = getBattleState(this);
 
     }
 
@@ -167,7 +167,7 @@ export class BattleUnit {
         this.type = type;
         this.character = this.charactersList.get(type);
         this.id = this.character.id;
-        this.api = getBattleApi(this);
+        this.state = getBattleState(this);
 
         this.idText.setText(this.character.id);
         this.sprite.setTexture(type);
