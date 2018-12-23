@@ -1,5 +1,5 @@
-import Phaser from 'phaser';
-import {interval, Observable} from 'rxjs/index';
+import * as Phaser from 'phaser';
+import {interval, Observable} from 'rxjs';
 import {map, take} from 'rxjs/internal/operators';
 import {font} from '../../helpers/font';
 

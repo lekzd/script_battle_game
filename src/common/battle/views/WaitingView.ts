@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+import * as Phaser from 'phaser';
 import {Inject} from "../../InjectDectorator";
 import {CharactersList} from "../../characters/CharactersList";
 import {WebsocketConnection} from "../../WebsocketConnection";

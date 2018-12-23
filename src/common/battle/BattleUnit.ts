@@ -41,7 +41,7 @@ export class BattleUnit {
     private type: string;
     private sprite: Phaser.GameObjects.Sprite;
     private sayText: Phaser.GameObjects.Text;
-    private container: any;
+    private container: Phaser.GameObjects.Container;
     private healthBar: Phaser.GameObjects.Graphics;
     private idText: Phaser.GameObjects.Text;
 
@@ -200,7 +200,7 @@ export class BattleUnit {
     }
 
     private initGraphics() {
-        this.container = (this.scene.add as any).container(this.renderLeft, this.renderTop);
+        this.container = this.scene.add.container(this.renderLeft, this.renderTop);
         const shadow = this.generateShadow();
         this.sprite = this.generateSprite();
         this.idText = this.generateIdText();

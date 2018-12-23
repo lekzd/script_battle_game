@@ -1,6 +1,6 @@
 import {Component, h} from 'preact';
 import {BattleState} from "./BattleState.model";
-import Phaser from "phaser";
+import * as Phaser from "phaser";
 import {WaitingView} from "./views/WaitingView";
 import {BattleView} from "./views/BattleView";
 import {AttentionView} from "./views/AttentionView";

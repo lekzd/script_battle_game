@@ -14,7 +14,7 @@ export class BattleStatistics {
 
         const left = side === BattleSide.left ? 10 : 390;
 
-        this.container = (this.scene.add as any).container(left, 3);
+        this.container = this.scene.add.container(left, 3);
 
         this.damageText = this.generateDamageText();
         this.damageLine = this.generateDamageLine();

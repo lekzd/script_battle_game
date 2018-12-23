@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+import * as Phaser from 'phaser';
 import {inject, Inject} from "../../InjectDectorator";
 import {CharactersList} from "../../characters/CharactersList";
 import {BattleFieldDrawer} from "../BattleFieldDrawer";
@@ -160,9 +160,9 @@ export class BattleView extends Phaser.Scene {
 
         const fieldTexture = this.textures.createCanvas(name, width, height);
 
-        this.battleFieldDrawer.draw((fieldTexture as any).context);
+        this.battleFieldDrawer.draw(fieldTexture.context);
 
-        (fieldTexture as any).refresh();
+        fieldTexture.refresh();
     }
 
     private runCode(leftCode: string, rightCode: string) {
