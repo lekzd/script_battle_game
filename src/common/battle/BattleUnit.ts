@@ -2,9 +2,9 @@ import {CharactersList, CharacterType, IAttackTypeConfig, ICharacterConfig} from
 import {Inject} from "../InjectDectorator";
 import {BattleFieldDrawer} from "./BattleFieldDrawer";
 import {IAction} from "../codeSandbox/CodeSandbox";
-import {getBattleApi} from "./BattleUnitBattleApi";
 import {BattleSide} from "./BattleSide";
 import {color} from "../helpers/color";
+import {getBattleState} from "./BattleUnitBattleState";
 
 interface IBattleUnitConfig {
     x: number;
@@ -31,7 +31,7 @@ export class BattleUnit {
     actions: IAction[] = [];
     gotDamage = 0;
 
-    api: any;
+    state: any;
 
     @Inject(CharactersList) private charactersList: CharactersList;
     @Inject(BattleFieldDrawer) private battleFieldDrawer: BattleFieldDrawer;
@@ -41,7 +41,7 @@ export class BattleUnit {
     private type: string;
     private sprite: Phaser.GameObjects.Sprite;
     private sayText: Phaser.GameObjects.Text;
-    private container: any;
+    private container: Phaser.GameObjects.Container;
     private healthBar: Phaser.GameObjects.Graphics;
     private idText: Phaser.GameObjects.Text;
 
@@ -68,7 +68,7 @@ export class BattleUnit {
 
         this.initGraphics();
 
-        this.api = getBattleApi(this);
+        this.state = getBattleState(this);
 
     }
 
@@ -167,7 +167,7 @@ export class BattleUnit {
         this.type = type;
         this.character = this.charactersList.get(type);
         this.id = this.character.id;
-        this.api = getBattleApi(this);
+        this.state = getBattleState(this);
 
         this.idText.setText(this.character.id);
         this.sprite.setTexture(type);
@@ -200,7 +200,7 @@ export class BattleUnit {
     }
 
     private initGraphics() {
-        this.container = (this.scene.add as any).container(this.renderLeft, this.renderTop);
+        this.container = this.scene.add.container(this.renderLeft, this.renderTop);
         const shadow = this.generateShadow();
         this.sprite = this.generateSprite();
         this.idText = this.generateIdText();

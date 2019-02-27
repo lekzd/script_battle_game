@@ -1,3 +1,5 @@
+const PROD_URL = 'http://142.93.129.144';
+const PROD_WS_URL = 'ws://142.93.129.144';
 
 interface IEnvConfig {
     api: string;
@@ -14,10 +16,10 @@ const localConfig = {
 };
 
 const prodConfig = {
-    api: 'http://142.93.129.144/api',
-    websocket: 'ws://142.93.129.144',
-    staticHost: 'http://142.93.129.144',
-    baseUrl: 'http://142.93.129.144'
+    api: `${PROD_URL}/api`,
+    websocket: PROD_WS_URL,
+    staticHost: PROD_URL,
+    baseUrl: PROD_URL
 };
 
 export class Environment {

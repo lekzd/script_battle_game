@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+import * as Phaser from 'phaser';
 import {font} from '../../helpers/font';
 
 export class WinView extends Phaser.Scene {

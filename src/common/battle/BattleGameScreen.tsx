@@ -1,6 +1,6 @@
 import {Component, h} from 'preact';
 import {BattleState} from "./BattleState.model";
-import Phaser from "phaser";
+import * as Phaser from "phaser";
 import {WaitingView} from "./views/WaitingView";
 import {BattleView} from "./views/BattleView";
 import {AttentionView} from "./views/AttentionView";
@@ -77,14 +77,6 @@ export class BattleGameScreen extends Component<IProps, IComponentState> {
         const resultsView = this.game.scene.getScene(BattleState.results) as ResultsView;
 
         resultsView.setResults(sessionResult);
-    }
-
-    showWinnerScreen(sessionResult: ISessionResult) {
-        this.setGameState(BattleState.win, sessionResult);
-    }
-
-    showLoseScreen(sessionResult: ISessionResult) {
-        this.setGameState(BattleState.lost, sessionResult);
     }
 
     private initGame(parent: HTMLElement) {

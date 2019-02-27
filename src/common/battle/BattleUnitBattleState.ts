@@ -1,6 +1,6 @@
 import {BattleUnit} from "./BattleUnit";
 
-export function getBattleApi(unit: BattleUnit) {
+export function getBattleState(unit: BattleUnit) {
     return {
         character: unit.character,
         health: unit.health,

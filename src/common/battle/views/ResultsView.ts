@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+import * as Phaser from 'phaser';
 import {ISessionResult, WinnerSide} from '../BattleSession';
 import {BattleFieldModel} from '../BattleFieldModel';
 import {Inject} from '../../InjectDectorator';

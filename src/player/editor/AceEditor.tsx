@@ -24,6 +24,7 @@ interface IProps {
     onScroll: (pointer: IPointer) => any;
     onChange: (value: string) => any;
     onCtrlEnter: () => any;
+    readonly?: boolean;
 }
 
 export class AceEditor extends Component<IProps, IComponentState> {
@@ -68,6 +69,11 @@ export class AceEditor extends Component<IProps, IComponentState> {
         this.ctrlEnter$.subscribe(() => {
             this.props.onCtrlEnter();
         });
+
+        if (this.props.readonly) {
+            this.editor.$blockScrolling = Infinity;
+            this.editor.setReadOnly(true);
+        }
     }
 
     getValue(): string {
@@ -76,6 +82,7 @@ export class AceEditor extends Component<IProps, IComponentState> {
 
     setValue(value: string) {
         this.editor.setValue(value);
+        this.editor.clearSelection();
     }
 
     shouldComponentUpdate(): boolean {
@@ -86,6 +93,11 @@ export class AceEditor extends Component<IProps, IComponentState> {
         return (
             <div id="editor" ref={ref => this.initEditor(ref)} />
         )
+    }
+
+    scroll(left: number, top: number) {
+        (this.editor.session as any).setScrollLeft(left);
+        this.editor.session.setScrollTop(top);
     }
 
     private initEditor(container: HTMLElement) {

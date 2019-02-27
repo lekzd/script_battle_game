@@ -1,4 +1,4 @@
-import {Observable, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import {debounceTime, first} from 'rxjs/internal/operators';
 import {Component, h} from "preact";
 import {AceEditor, IPointer} from "./AceEditor";
@@ -20,23 +20,12 @@ interface IProps {
 
 export class EditorComponent extends Component<IProps, IComponentState> {
 
-    runCode$ = new Subject<string>();
-    nameInput$ = new Subject<string>();
-    pushCode$ = new Subject<string>();
-
     @Inject(ClientState) private clientState: ClientState;
     @Inject(CharactersList) private charactersList: CharactersList;
     @Inject(WebsocketConnection) private connection: WebsocketConnection;
 
     private editor: AceEditor;
-
-    get editorScroll$(): Observable<IPointer> {
-        return this.editor.editorScroll$;
-    }
-
-    get change$(): Observable<string> {
-        return this.editor.change$;
-    }
+    private nameInput$ = new Subject<string>();
 
     componentDidMount() {
         const code = Maybe(this.props.playerState).pluck('editor.code').get();

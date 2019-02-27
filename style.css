@@ -139,15 +139,12 @@ canvas {
   display: none;
 }
 
-.codeDisplay pre {
-  font-family: monospace;
-  margin: 0;
+.codeDisplay-editor {
+  position: relative;
   flex-grow: 1;
   box-sizing: border-box;
   width: 100%;
   overflow: auto;
-  padding: 20px;
-  background: #272822;
   border: 2px solid #007b9c;
 }
 
@@ -160,6 +157,7 @@ canvas {
 }
 
 .code-container {
+  position: relative;
   display: flex;
   flex-grow: 1;
 }
@@ -600,7 +598,7 @@ canvas {
   color: #fff!important;
   text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.35);
   padding: 0 20px;
-  font-size: 16px;
+  font-size: 14px;
   cursor: pointer;
   box-sizing: border-box;
   box-shadow: 1px 1px 1px rgba(0, 0, 0, .5);
